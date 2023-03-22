@@ -1,0 +1,43 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16.13.2
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Update NPM
+          command: "sudo npm install -g npm"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "client/package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            cd client
+            npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "client/package-lock.json" }}
+          paths:
+            - .client/node_modules
+      - run:
+          name: Build React App
+          command: |
+            cd client
+            npm run build
+      - save_cache:
+          key: app-build-cache-{{ .Branch }}
+          paths:
+            - ./client/build
+      - run:
+          name: Deploy to Netlify
+          command: ./client/node_modules/netlify-cli/bin/run.mjs deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./client/build
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
