@@ -15,7 +15,7 @@ jobs:
           name: Install Dependencies
           command: |
             cd client
-            npm install
+            npm install --legacy-peer-deps
       - save_cache:
           key: dependency-cache-{{ checksum "client/package-lock.json" }}
           paths:
