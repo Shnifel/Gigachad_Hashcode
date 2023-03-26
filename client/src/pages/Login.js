@@ -76,7 +76,7 @@ export default function Login() {
 
   const googleResponse = async (response) => {
     try{
-      const res = await googleAuth(response);
+      await googleAuth(response);
       navigate("/Dashboard");
     }catch (err){
       setError(err.response.data);
