@@ -1,0 +1,41 @@
+.typewriter {
+    font-size: 60px;
+    font-family: 'Courier New', Courier, monospace;
+    color: green;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color:white ;
+}
+
+.error {
+    justify-content: center;
+    text-align: center;
+    background-color: rgb(255, 204, 204);
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    
+
+}
+.googleButton{
+    
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: black;
+    align-content: center;
+
+    > div{
+        font-weight: bold;
+        align-items: center;
+        justify-content: center;
+    }
+
+    > span{
+        justify-content: start;
+        color: black;
+    }
+}
+

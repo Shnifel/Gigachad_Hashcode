@@ -13,10 +13,13 @@ const client = new OAuth2Client(google_access_token);
 export const googleSignIn = async (req, res) => {
 
     // Extract user token id from google token object in request body
-    const token = req.body.tokenObj.id_token;
+
+    
 
     // Verify token id obtained in request body is indeed valid
     try {
+        const token = req.body.tokenObj.id_token;
+
         const ticket = await client.verifyIdToken({
             idToken: token,
             audience: google_access_token,
@@ -31,10 +34,12 @@ export const googleSignIn = async (req, res) => {
         const email = payload["email"];
 
         // Query whether user/email exists in our database - has to have been registered
-        const query = "";
+        const query = "SELECT * FROM Users WHERE EMAILADDRESS = ?";
 
-        db.query(query, [name, email, userId], (err, data) => {
+        db.query(query, [email], (err, data) => {
             if (err) return res.json(err);
+
+            if (! data.length) return res.status(404).json('No such user exists');
 
             // If user exists extract emailVerified or not, if not verified set user to verified / we can trust Google's authentication
 
@@ -53,8 +58,8 @@ export const googleSignIn = async (req, res) => {
 export const login = async (req, res) => {
 
     // From request body extract all login details and query database for such a user
-    const query = "";
-    db.query(query, [req.body.name, req.body.surname], (err,data) =>{
+    const query = "SELECT * FROM Users WHERE EMAILADDRESS = ?";
+    db.query(query, [req.body.email], (err,data) =>{
         if (err) {return res.json(err);} // A server side error has occurred
         if (!data.length) {return res.status(404).json("No such user found");} // No such user, return user not found
 
