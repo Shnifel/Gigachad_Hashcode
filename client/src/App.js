@@ -3,13 +3,19 @@ import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements } 
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import PrivateRoute from './routes/PrivateRoute';
+import './App.css'
+import Teams from './pages/Teams';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path = "/" >
-      <Route index element = {<Login/>}/>
+      <Route exact index element = {<Login/>}/>
       <Route path = "Register" element = {<Register/>}/>
-      <Route path = "Dashboard" element = {<Dashboard />} />
+      <Route element = {<PrivateRoute/>}>
+        <Route path = "Dashboard" element={<Dashboard/>} exact/>
+        <Route path = "Teams" element = {<Teams/>} exact/>
+      </Route>
     </Route>
 
   )

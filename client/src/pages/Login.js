@@ -21,7 +21,9 @@ import { useNavigate } from 'react-router-dom';
 import { gapi } from 'gapi-script';
 import { GoogleLogin } from "react-google-login";
 import TypewriterTitle from '../components/TypewriterTitle';
-
+import { useSelector, useDispatch } from 'react-redux'
+import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js'
+import video from "../assets/tunnel-65495.mp4"
 
 
 const theme = createTheme();
@@ -44,6 +46,11 @@ function Copyright(props) {
 
 export default function Login() {
 
+  const userID = useSelector(state => state.auth.isLoggedIn);
+  console.log(userID);
+  const dispatch = useDispatch();
+
+
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -59,24 +66,28 @@ export default function Login() {
     }, []); 
 
   const handleSubmit = async (event) => {
+    setError(userID);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const inputs = {
       email: data.get('email'),
+      
       password: data.get('password'),
     };
+    
     try{
        await loginHandler(inputs);
        navigate("/Dashboard");
     }
     catch (err){
       setError(err.response.data);
+      
     }
   };
 
   const googleResponse = async (response) => {
     try{
-      await googleAuth(response);
+      const res = await googleAuth(response);
       navigate("/Dashboard");
     }catch (err){
       setError(err.response.data);
@@ -92,13 +103,15 @@ export default function Login() {
 
         {/* Handles left hand side of screen */}
 
-        <Grid item sm = {4} md = {7}  >
-          <div style = {{ height: '87vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <img src = 'https://source.unsplash.com/random' alt = 'placeholder' style = {{height: '100%', width: '100%', maxWidth: '100%', marginBottom: '2'}} />
+        <Grid item sm = {4} md = {7}  style = {{ alignItems: 'center'}}>
+            <p> Hello </p>
+          <div style = {{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <video width="100%" height="100%" autoPlay loop muted style = {{objectFit: 'cover'}} >
+                <source src={video} type="video/mp4"/>
+            </video>
+
           </div>
-          <div className='typewriter' style = {{ height: '13vh', width: '100%', display: 'flex'}}>
-            <TypewriterTitle/>
-          </div>
+          
         </Grid>
         
         {/* Right hand side of screem */}

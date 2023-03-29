@@ -9,13 +9,12 @@ const TypewriterTitle = () => {
                 .callFunction(() => {
                 })
                 .pauseFor(250)
-                .deleteAll()
                 .callFunction(() => {
                 })
                 .start();
             }}
             options = {{
-                loop: true,
+                loop: false,
                 autoStart: true
             }}
         />

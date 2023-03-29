@@ -5,7 +5,7 @@ import mysql from "mysql";
 /**
  * @returns {any} Database object that will be used to query from the database
  */
-export const db = mysql.createConnection({
+export const db = mysql.createPool({
     host:"sql12.freesqldatabase.com",
     user: "sql12607207",
     password: "VRKw72eDpy",
