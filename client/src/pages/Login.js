@@ -28,8 +28,6 @@ import video from "../assets/tunnel-65495.mp4"
 
 const theme = createTheme();
 
-const google_access_token = '706697422532-7dr63k4qq2a7m7t98v4fvt2698r7bf8n.apps.googleusercontent.com';
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -53,17 +51,7 @@ export default function Login() {
 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    function start() {
-        gapi.client.init({
-        clientId: google_access_token,
-        scope: 'email',
-        });
-    }
-    
-    gapi.load('client:auth2', start);
-    }, []); 
+ 
 
   const handleSubmit = async (event) => {
     setError(userID);
@@ -76,7 +64,7 @@ export default function Login() {
     };
     
     try{
-       await loginHandler(inputs);
+       await googleAuth(inputs);
        navigate("/Dashboard");
     }
     catch (err){
@@ -85,26 +73,20 @@ export default function Login() {
     }
   };
 
-  const googleResponse = async (response) => {
-    try{
-      const res = await googleAuth(response);
-      navigate("/Dashboard");
-    }catch (err){
-      setError(err.response.data);
-    }
 
-  }
+  
 
   return (
 
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}
+    >
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
 
         {/* Handles left hand side of screen */}
 
         <Grid item sm = {4} md = {7}  style = {{ alignItems: 'center'}}>
-            <p> Hello </p>
+            
           <div style = {{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <video width="100%" height="100%" autoPlay loop muted style = {{objectFit: 'cover'}} >
                 <source src={video} type="video/mp4"/>
@@ -197,13 +179,7 @@ export default function Login() {
                 </Grid>
               </Grid>
 
-              <GoogleLogin
-                clientId = {google_access_token}
-                buttonText='CONTINUE WITH GOOGLE'
-                onSuccess={googleResponse}
-                onFailure={googleResponse}
-                className = "googleButton"
-              />
+             
              
                
               

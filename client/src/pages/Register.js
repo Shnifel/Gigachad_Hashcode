@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
+import { registerHandler } from '../handlers/auth/auth';
 
 function Copyright(props) {
   return (
@@ -30,13 +31,23 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const [error,setError]=React.useState(null)
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const Inputs={
       email: data.get('email'),
+      name: data.get('firstName'),
+      surname:data.get('lastName'),
       password: data.get('password'),
-    });
+    };
+    try{
+      await registerHandler(Inputs);
+   }
+   catch (err){
+     setError(err.response.data);
+
+   }
   };
 
   return (
