@@ -9,10 +9,15 @@ import Link from '@mui/material/Link';
 import CompetitionCard from '../components/CompetitionCard.js';
 import AppBar from '../components/layout/AppBar.js';
 import myTheme from '../components/styles/Theme.js';
-
+import { useSelector} from "react-redux";
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from 'react-router-dom';
 
 
 function Copyright(props) {
+ 
+
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -26,7 +31,12 @@ function Copyright(props) {
 }
 
 function DashboardContent() {
+  const isAdmin = useSelector(state => state.auth.isAdmin);
+  const navigate = useNavigate();
 
+  const createNew = () => {
+    navigate("/CreateCompetition");
+  }
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -54,6 +64,12 @@ function DashboardContent() {
           <Typography component = "h1" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "grey"}}>
             Coding Competition
           </Typography>
+          {isAdmin &&
+          <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex'}}>
+            <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} sx = {{backgroundColor: (theme) => theme.palette.primary.main, color: 'black', margin: '3vh'}}>
+              CREATE NEW COMPETITION
+            </Button>
+          </Box>}
           <CompetitionCard name = {"HashCode Competition 1"} isrunning = {true} />
           <CompetitionCard name = {"Google Kick Start"} isrunning = {false} />
             <Copyright sx={{ pt: 4 }} />

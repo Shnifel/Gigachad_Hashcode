@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
 import Teams from './pages/adminViews/Teams'
+import CompetitionForm from './pages/adminViews/CompetitionForm';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
       <Route element = {<PrivateRoute/>}>
         <Route path = "Dashboard" element={<Dashboard/>} exact/>
         <Route path = "Teams" element = {<Teams/>} exact/>
+        <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
       </Route>
     </Route>
 

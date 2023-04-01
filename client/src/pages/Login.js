@@ -24,27 +24,41 @@ import TypewriterTitle from '../components/TypewriterTitle';
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js'
 import video from "../assets/tunnel-65495.mp4"
+import { makeStyles } from '@material-ui/core/styles';
+import ReactPlayer from 'react-player';
+import myTheme from '../components/styles/Theme';
 
 
-const theme = createTheme();
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
+  },
+  player: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+    padding: theme.spacing(2),
+  }
+}));
 
 const google_access_token = '706697422532-7dr63k4qq2a7m7t98v4fvt2698r7bf8n.apps.googleusercontent.com';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
 
 
 export default function Login() {
+  const classes = useStyles();
 
   const userID = useSelector(state => state.auth.isLoggedIn);
   console.log(userID);
@@ -97,26 +111,26 @@ export default function Login() {
 
   return (
 
-    <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+    <ThemeProvider theme={myTheme}>
+      <div className={classes.root}>
+      <ReactPlayer 
+        className = {classes.player}
+        url = {video}
+        playing
+        loop
+        muted
+        width= "100%"
+        height = "auto"
+      />
+      <div className={classes.content}>
+      <Grid container component="main" sx={{ justifyContent: 'center' }}>
         <CssBaseline />
+
 
         {/* Handles left hand side of screen */}
 
-        <Grid item sm = {4} md = {7}  style = {{ alignItems: 'center'}}>
-            <p> Hello </p>
-          <div style = {{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <video width="100%" height="100%" autoPlay loop muted style = {{objectFit: 'cover'}} >
-                <source src={video} type="video/mp4"/>
-            </video>
 
-          </div>
-          
-        </Grid>
-        
-        {/* Right hand side of screem */}
-
-        <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
+        <Grid item >
           <Box
             sx={{
               my: 8,
@@ -126,22 +140,32 @@ export default function Login() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'grey' }}>
+           <div className='typewriter' style={{background: 'transparent'}}>
+            <TypewriterTitle />
+           </div>
+              
+            
+            <Avatar sx={{ m: 1, color: 'primary' , bgcolor: 'transparent' }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5" color="secondary">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }} style = {{width: '100%'}}>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, color: 'white' }} style = {{width: '100vh'}}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
+                color = "black"
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
+                variant = "filled"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20}
+                }}
+                
               />
               <TextField
                 margin="normal"
@@ -152,9 +176,15 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                variant='filled'
+                color = "black"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20}
+                }}
+
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value="remember" color="secondary" />}
                 label="Remember me"
               />
 
@@ -206,12 +236,12 @@ export default function Login() {
               />
              
                
-              
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
-      </Grid>
+      </Grid> 
+      </div>
+      </div>
     </ThemeProvider>
   );
 }

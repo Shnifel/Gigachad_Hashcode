@@ -5,17 +5,21 @@ const myTheme = createTheme({
       danger: '#e53e3e',
     },
     palette: {
+      type: 'dark',
       primary: {
-        main: '#4681f4',
+        main: '#03dac6',
         light: '#fefefe',
       },
       secondary: {
-        main: '#4681f4',
+        main: '#fefefe',
       },
       neutral: {
         main: '#ffffff',
         contrastText: '#fff',
       },
+      black: {
+        main: '#000000',
+      }
     },
   });
 

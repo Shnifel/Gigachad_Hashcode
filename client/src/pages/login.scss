@@ -1,7 +1,7 @@
 .typewriter {
     font-size: 60px;
     font-family: 'Courier New', Courier, monospace;
-    color: green;
+    color: #228b22;
     font-weight: bold;
     align-items: center;
     justify-content: center;
@@ -26,6 +26,7 @@
     width: 100%;
     color: black;
     align-content: center;
+    border-radius: 100%;
 
     > div{
         font-weight: bold;
