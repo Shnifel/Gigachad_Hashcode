@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
 import Teams from './pages/Teams'
+import CompetitionForm from './pages/adminViews/CompetitionForm'
 
 const router = createBrowserRouter(
   createRoutesFromElements(

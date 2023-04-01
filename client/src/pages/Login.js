@@ -52,24 +52,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-;
-
-
-
-
 
 export default function Login() {
   const classes = useStyles();
 
   const userID = useSelector(state => state.auth.isLoggedIn);
-  console.log(userID);
-  const dispatch = useDispatch();
-
 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
  
-
   const handleSubmit = async (event) => {
     setError(userID);
     event.preventDefault();
@@ -209,18 +200,7 @@ export default function Login() {
                       OR
                   </Typography>
                 </Grid>
-              </Grid>
-
-              <GoogleLogin
-                clientId = {google_access_token}
-                buttonText='CONTINUE WITH GOOGLE'
-                onSuccess={googleResponse}
-                onFailure={googleResponse}
-                className = "googleButton"
-              />
-             
-             
-               
+              </Grid>    
             </Box>
           </Box>
         </Grid>

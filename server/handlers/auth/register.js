@@ -3,14 +3,11 @@ import { createUserWithEmailAndPassword,sendEmailVerification } from "firebase/a
 import {doc,setDoc} from "firebase/firestore";
 
 
-
 export const register = async (req, res) => {
     try {
         const name= req.body.name
         const surname=req.body.surname
         const email=req.body.email
-        
-    
         const usercredential = await createUserWithEmailAndPassword(Auth,req.body.email,req.body.password)
         const uid = usercredential.user.uid
         const userref = doc(db,"Users",uid)
@@ -19,9 +16,5 @@ export const register = async (req, res) => {
     } catch (error) {
         console.log(error)    
     }
-    
-    
-    
 
-    
 };
