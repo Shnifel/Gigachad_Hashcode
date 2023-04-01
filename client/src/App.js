@@ -5,8 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
-import Teams from './pages/adminViews/Teams'
-import CompetitionForm from './pages/adminViews/CompetitionForm';
+import Teams from './pages/Teams'
 
 const router = createBrowserRouter(
   createRoutesFromElements(

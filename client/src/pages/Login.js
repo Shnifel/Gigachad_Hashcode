@@ -52,7 +52,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const google_access_token = '706697422532-7dr63k4qq2a7m7t98v4fvt2698r7bf8n.apps.googleusercontent.com';
+;
+
 
 
 
@@ -67,17 +68,7 @@ export default function Login() {
 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    function start() {
-        gapi.client.init({
-        clientId: google_access_token,
-        scope: 'email',
-        });
-    }
-    
-    gapi.load('client:auth2', start);
-    }, []); 
+ 
 
   const handleSubmit = async (event) => {
     setError(userID);
@@ -90,7 +81,7 @@ export default function Login() {
     };
     
     try{
-       await loginHandler(inputs);
+       await googleAuth(inputs);
        navigate("/Dashboard");
     }
     catch (err){
@@ -99,15 +90,8 @@ export default function Login() {
     }
   };
 
-  const googleResponse = async (response) => {
-    try{
-      const res = await googleAuth(response);
-      navigate("/Dashboard");
-    }catch (err){
-      setError(err.response.data);
-    }
 
-  }
+  
 
   return (
 
@@ -234,6 +218,7 @@ export default function Login() {
                 onFailure={googleResponse}
                 className = "googleButton"
               />
+             
              
                
             </Box>
