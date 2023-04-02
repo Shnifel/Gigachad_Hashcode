@@ -1,13 +1,27 @@
+
+
+
+@font-face{
+    font-family:'Scififont';
+    src: url("../assets/BlocTekRegular-gxEZ4.ttf") format("truetype");
+
+}
+
+.font{
+    font-family:'Scififont', sans-serif;
+}
+
 .typewriter {
-    font-size: 60px;
-    font-family: 'Courier New', Courier, monospace;
-    color: #228b22;
-    font-weight: bold;
+    font-size: 50px;
+    font-family: 'Scififont';
+    color: #FF000C;
+    font-weight: normal;
     align-items: center;
     justify-content: center;
     text-align: center;
     background-color:white ;
 }
+
 
 .error {
     justify-content: center;

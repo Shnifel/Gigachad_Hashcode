@@ -5,7 +5,7 @@ const TypewriterTitle = () => {
   return (
         <Typewriter
             onInit={(typewriter) => {
-                typewriter.typeString('\u003C HashCode Competition/ \u003E')
+                typewriter.typeString('\u003C HASHCODE COMPETITION / \u003E')
                 .callFunction(() => {
                 })
                 .pauseFor(250)

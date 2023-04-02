@@ -1,9 +1,11 @@
 import {createTheme } from '@mui/material/styles';
 
+
 const myTheme = createTheme({
     status: {
       danger: '#e53e3e',
     },
+    
     palette: {
       type: 'dark',
       primary: {

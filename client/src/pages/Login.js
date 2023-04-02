@@ -23,7 +23,7 @@ import { GoogleLogin } from "react-google-login";
 import TypewriterTitle from '../components/TypewriterTitle';
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js'
-import video from "../assets/tunnel-65495.mp4"
+import video from "../assets/tunnel-65492.mp4"
 import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import myTheme from '../components/styles/Theme';
@@ -62,7 +62,7 @@ export default function Login() {
   const navigate = useNavigate();
  
   const handleSubmit = async (event) => {
-    setError(userID);
+    
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const inputs = {
@@ -72,8 +72,10 @@ export default function Login() {
     };
     
     try{
-       await googleAuth(inputs);
-       navigate("/Dashboard");
+      
+      const login = await loginHandler(inputs);
+      navigate("/Dashboard")
+      console.log(login)
     }
     catch (err){
       setError(err.response.data);

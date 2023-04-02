@@ -13,24 +13,41 @@ import { useSelector} from "react-redux";
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import ReactPlayer from 'react-player';
+import Video from "../assets/lines-128089.mp4";
+import './login.scss'; 
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
+  },
+  player: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+    padding: theme.spacing(2),
+  }
+}));
 
 
-function Copyright(props) {
- 
 
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
+
 
 function DashboardContent() {
+  const classes = useStyles();
   const isAdmin = useSelector(state => state.auth.isAdmin);
   const navigate = useNavigate();
 
@@ -44,26 +61,35 @@ function DashboardContent() {
 
   return (
     <ThemeProvider theme={myTheme}>
-      <Box sx={{ display: 'flex'}}>
+      <div className={classes.root}>
+      <ReactPlayer 
+        className = {classes.player}
+        url = {Video}
+        playing
+        loop
+        muted
+        playbackRate={0.5}
+        width= "100%"
+        height = "auto"
+      />
+      <div className={classes.content}>
+      <Box sx={{ display: 'flex', backgroundColor:'transparent'}}>
         <CssBaseline />
-        <AppBar />
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.primary.light
-                : theme.palette.primary.light,
+            backgroundColor: 'transparent',
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
           }}
-        >
+        > 
           <Toolbar />
           <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
-          <Typography component = "h1" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "grey"}}>
-            Coding Competition
-          </Typography>
+          <div className='font'>
+          <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#EF1111" }}>
+            CODING COMPETITION
+          </Typography></div>
           {isAdmin &&
           <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex'}}>
             <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} sx = {{backgroundColor: (theme) => theme.palette.primary.main, color: 'black', margin: '3vh'}}>
@@ -72,11 +98,11 @@ function DashboardContent() {
           </Box>}
           <CompetitionCard name = {"HashCode Competition 1"} isrunning = {true} />
           <CompetitionCard name = {"Google Kick Start"} isrunning = {false} />
-            <Copyright sx={{ pt: 4 }} />
+           
           </Container>
         </Box>
-      </Box>
-    </ThemeProvider>
+      </Box> </div> </div>
+    </ThemeProvider> 
   );
 }
 
