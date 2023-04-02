@@ -7,6 +7,15 @@ import {getFirestore} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+import admin from"firebase-admin";
+
+import serviceAccount from "./serviceAccountKey.json" assert { type: "json" };;
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
 const firebaseConfig = {
   apiKey: "AIzaSyDrfpU2_1oSolJhnRGZaoduMG0FvexqYpU",
   authDomain: "hashcode-45476.firebaseapp.com",
@@ -23,4 +32,5 @@ const firebaseConfig = {
 export const googleProvider = new GoogleAuthProvider();
 export const app = initializeApp(firebaseConfig);
 export const Auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = admin.firestore();
+export const Admin = admin
