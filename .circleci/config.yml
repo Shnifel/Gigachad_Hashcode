@@ -24,7 +24,7 @@ jobs:
           name: Build React App
           command: |
             cd client
-            npm run build
+            CI=false npm run build
       - save_cache:
           key: app-build-cache-{{ .Branch }}
           paths:
