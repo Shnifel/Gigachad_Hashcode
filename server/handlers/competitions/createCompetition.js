@@ -23,7 +23,7 @@ export const createCompetition = async(req,res) => {
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
-      return res.status(400).json(error.message)  
+        return res.status(400).json(error.message)  
       });            
 
 
