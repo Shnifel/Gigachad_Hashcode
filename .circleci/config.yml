@@ -16,6 +16,11 @@ jobs:
           command: |
             cd client
             npm install --legacy-peer-deps
+      - run:
+          name: Upload Coverage Report
+          command: | 
+            cd client
+            npx codecov
       - save_cache:
           key: dependency-cache-{{ checksum "client/package-lock.json" }}
           paths:
