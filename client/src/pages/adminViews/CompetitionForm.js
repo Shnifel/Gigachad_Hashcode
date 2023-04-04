@@ -11,17 +11,35 @@ import myTheme from '../../components/styles/Theme.js';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import { createNewCompetitions } from '../../handlers/competitions.js';
+import Avatar from '@mui/material/Avatar';
+import Error from "@mui/icons-material/Error"
+import { useSelector } from 'react-redux';
  
 
 function CompetitionCreate() {
-    const createTeam = (event) => {
+  const id=useSelector(useSelector(state => state.auth.userID))
+  const [err,setError] = useState(null)
+    const createCompetition = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const inputs = {
-            teamName: data.get('name'),
-            
-            user: data.get('user'),
+          uid:id,
+          compname : data.get("name"),
+          compdesc : data.get("details"),
+          regstartdate : data.get("regStart"),
+          regenddate : data.get("regClose"),
+          teamsize: data.get("numPeople"),
+          numteams: data.get("numTeams"),
+          compdate : data.get("compDate")
+
         };
+        try {
+          const response = await createNewCompetitions(inputs)
+          console.log(response.data)
+        } catch (err) {
+          setError(err.response.data)
+        }
         console.log(inputs);
         }
 
@@ -45,7 +63,7 @@ function CompetitionCreate() {
           </Typography>
           <Container sx = {{ mt : 4, mb : 4}}> 
            <Paper>
-            <Box component = "form" Vali sx = {{mt:1}} onSubmit = {createTeam}>
+            <Box component = "form" Vali sx = {{mt:1}} onSubmit = {createCompetition}>
                 <TextField
                 margin="normal"
                 required
@@ -77,6 +95,15 @@ function CompetitionCreate() {
                 margin = "normal"
                 required
                 type = "datetime-local"
+                name = "regStart"
+                label = "Registration open date"
+                id = "regStart"
+                />
+                <TextField
+                InputLabelProps={{ shrink: true }}
+                margin = "normal"
+                required
+                type = "datetime-local"
                 name = "regClose"
                 label = "Registration closing date"
                 id = "regClose"
@@ -95,7 +122,13 @@ function CompetitionCreate() {
                 name = "numPeople"
                 label = "Set a limit on the maximum number of individuals per team"
                 id = "numPeople"/>
-
+              {err && <div className='error'>
+              <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
+              <Error />
+              </Avatar>
+              <p> {err} </p>
+              </div>
+              }
                 <Button
                 type="submit"
                 fullWidth

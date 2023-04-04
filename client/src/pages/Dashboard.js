@@ -1,13 +1,11 @@
 import * as React from 'react';
-import {createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import CompetitionCard from '../components/CompetitionCard.js';
-import AppBar from '../components/layout/AppBar.js';
 import myTheme from '../components/styles/Theme.js';
 import { useSelector} from "react-redux";
 import Button from '@mui/material/Button';
@@ -17,6 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import Video from "../assets/lines-128089.mp4";
 import './login.scss'; 
+import { useEffect,useState } from 'react';
+import { getCompetitions } from '../handlers/competitions.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +47,15 @@ const useStyles = makeStyles((theme) => ({
 
 
 function DashboardContent() {
+  const [comps,setcomps] = useState(null)
+  useEffect(() => {
+    async function fetchdata(){
+      const response = await getCompetitions()
+      setcomps(response)
+    }
+     fetchdata()
+     console.log(comps)
+        }, []);
   const classes = useStyles();
   const isAdmin = useSelector(state => state.auth.isAdmin);
   const navigate = useNavigate();
@@ -54,10 +63,8 @@ function DashboardContent() {
   const createNew = () => {
     navigate("/CreateCompetition");
   }
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  
+  
 
   return (
     <ThemeProvider theme={myTheme}>
@@ -87,16 +94,30 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
           <div className='font'>
-          <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#EF1111" }}>
-            CODING COMPETITION
+          <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#FF000C" }}>
+            CODING COMPETITIONS
           </Typography></div>
           {isAdmin &&
           <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex'}}>
             <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} sx = {{backgroundColor: (theme) => theme.palette.primary.main, color: 'black', margin: '3vh'}}>
-              CREATE NEW COMPETITION
+              CREATE NEW COMPETITIONS
             </Button>
           </Box>}
-          <CompetitionCard name = {"HashCode Competition 1"} isrunning = {true} />
+          <Box>
+          {comps &&
+
+            
+              comps.map((comp)=>(
+                
+                <CompetitionCard key ={comp.id} compid = {comp.id} name = {comp.data.compname} isrunning = {new Date(comp.data.regenddate)>=  new Date()} />
+              ))}
+            
+              
+
+           
+            
+          </Box>
+          
           <CompetitionCard name = {"Google Kick Start"} isrunning = {false} />
            
           </Container>

@@ -7,6 +7,10 @@ import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
 import Teams from './pages/Teams'
 import CompetitionForm from './pages/adminViews/CompetitionForm'
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setUserID } from './stateManagement/state';
+import { Auth } from './Firebase';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,10 +27,24 @@ const router = createBrowserRouter(
   )
 )
 
+
+
+
+
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+  const unsubscribe = Auth.onAuthStateChanged((user) => {
+    dispatch(setUserID(user.uid));
+    });
+
+    return unsubscribe;
+  }, [dispatch]);
+  
   return (
     <div className='app'>
-      <RouterProvider router = {router} />
+      <RouterProvider router = {router} />  
     </div>
     );
 }

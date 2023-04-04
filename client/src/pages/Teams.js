@@ -12,30 +12,60 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useLocation } from 'react-router-dom';
 import { FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { createTeam,joinTeams } from '../handlers/competitions.js';
+import { Avatar } from '@mui/material';
+import Error from '@mui/icons-material/Error.js';
+import './login.scss';
 
 
 function TeamRegister() {
+  const [error,setError] = useState(null) 
   const location = useLocation();
   const compName = location.state.compName;
-
+  const compid = location.state.compid;
+  const userid = useSelector(state=>state.auth.userID)
   const [selectedValue, setSelected] = useState('');
-
+  const [code,setcode] = useState(null)
   const toggleChange = (event) => {
     setSelected(event.target.value);
   }
 
-  const createTeam = (event) => {
+  const handlecreateTeam = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const inputs = {
-      teamName: data.get('name'),
-      
-      user: data.get('user'),
+      teamname: data.get('name'),
+      uid: userid,
+      compid: compid,
     };
-    console.log(inputs);
+    
+
+    try { 
+    const code= await createTeam(inputs)
+      setcode(code.teamCode)
+    } catch (error) {
+      setError(error.response.data)
+    }
   }
 
-  
+  const handlejoinTeam = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const inputs = {
+      teamCode: data.get('Code'),
+      uid: userid,
+      
+    };
+    
+    console.log(userid)
+    try { 
+     await joinTeams(inputs)
+      
+    } catch (error) {
+      setError(error.response.data)
+    }
+  }
 
   return (
     <ThemeProvider theme={myTheme}>
@@ -63,7 +93,7 @@ function TeamRegister() {
                 label = "Create a new team"
               />
               {selectedValue == 'create' && 
-                <Box component = "form" Vali sx = {{mt:1}} onSubmit = {createTeam}>
+                <Box component = "form" sx = {{mt:1}} onSubmit = {handlecreateTeam}>
                   <TextField
                     margin="normal"
                     required
@@ -81,6 +111,19 @@ function TeamRegister() {
                     label="User"
                     id="user"
                   />
+                  {code &&
+                    <p>
+                     Your team code is: {code}
+                    
+                    </p>
+                  }
+                   {error && <div className='error'>
+                    <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
+                    <Error />
+                    </Avatar>
+                    <p> {error} </p>
+                    </div>
+                    }
                   <Button
                     type="submit"
                     fullWidth
@@ -97,19 +140,37 @@ function TeamRegister() {
                 label = "Join an existing team"
               />
               { selectedValue == "join" && 
-              <Box component = "form">
+              <Box component = "form"
+              onSubmit={handlejoinTeam}>
                 <TextField
                     margin="normal"
                     required
                     fullWidth
-                    name="password"
+                    name="Code"
                     label="Enter the team code"
                     id="Team Code"
                   />
+               {error && <div className='error'>
+                    <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
+                    <Error />
+                    </Avatar>
+                    <p> {error} </p>
+                    </div>
+                    }
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    
+                  >
+                  Join Team
+                  </Button>
               </Box>
               }
 
             </RadioGroup>
+            
           </Container>
           </Container>
         </Box>

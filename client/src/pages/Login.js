@@ -6,27 +6,26 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Error from "@mui/icons-material/Error"
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {  ThemeProvider } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import "./login.scss"
 import {loginHandler, googleAuth} from "../handlers/auth/auth.js"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { gapi } from 'gapi-script';
-import { GoogleLogin } from "react-google-login";
 import TypewriterTitle from '../components/TypewriterTitle';
-import { useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js'
 import video from "../assets/tunnel-65492.mp4"
 import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import myTheme from '../components/styles/Theme';
+import GoogleButton from 'react-google-button';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
-
-  const userID = useSelector(state => state.auth.isLoggedIn);
+  const dispatch= useDispatch();
+  
 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -74,17 +73,28 @@ export default function Login() {
     try{
       
       const login = await loginHandler(inputs);
+      console.log(login)
+      
       navigate("/Dashboard")
       console.log(login)
     }
     catch (err){
-      setError(err.response.data);
+      setError(err.message);
       
     }
   };
 
 
-  
+  const handlegoogle = async(event) => {
+    event.preventDefault()
+    try {
+      await googleAuth()
+      
+      navigate('/Dashboard')
+    } catch (err) {
+      setError(err.message);
+    }
+  }
 
   return (
 
@@ -202,7 +212,13 @@ export default function Login() {
                       OR
                   </Typography>
                 </Grid>
-              </Grid>    
+                
+              </Grid>
+              <GoogleButton
+                  type="light" // can be light or dark
+                  onClick={handlegoogle}
+                  className= 'googleButton'
+                />    
             </Box>
           </Box>
         </Grid>

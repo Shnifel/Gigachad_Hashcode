@@ -11,10 +11,11 @@ const CompetitionCard = (props) => {
  const navigate = useNavigate();
 
  const handleClick = () => {
-  navigate("/Teams", {state: {compName : props.name}})
+  navigate("/Teams", {state: {compName : props.name,compid:props.compid}})
  }
   return (
-    
+    console.log("Test"),
+
     <Card sx={{ display: 'flex', margin: '3vh', backgroundColor: 'white'}} onClick = {handleClick} >
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
