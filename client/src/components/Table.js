@@ -11,9 +11,10 @@ function preventDefault(event) {
   }
   
   export default function DisplayTable(props) {
-    const rows = props.rows
-    const labels = props.labels
-    const title = props.title
+    const rows = props.rows;
+    const labels = props.labels;
+    const title = props.title;
+    const cols = props.cols;
 
     return (
       <React.Fragment>
@@ -28,8 +29,8 @@ function preventDefault(event) {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                {labels.map((label) => (
-                    <TableCell> {row[label]}</TableCell>
+                {cols.map((col) => (
+                    <TableCell key = {row.id + col}> {row[col]}</TableCell>
                 ))}
               </TableRow>
             ))}

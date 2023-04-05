@@ -14,52 +14,42 @@ import { useLocation } from 'react-router-dom';
 import { FormControlLabel, RadioGroup, Radio } from '@mui/material';
 import DisplayTable from '../../components/Table.js';
 import Paper from '@mui/material/Paper';
+import { useEffect } from 'react';
+import { getTeams } from '../../handlers/competitions.js';
 
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-    return { id, date, name, shipTo, paymentMethod, amount };
-  }
+function createData(id, teamName, code, numMembers) {
+    return { id, teamName, code, numMembers };
+}
 
-  const labels = ["id", "date", "name", "shipTo", "paymentMethod", "amount"];
+
+
   
 
-  const rows = [
-    createData(
-      0,
-      '16 Mar, 2019',
-      'Elvis Presley',
-      'Tupelo, MS',
-      'VISA ⠀•••• 3719',
-      312.44,
-    ),
-    createData(
-      1,
-      '16 Mar, 2019',
-      'Paul McCartney',
-      'London, UK',
-      'VISA ⠀•••• 2574',
-      '866.99',
-    ),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-    createData(
-      3,
-      '16 Mar, 2019',
-      'Michael Jackson',
-      'Gary, IN',
-      'AMEX ⠀•••• 2000',
-      654.39,
-    ),
-    createData(
-      4,
-      '15 Mar, 2019',
-      'Bruce Springsteen',
-      'Long Branch, NJ',
-      'VISA ⠀•••• 5919',
-      212.79,
-    ),
-  ];
-  
+function TeamDisplay() {
 
-function TeamRegister() {
+  const location = useLocation();
+  const compName = location.state.compName;
+  const compid = location.state.compid;
+  const [teams, setTeams] = useState(null);
+  const [rows, setRows] = useState(null);
+  const labels = ["Team Name", "Team Join Code", "Number of members"];
+  const cols = ["teamName", "code", "numMembers"];
+
+
+  useEffect(() => {
+    async function fetchdata(){
+      const inputs = { compid: compid};
+      const response = await getTeams(inputs); 
+      setRows(response.map((team) => {
+        return createData(team.id, team.teamname, team.teamCode, team.members.length)
+      }
+      ))
+      
+    }
+     fetchdata()
+  
+        }, []);
+
 
   return (
     <ThemeProvider theme={myTheme}>
@@ -79,12 +69,14 @@ function TeamRegister() {
           <Typography component = "h1" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "grey"}}>
             My Competition
           </Typography>
-          <Container sx = {{ mt : 4, mb : 4}}>
+          {rows && 
+           <Container sx = {{ mt : 4, mb : 4}}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <DisplayTable rows = {rows} labels = {labels} title = "My table"/>
+                <DisplayTable rows = {rows} labels = {labels} cols = {cols} title = "My table"/>
             </Paper>
             
-          </Container>
+          </Container>}
+          
           </Container>
         </Box>
       </Box>
@@ -93,5 +85,5 @@ function TeamRegister() {
 }
 
 export default function Teams() {
-  return <TeamRegister />;
+  return <TeamDisplay />;
 }

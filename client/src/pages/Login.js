@@ -21,36 +21,10 @@ import TypewriterTitle from '../components/TypewriterTitle';
 import {  useDispatch } from 'react-redux'
 import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js'
 import video from "../assets/tunnel-65492.mp4"
-import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import myTheme from '../components/styles/Theme';
 import GoogleButton from 'react-google-button';
-
-
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: -1,
-  },
-  player: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-  },
-  content: {
-    position: 'relative',
-    zIndex: 1,
-    padding: theme.spacing(2),
-  }
-}));
+import { useStyles } from '../components/styles/Theme';
 
 
 export default function Login() {
@@ -72,12 +46,8 @@ export default function Login() {
     };
     
     try{
-      
       const login = await loginHandler(inputs);
-      console.log(login)
-      
-      navigate("/Dashboard")
-      console.log(login)
+      navigate("/Dashboard");
     }
     catch (err){
       setError(err.message);
@@ -151,7 +121,7 @@ export default function Login() {
                 autoComplete="email"
                 variant = "filled"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20}
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
                 }}
                 
               />
@@ -167,7 +137,7 @@ export default function Login() {
                 variant='filled'
                 color = "black"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20}
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
                 }}
 
               />
@@ -215,11 +185,16 @@ export default function Login() {
                 </Grid>
                 
               </Grid>
-              <GoogleButton
+              
+                <GoogleButton
+                  label = "CONTINUE WITH GOOGLE"
                   type="light" // can be light or dark
                   onClick={handlegoogle}
                   className= 'googleButton'
-                />    
+                  style = {{width: '100%', borderRadius: 10}}
+                />  
+             
+                
             </Box>
           </Box>
         </Grid>

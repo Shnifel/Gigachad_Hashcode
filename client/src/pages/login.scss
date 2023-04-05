@@ -1,14 +1,9 @@
 
 
-
 @font-face{
     font-family: "Scififont";
     src: url("../assets/BlocTekRegular-gxEZ4.ttf") format("truetype");
 
-}
-
-.font{
-    font-family:Scififont;
 }
 
 .typewriter {
@@ -16,6 +11,7 @@
     font-family: "'Scififont'";
     color: #FF000C;
     font-weight: normal;
+    font-style: normal;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -28,6 +24,7 @@
     text-align: center;
     background-color: rgb(255, 204, 204);
     display: flex;
+    color: black;
     border-radius: 10px;
     align-items: center;
     
@@ -37,20 +34,19 @@
     
     display: flex;
     justify-content: center;
-    width: 100%;
     color: black;
     align-content: center;
-    border-radius: 100%;
-    
 
     > div{
-        font-weight: bold;
+        width : 100%;
+        display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: right;
     }
 
     > span{
-        justify-content: start;
+        width: 100%;
+        justify-content: center;
         color: black;
     }
 }

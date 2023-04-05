@@ -5,7 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
-import Teams from './pages/Teams'
+import Teams from './pages/adminViews/Teams'
 import CompetitionForm from './pages/adminViews/CompetitionForm'
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -26,11 +26,6 @@ const router = createBrowserRouter(
 
   )
 )
-
-
-
-
-
 const App = () => {
   const dispatch = useDispatch();
 
