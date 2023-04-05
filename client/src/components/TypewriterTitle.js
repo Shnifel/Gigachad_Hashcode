@@ -7,7 +7,7 @@ const TypewriterTitle = () => {
   return (
         <Typewriter
             onInit={(typewriter) => {
-                typewriter.typeString('\u003C HASHCODE REVIVED / \u003E')
+                typewriter.typeString('\u003C HASHCODE COMPETITION / \u003E')
                 .callFunction(() => {
                 })
                 .pauseFor(250)
@@ -18,10 +18,6 @@ const TypewriterTitle = () => {
             options = {{
                 loop: false,
                 autoStart: true,
-                fontFamily:"'Scififont'"
-            }}
-            textStyle={{
-                fontFamily:"'Scififont'"
             }}
             
         />

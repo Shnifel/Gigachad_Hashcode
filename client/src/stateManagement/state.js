@@ -4,8 +4,8 @@ export const stateSlice = createSlice({
   name: 'auth',
   initialState: {
     userID: null,
-    isAdmin: true,
-    isLoggedIn: true
+    isAdmin: false,
+    isLoggedIn: false
   },
   reducers: {
     setUserID: (state, action) => {

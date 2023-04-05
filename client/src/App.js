@@ -9,7 +9,7 @@ import Teams from './pages/adminViews/Teams'
 import CompetitionForm from './pages/adminViews/CompetitionForm'
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { setUserID } from './stateManagement/state';
+import { setUserID, setLoggedIn } from './stateManagement/state';
 import { Auth } from './Firebase';
 
 const router = createBrowserRouter(
@@ -32,6 +32,12 @@ const App = () => {
   useEffect(() => {
   const unsubscribe = Auth.onAuthStateChanged((user) => {
     dispatch(setUserID(user.uid));
+    if (user) {
+      dispatch(setLoggedIn(true));
+    }
+    else{
+      dispatch(setLoggedIn(false));
+    }
     });
 
     return unsubscribe;
