@@ -47,6 +47,8 @@ export default function Login() {
     
     try{
       const login = await loginHandler(inputs);
+      const isAdmin = login.isAdmin;
+      dispatch(setAdmin(isAdmin));
       navigate("/Dashboard");
     }
     catch (err){
@@ -59,8 +61,9 @@ export default function Login() {
   const handlegoogle = async(event) => {
     event.preventDefault()
     try {
-      await googleAuth()
-      
+      const creds = await googleAuth();
+      const isAdmin = creds.isAdmin;
+      dispatch(setAdmin(isAdmin));
       navigate('/Dashboard')
     } catch (err) {
       setError(err.message);

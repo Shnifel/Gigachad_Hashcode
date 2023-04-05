@@ -4,6 +4,7 @@ import {Auth,db} from "../../Firebase.js"
 import { createUserWithEmailAndPassword,sendEmailVerification,signInWithEmailAndPassword,signInWithPopup } from "firebase/auth";
 import {collection,doc,setDoc,query,onSnapshot,where,documentId} from "firebase/firestore";
 import { googleProvider } from "../../Firebase.js";
+import axios from "axios";
 
 function Error(message) {
     this.message = message;
@@ -39,11 +40,19 @@ export const loginHandler = async (inputs) => {
     if (! emailVerified){
         throw new Error("Please verify your email before logging in");
     }
+
+    const creds = {uid : id}
+    const response = await axios.post("/auth/login",creds); 
+    return response.data;
 }
 
 
 export const googleAuth = async (response) => {
-    await signInWithPopup(Auth,googleProvider)
+    const user = await signInWithPopup(Auth,googleProvider)
+    const id = user.user.uid
 
+    const creds = {uid : id}
+    const res = await axios.post("/auth/login",creds); 
+    return res.data;
 }
 

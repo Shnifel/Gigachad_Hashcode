@@ -16,7 +16,7 @@ const CompetitionCard = (props) => {
   return (
     console.log("Test"),
 
-    <Card sx={{ display: 'flex', margin: '3vh', backgroundColor: 'white'}} onClick = {handleClick} >
+    <Card sx={{ display: 'flex', margin: '3vh', backgroundColor: 'white', borderRadius : 5}} onClick = {handleClick} >
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
           <Typography component="div" variant="h5">

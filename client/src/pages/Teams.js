@@ -17,10 +17,17 @@ import { createTeam,joinTeams } from '../handlers/competitions.js';
 import { Avatar } from '@mui/material';
 import Error from '@mui/icons-material/Error.js';
 import './login.scss';
-
+import { useStyles } from '../components/styles/Theme.js';
+import video from "../assets/chain-25380.mp4";
+import ReactPlayer from 'react-player';
+import ErrorMessage from '../components/Error.js';
+import Success from '../components/Success.js';
+import Clipboard from '../components/Clipboard.js';
 
 function TeamRegister() {
-  const [error,setError] = useState(null) 
+  const classes = useStyles();
+  const [error,setError] = useState(null) ;
+  const [success, setSuccess] = useState(null);
   const location = useLocation();
   const compName = location.state.compName;
   const compid = location.state.compid;
@@ -29,6 +36,9 @@ function TeamRegister() {
   const [code,setcode] = useState(null)
   const toggleChange = (event) => {
     setSelected(event.target.value);
+    setSuccess(null);
+    setError(null);
+    setcode(null);
   }
 
   const handlecreateTeam = async (event) => {
@@ -43,9 +53,12 @@ function TeamRegister() {
 
     try { 
     const code= await createTeam(inputs)
-      setcode(code.teamCode)
+    setcode(code.teamCode)
+    setSuccess("Succesfully created team, share the code above to invite your friends to join")
+    setError(null)
     } catch (error) {
       setError(error.response.data)
+      setSuccess(null)
     }
   }
 
@@ -55,23 +68,37 @@ function TeamRegister() {
     const inputs = {
       teamCode: data.get('Code'),
       uid: userid,
-      
+      compid: compid
     };
     
     console.log(userid)
     try { 
      await joinTeams(inputs)
+     setSuccess("Successfully joined team")
+     setError(null)
+
       
     } catch (error) {
       setError(error.response.data)
+      setSuccess(null)
     }
   }
 
   return (
     <ThemeProvider theme={myTheme}>
+       <div className={classes.root}>
+      <ReactPlayer 
+        className = {classes.player}
+        url = {video}
+        playing
+        loop
+        muted
+        width= "100%"
+        height = "auto"
+      />
+      <div className={classes.content}>
       <Box sx={{ display: 'flex'}}>
         <CssBaseline />
-        <AppBar />
         <Box
           component="main"
           sx={{
@@ -80,17 +107,25 @@ function TeamRegister() {
             overflow: 'auto',
           }}
         >
-          <Toolbar />
           <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
-          <Typography component = "h1" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "grey"}}>
-            Create/Register a team for the {compName}
-          </Typography>
+          <div className='font'>
+          <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#006400" }}>
+            SIGN UP FOR THE {compName.toUpperCase()}
+          </Typography></div>
           <Container sx = {{ mt : 4, mb : 4}}>
             <RadioGroup value = {selectedValue} onChange = {toggleChange}>
               <FormControlLabel
                 value = "create"
-                control={<Radio/>}
+                control={<Radio sx={{
+                  color: '#ffffff',
+                  '&.Mui-checked': {
+                    color: '#ffffff',
+                  },
+                }}/>}
                 label = "Create a new team"
+                sx = {{
+                  color: '#ffffff'
+                }}
               />
               {selectedValue == 'create' && 
                 <Box component = "form" sx = {{mt:1}} onSubmit = {handlecreateTeam}>
@@ -100,30 +135,17 @@ function TeamRegister() {
                     fullWidth
                     id="name"
                     label="Team Name"
+                    variant = "filled"
+                    color='black'
                     name="name"
+                    InputProps={{
+                      style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                    }}
                     autoFocus
                   />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="user"
-                    label="User"
-                    id="user"
-                  />
-                  {code &&
-                    <p>
-                     Your team code is: {code}
-                    
-                    </p>
-                  }
-                   {error && <div className='error'>
-                    <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
-                    <Error />
-                    </Avatar>
-                    <p> {error} </p>
-                    </div>
-                    }
+                  {code && <Clipboard label = "Team join code: " copy = {code}/>}
+                   {success && <Success text = {success} />}
+                   {error && <ErrorMessage errmsg = {error} />}
                   <Button
                     type="submit"
                     fullWidth
@@ -136,8 +158,16 @@ function TeamRegister() {
               }
               <FormControlLabel
                 value = "join"
-                control = {<Radio/>}
+                control = {<Radio sx={{
+                  color: '#ffffff',
+                  '&.Mui-checked': {
+                    color: '#ffffff',
+                  },
+                }}/>}
                 label = "Join an existing team"
+                sx = {{
+                  color: '#ffffff'
+                }}
               />
               { selectedValue == "join" && 
               <Box component = "form"
@@ -149,14 +179,14 @@ function TeamRegister() {
                     name="Code"
                     label="Enter the team code"
                     id="Team Code"
+                    InputProps={{
+                      style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                    }}
+                    variant='filled'
+                    color = 'black'
                   />
-               {error && <div className='error'>
-                    <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
-                    <Error />
-                    </Avatar>
-                    <p> {error} </p>
-                    </div>
-                    }
+                {success && <Success text = {success} />}
+               {error && <ErrorMessage errmsg = {error} />}
                   <Button
                     type="submit"
                     fullWidth
@@ -175,6 +205,8 @@ function TeamRegister() {
           </Container>
         </Box>
       </Box>
+      </div>
+      </div>
     </ThemeProvider>
   );
 }

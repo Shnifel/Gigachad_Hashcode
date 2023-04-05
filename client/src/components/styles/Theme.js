@@ -45,6 +45,9 @@ const myTheme = createTheme({
       },
       black: {
         main: '#000000',
+      },
+      white: {
+        main: '#ffffff',
       }
     },
   });

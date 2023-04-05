@@ -16,6 +16,9 @@ import DisplayTable from '../../components/Table.js';
 import Paper from '@mui/material/Paper';
 import { useEffect } from 'react';
 import { getTeams } from '../../handlers/competitions.js';
+import { useStyles } from '../../components/styles/Theme.js';
+import ReactPlayer from 'react-player';
+import video from "../../assets/chain-25380.mp4";
 
 function createData(id, teamName, code, numMembers) {
     return { id, teamName, code, numMembers };
@@ -26,6 +29,7 @@ function createData(id, teamName, code, numMembers) {
   
 
 function TeamDisplay() {
+  const classes = useStyles();
 
   const location = useLocation();
   const compName = location.state.compName;
@@ -53,9 +57,19 @@ function TeamDisplay() {
 
   return (
     <ThemeProvider theme={myTheme}>
+       <div className={classes.root}>
+      <ReactPlayer 
+        className = {classes.player}
+        url = {video}
+        playing
+        loop
+        muted
+        width= "100%"
+        height = "auto"
+      />
+      <div className={classes.content}>
       <Box sx={{ display: 'flex'}}>
         <CssBaseline />
-        <AppBar />
         <Box
           component="main"
           sx={{
@@ -64,11 +78,11 @@ function TeamDisplay() {
             overflow: 'auto',
           }}
         >
-          <Toolbar />
           <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
-          <Typography component = "h1" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "grey"}}>
-            My Competition
-          </Typography>
+          <div className='font'>
+          <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#006400" }}>
+            {compName.toUpperCase()}
+          </Typography></div>
           {rows && 
            <Container sx = {{ mt : 4, mb : 4}}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
@@ -80,10 +94,12 @@ function TeamDisplay() {
           </Container>
         </Box>
       </Box>
+      </div>
+      </div>
     </ThemeProvider>
   );
 }
 
-export default function Teams() {
-  return <TeamDisplay />;
+export default function TeamAdmin() {
+  return <TeamDisplay/>;
 }
