@@ -17,30 +17,9 @@ import Error from "@mui/icons-material/Error"
 import { useSelector } from 'react-redux';
 import Video from "../../assets/black-13495.mp4";
 import ReactPlayer from 'react-player';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../components/styles/Theme';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: -1,
-  },
-  player: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-  },
-  content: {
-    position: 'relative',
-    zIndex: 1,
-    padding: theme.spacing(2),
-  }
-}));
+
  
 
 function CompetitionCreate() {
@@ -110,9 +89,9 @@ function CompetitionCreate() {
           <Typography component = "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "#FF000C"}}>
             CREATE A NEW COMPETITION
           </Typography>
-          <Container sx = {{ mt : 4, mb : 4}}> 
-           <Paper>
-            <Box component = "form" Vali sx = {{mt:1}} onSubmit = {createCompetition}>
+          <Container sx = {{ mt : 4, mb : 4}}>
+           
+            <Box component = "form" Vali sx = {{mt:1}} onSubmit = {createCompetition} >
                 <TextField
                 margin="normal"
                 required
@@ -120,6 +99,10 @@ function CompetitionCreate() {
                 id="name"
                 label="Competition Name"
                 name="name"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden', color:"white"}
+                }}
+                
                 autoFocus
                 />
                 <TextField
@@ -129,6 +112,9 @@ function CompetitionCreate() {
                 name="details"
                 label="Competition Details"
                 id="user"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
                 <TextField
                 margin="normal"
@@ -138,6 +124,9 @@ function CompetitionCreate() {
                 name="compDate"
                 label="Date of the Competition"
                 id="compDate"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
                 <TextField
                 InputLabelProps={{ shrink: true }}
@@ -147,6 +136,9 @@ function CompetitionCreate() {
                 name = "regStart"
                 label = "Registration open date"
                 id = "regStart"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
                 <TextField
                 InputLabelProps={{ shrink: true }}
@@ -156,6 +148,9 @@ function CompetitionCreate() {
                 name = "regClose"
                 label = "Registration closing date"
                 id = "regClose"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
                 <TextField
                 margin = "normal"
@@ -164,6 +159,8 @@ function CompetitionCreate() {
                 name = "numTeams"
                 label = "Set a limit on the maximum number of teams"
                 id = "numTeams"/>
+                
+                
                 <TextField
                 margin = "normal"
                 type = "number"
@@ -171,6 +168,7 @@ function CompetitionCreate() {
                 name = "numPeople"
                 label = "Set a limit on the maximum number of individuals per team"
                 id = "numPeople"/>
+              
               {err && <div className='error'>
               <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
               <Error />
@@ -187,7 +185,7 @@ function CompetitionCreate() {
                 Register new competition
                 </Button>
             </Box>
-           </Paper>
+           
             
           </Container>
           </Container>

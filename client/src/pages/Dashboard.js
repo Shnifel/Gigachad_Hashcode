@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
-import Video from "../assets/lines-128089.mp4";
+import Video from "../assets/black-13495.mp4";
 import './login.scss'; 
 import { useEffect,useState } from 'react';
 import { getCompetitions } from '../handlers/competitions.js';
