@@ -214,11 +214,14 @@ export default function Login() {
                 </Grid>
                 
               </Grid>
-              <GoogleButton
+              <div className='googleButton'>
+                <GoogleButton
                   type="light" // can be light or dark
                   onClick={handlegoogle}
                   className= 'googleButton'
-                />    
+                />  
+              </div>
+                
             </Box>
           </Box>
         </Grid>
