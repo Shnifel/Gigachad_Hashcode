@@ -13,11 +13,19 @@ import { NavLink } from 'react-router-dom';
 import { registerHandler } from '../handlers/auth/auth';
 import Error from '@mui/icons-material/Error';
 import './login.scss';
+import ErrorMessage from '../components/Error';
+import Success from '../components/Success';
+import { useStyles } from '../components/styles/Theme';
+import video from "../assets/tunnel-65492.mp4";
+import ReactPlayer from 'react-player';
+import TypewriterTitle from '../components/TypewriterTitle';
+import myTheme from '../components/styles/Theme';
 
-const theme = createTheme();
 
 export default function SignUp() {
-  const [error,setError]=React.useState(null)
+  const classes = useStyles();
+  const [error,setError]=React.useState(null);
+  const [success, setSuccess] = React.useState(null);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -28,43 +36,66 @@ export default function SignUp() {
       password: data.get('password'),
     };
     try{
-      await registerHandler(Inputs);
+      const response = await registerHandler(Inputs);
+      setError(null);
+      setSuccess(response.message);
    }
    catch (err){
+      setSuccess(null);
      setError(err.message);
-    console.log(err)
    }
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+    <ThemeProvider theme={myTheme}>
+      <div className={classes.root}>
+      <ReactPlayer 
+        className = {classes.player}
+        url = {video}
+        playing
+        loop
+        muted
+        width= "100%"
+        height = "auto"
+      />
+      <div className={classes.content}>
+      <Grid container component="main" sx = {{justifyContent: 'center'}}>
         <CssBaseline />
+        <Grid item>
         <Box
           sx={{
-            marginTop: 8,
+            my: 8,
+            mx : 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <div className='typewriter' style={{background: 'transparent'}}>
+            <TypewriterTitle />
+           </div>
+          <Avatar sx={{ m: 1, color: 'primary' , bgcolor: 'transparent' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" color = "secondary">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 , color: 'white' }} style = {{width: '100vh'}}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
                   required
+                  color = "black"
                   fullWidth
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  variant = "filled"
+                  InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -72,9 +103,14 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="lastName"
+                  color = "black"
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  variant = "filled"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -82,9 +118,14 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
+                  color = "black"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  variant = "filled"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -93,22 +134,22 @@ export default function SignUp() {
                   fullWidth
                   name="password"
                   label="Password"
+                  color = "black"
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  variant = "filled"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}
                 />
               </Grid>
               <Grid item xs={12}>
                 
               </Grid>
             </Grid>
-                  {error && <div className='error'>
-                    <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
-                    <Error />
-                    </Avatar>
-                    <p> {error} </p>
-                    </div>
-                    }
+            {error && <ErrorMessage errmsg = {error} />}
+            {success && <Success text = {success} />}
             <Button
               type="submit"
               fullWidth
@@ -126,8 +167,10 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-       
-      </Container>
+        </Grid>
+      </Grid>
+      </div>
+      </div>
     </ThemeProvider>
   );
 }

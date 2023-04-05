@@ -26,11 +26,6 @@ const router = createBrowserRouter(
 
   )
 )
-
-
-
-
-
 const App = () => {
   const dispatch = useDispatch();
 

@@ -24,6 +24,7 @@
     text-align: center;
     background-color: rgb(255, 204, 204);
     display: flex;
+    color: black;
     border-radius: 10px;
     align-items: center;
     
@@ -33,24 +34,20 @@
     
     display: flex;
     justify-content: center;
-    width: 100%;
-    font-family: 'Courier New', Courier, monospace;
     color: black;
     align-content: center;
-    border-radius: 100%;
 
     > div{
         width : 100%;
+        display: flex;
         align-items: center;
-        justify-content: center;
-        font-family: 'Courier New', Courier, monospace;
+        justify-content: right;
     }
 
     > span{
         width: 100%;
-        justify-content: start;
+        justify-content: center;
         color: black;
-        font-family: 'Courier New', Courier, monospace;
     }
 }
 
