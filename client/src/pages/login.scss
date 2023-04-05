@@ -2,18 +2,18 @@
 
 
 @font-face{
-    font-family:'Scififont';
+    font-family: "Scififont";
     src: url("../assets/BlocTekRegular-gxEZ4.ttf") format("truetype");
 
 }
 
 .font{
-    font-family:'Scififont', sans-serif;
+    font-family:Scififont;
 }
 
 .typewriter {
     font-size: 50px;
-    font-family: 'Scififont';
+    font-family: "'Scififont'";
     color: #FF000C;
     font-weight: normal;
     align-items: center;
@@ -41,6 +41,7 @@
     color: black;
     align-content: center;
     border-radius: 100%;
+    
 
     > div{
         font-weight: bold;

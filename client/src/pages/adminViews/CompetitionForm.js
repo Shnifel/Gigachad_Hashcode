@@ -15,10 +15,37 @@ import { createNewCompetitions } from '../../handlers/competitions.js';
 import Avatar from '@mui/material/Avatar';
 import Error from "@mui/icons-material/Error"
 import { useSelector } from 'react-redux';
+import Video from "../../assets/black-13495.mp4";
+import ReactPlayer from 'react-player';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
+  },
+  player: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+    padding: theme.spacing(2),
+  }
+}));
  
 
 function CompetitionCreate() {
-  const id=useSelector(useSelector(state => state.auth.userID))
+  const classes = useStyles();
+  const id=useSelector(state => state.auth.userID)
   const [err,setError] = useState(null)
     const createCompetition = async (event) => {
         event.preventDefault();
@@ -45,9 +72,31 @@ function CompetitionCreate() {
 
   return (
     <ThemeProvider theme={myTheme}>
+      <div className={classes.root}>
+      <ReactPlayer 
+        className = {classes.player}
+        url = {Video}
+        playing
+        loop
+        muted
+        playbackRate={0.5}
+        width= "100%"
+        height = "auto"
+      />
+      <div className={classes.content}>
+      <Box sx={{ display: 'flex', backgroundColor:'transparent'}}>
+        <CssBaseline />
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: 'transparent',
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        > 
       <Box sx={{ display: 'flex'}}>
         <CssBaseline />
-        <AppBar />
         <Box
           component="main"
           sx={{
@@ -58,8 +107,8 @@ function CompetitionCreate() {
         >
           <Toolbar />
           <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
-          <Typography component = "h1" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "grey"}}>
-            Create a new competition
+          <Typography component = "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "#FF000C"}}>
+            CREATE A NEW COMPETITION
           </Typography>
           <Container sx = {{ mt : 4, mb : 4}}> 
            <Paper>
@@ -143,7 +192,9 @@ function CompetitionCreate() {
           </Container>
           </Container>
         </Box>
-      </Box>
+      </Box> 
+      </Box> 
+      </Box></div> </div>
     </ThemeProvider>
   );
 }
