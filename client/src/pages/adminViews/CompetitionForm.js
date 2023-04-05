@@ -107,10 +107,11 @@ function CompetitionCreate() {
                 variant = "filled"
                 label="Competition Name"
                 name="name"
-                autoFocus
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden', color:"white"}
                 }}
+                
+                autoFocus
                 />
                 <TextField
                 margin="normal"
@@ -226,8 +227,8 @@ function CompetitionCreate() {
                 Register new competition
                 </Button>
             </Box>
-           </Paper>
-            
+           
+             </Paper>
           </Grid>
           </Container>
         </Box>
