@@ -108,7 +108,7 @@ function CompetitionCreate() {
                 label="Competition Name"
                 name="name"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden', color:"white"}
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
                 }}
                 
                 autoFocus

@@ -109,7 +109,7 @@ function DashboardContent() {
             
               comps.map((comp)=>(
                 
-                <CompetitionCard key ={comp.id} compid = {comp.id} name = {comp.data.compname} isrunning = {new Date(comp.data.regenddate)>=  new Date()} />
+                <CompetitionCard key ={comp.id} compid = {comp.id} name = {comp.data.compname} compdate = {comp.data.compdate} isrunning = {new Date(comp.data.regenddate)>=  new Date()} />
               ))}
             
               

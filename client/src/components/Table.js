@@ -18,7 +18,7 @@ function preventDefault(event) {
 
     return (
       <React.Fragment>
-        <Table>
+        <Table sx = {{borderRadius : 3, backgroundColor : 'rgba(255,255,255,0.4)'}}>
           <TableHead>
             <TableRow>
              {labels.map((label) => (
