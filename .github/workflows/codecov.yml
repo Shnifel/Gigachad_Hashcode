@@ -25,7 +25,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         cd client
-        npm test -- --testResultsProcessor=\'jest-junit' --coverage
+        npm test -- --testResultsProcessor=\jest-junit --coverage
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2.1.0
