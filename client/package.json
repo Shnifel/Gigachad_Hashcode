@@ -59,6 +59,9 @@
       "last 1 safari version"
     ]
   },
+   "jest": {
+    "verbose": true
+  },
   "proxy": "http://localhost:8800/server",
   "devDependencies": {
     "codecov": "^3.8.3"
