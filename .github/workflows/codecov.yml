@@ -28,6 +28,10 @@ jobs:
         npm test -- --coverage
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2.1.0
-      with:
-        path: client/coverage/lcov.info
+      env:
+        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+      run: | 
+       curl -Os https://uploader.codecov.io/latest/linux/codecov
+       find . -iregex "codecov.*"
+       chmod +x codecov 
+       ./codecov -t ${CODECOV_TOKEN}
