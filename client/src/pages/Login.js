@@ -13,13 +13,13 @@ import Error from "@mui/icons-material/Error"
 import Typography from '@mui/material/Typography';
 import {  ThemeProvider } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
-import "./login.scss"
+import "./login.scss";
 import {loginHandler, googleAuth} from "../handlers/auth/auth.js"
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TypewriterTitle from '../components/TypewriterTitle';
-import {  useDispatch } from 'react-redux'
-import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js'
+import {  useDispatch } from 'react-redux';
+import { setUserID, setAdmin, setLoggedIn } from '../stateManagement/state.js';
 import video from "../assets/tunnel-65492.mp4"
 import ReactPlayer from 'react-player';
 import myTheme from '../components/styles/Theme';
@@ -74,7 +74,8 @@ export default function Login() {
 
     <ThemeProvider theme={myTheme}>
       <div className={classes.root}>
-      <ReactPlayer 
+      <ReactPlayer
+        data-testid = "Background"
         className = {classes.player}
         url = {video}
         playing

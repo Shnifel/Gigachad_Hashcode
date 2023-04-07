@@ -1,8 +1,7 @@
-import { fontFamily } from '@mui/system';
 import React from 'react'
 import Typewriter from 'typewriter-effect';
 import "../pages/login.scss";
-import "../assets/BlocTekRegular-gxEZ4.ttf";
+
 const TypewriterTitle = () => {
   return (
         <Typewriter
