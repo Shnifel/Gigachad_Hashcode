@@ -28,7 +28,7 @@ jobs:
         npm test -- --coverage
 
     - name: Upload coverage to Codecov
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: |
-        bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+      uses: codecov/codecov-action@v3
+      with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          debug: true
