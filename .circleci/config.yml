@@ -17,6 +17,11 @@ jobs:
             cd client
             npm install --legacy-peer-deps
       - run:
+          name: Run tests with coverage
+          command: |
+            cd client
+            npm test -- --coverage
+      - run:
           name: Upload Coverage Report
           command: | 
             cd client
