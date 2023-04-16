@@ -16,12 +16,24 @@ export const getTeams = async(req,res) => {
     const compid = req.body.compid; // Competition ID
     const competitionDoc = await db.collection('Competitions').doc(compid).get(); //Obtain data from firestore
     const teamsRefs = competitionDoc.data().teams; //Get array of references to team collections
-    const teamsPromises = teamsRefs.map(
-        //Map each teamRef to its data in the firestore and await all
-        teamRef => teamRef.get().catch(error => {
-        console.log(error.data);
-        return res.status(400).json("Teams data retrieval unsuccessful")
-    }));
+
+    const teamsPromises = teamsRefs.map( // Take each team reference and get data
+        async(teamRef) => {
+          const teamDoc = await teamRef.get()
+          const members = teamDoc.data().members
+
+          const memberPromises = members.map(
+            //Get data for each member in team
+            async (member) => {
+              const memberDoc = await member.get()
+              const memberData = memberDoc.data()
+              return {...memberData}
+            }
+          )
+
+          const membersData = await Promise.all(memberPromises)
+          return {...teamDoc.data(), memebersData : membersData}
+    });
 
     //Promise ensures that all async requests to teams data is obtained before proceeding
     const teamsSnapshots = await Promise.all(teamsPromises);
@@ -37,6 +49,12 @@ export const getTeams = async(req,res) => {
     }
 }
 
+/**
+ * @description For a given competition id and user, retrieves team that member belongs to
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 export const getTeam = async(req, res) => {
     try {
         const compid = req.body.compid
@@ -46,26 +64,27 @@ export const getTeam = async(req, res) => {
         const teams = competitionDoc.data().teams
 
         for (const teamRef of teams) {
-            // Get the team document
-            const teamDoc = await teamRef.get().catch(error => {
-              return res.status(400).json("Team data retrieval unsuccessful");
-            });
-          
-            // Check if the user is already a member of the team
-            const members = teamDoc.data().members;
-            if (members.some(memberRef => memberRef.id === user)) {
-              return res.status(200);
-            }
-          
-            // Check if the team name is already taken
-            if (teamDoc.data().name === teamname) {
-              return res.status(400).json("Team name is already taken, please choose a different one");
-            }
-            }
+            const teamDoc = await teamRef.get()
+            const members = teamDoc.data().members
 
-        
-    } catch (error) {
-        
+            if (members.some(memberRef => memberRef.id === user)) {
+              const membersPromises = members.map(
+                async (member) => {
+                  const memDoc = member.get()
+                  const memData = memDoc.data()
+                  return {...memData}
+                }
+              )
+
+              const memberData = await Promise.all(membersPromises)
+              return res.status(200).json({...teamDoc.data(), membersData: memberData})
+            }
+        }
+
+        return res.status(400).json("You are not registered in this competition")
+      }
+    catch (error) {
+        return res.status(400).json("An error has occurred. Access denied")
     }
 }
 
@@ -127,4 +146,93 @@ export const createTeams = async(req,res) => {
       });
 
   }
+
+/**
+ * @description Adds and validates a user attempting to join a team
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+  export const joinTeam = async(req,res) => {
+    const user = req.body.uid;
+    const compid = req.body.compid;
+    const teamCode = req.body.teamCode;
+
+    const compRef = await db.collection('Competitions').doc(compid).get();
+    const teams = compRef.data().teams
+
+    // Check each team in the competition
+    for (const teamRef of teams) {
+      // Get the team document
+      const teamDoc = await teamRef.get().catch(error => {
+        return res.status(400).json("Team data retrieval unsuccessful");
+      });
+    
+      // Check if the user is already a member of the team
+      const members = teamDoc.data().members;
+      if (members.some(memberRef => memberRef.id === user)) {
+        return res.status(400).json("You are already registered in a team in this competition");
+      }
+      }
+  
+    
+    await db.collection('Teams').where('teamCode', '==', teamCode).get().then((querySnapshot) => {
+      //Invalid join code passed
+      if (querySnapshot.empty) {
+            return res.status(404).json("No such team found")
+        }
+
+       //Team found, add user to team
+        const teamid = querySnapshot.docs[0].id
+        const teamref =  db.collection('Teams').doc(teamid)
+        teamref.update({members: Admin.firestore.FieldValue.arrayUnion(db.collection('Users').doc(user))})
+        return res.status(200).json("Succesfully joined team")
+    })
+    .catch((error) => {
+        return res.status(400).json("Failed to join team")
+    });  
+ }
+
+/**
+ * @description Removes a member from a team
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+ export const deleteMember = async (req, res) => {
+  try {
+    const user = db.collection('Users').doc(req.body.uid)
+    const team = db.collection('Teams').doc(req.body.teamid)
+    team.update({members : Admin.firestore.FieldValue.arrayRemove(user)})
+
+    return res.status(200).json("Successfully removed member")
+  } catch (error) {
+    return res.status(400).json("Error removing member from team")
+  }
+ }
+
+ /**
+  * @description Remove a team from a competition
+  * @param {*} req 
+  * @param {*} res 
+  * @returns 
+  */
+ export const deleteTeam = async (req, res) => {
+  try {
+    const team = req.body.teamid
+    const teamRef = db.collection('Teams').doc(team)
+    const compRef = db.collection('Competitions').doc(req.body.compid)
+
+    await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(teamRef)}).catch(
+      (error) => { return res.status(400).json("Error encountered")}
+    )
+
+    await teamRef.delete().then(() => {
+      return res.status(200).json("Successfully deleted team")
+    })
+  } catch (error) {
+    return res.status(400).json("Error deleting team")
+  }
+ }
+  
 
