@@ -1,4 +1,4 @@
-import { createNewCompetitions } from '../competitions.js'
+import { createNewCompetitions } from './competitions.js'
 import axios from 'axios';
 
 jest.mock('axios');
