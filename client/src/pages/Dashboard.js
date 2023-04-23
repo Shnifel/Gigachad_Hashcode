@@ -17,6 +17,7 @@ import Video from "../assets/chain-25380.mp4";
 import './login.scss'; 
 import { useEffect,useState } from 'react';
 import { getCompetitions } from '../handlers/competitions.js';
+import NavBar from '../components/Navbar.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
   content: {
     position: 'relative',
     zIndex: 1,
-    padding: theme.spacing(2),
   }
 }));
 
@@ -67,7 +67,9 @@ function DashboardContent() {
   
 
   return (
+    
     <ThemeProvider theme={myTheme}>
+      <NavBar/>
       <div className={classes.root}>
       <ReactPlayer 
         className = {classes.player}

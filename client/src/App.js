@@ -9,6 +9,8 @@ import './App.css';
 import Teams from './pages/Teams'
 import TeamAdmin from './pages/adminViews/Teams';
 import CompetitionForm from './pages/adminViews/CompetitionForm'
+import CompetitionsPage from './pages/adminViews/Competition';
+import ProfilePage from './pages/ProfilePage';
 import { useDispatch , useSelector} from 'react-redux';
 import { useEffect } from 'react';
 import { setUserID, setLoggedIn } from './stateManagement/state';
@@ -21,12 +23,13 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path = "/" >
-        <Route exact index element = {<Login/>}/>
+        <Route exact index element = {<CompetitionsPage/>}/>
         <Route path = "Register" element = {<Register/>}/>
         <Route element = {<PrivateRoute/>}>
           <Route path = "Dashboard" element={<Dashboard/>} exact/>
           <Route path = "Teams" element = {isAdmin ? <TeamAdmin/> : <Teams/>} exact/>
           <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
+          <Route path = "ProfilePage" element = {<ProfilePage/>} exact />
         </Route>
       </Route>
 
