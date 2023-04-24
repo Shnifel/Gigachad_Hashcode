@@ -36,3 +36,7 @@ export const getTeams = async(inputs) => {
     return response.data;
 }
 
+export const getTeam = async(inputs) => {
+    const response = await axios.post("/competitions/getTeam", inputs);
+    return response.data;
+}

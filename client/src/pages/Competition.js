@@ -21,7 +21,9 @@ import {
     Info as InfoIcon,
     Logout,
     Group,
-    Quiz
+    Quiz,
+    Grading,
+    EmojiEvents
 } from '@mui/icons-material';
 import {makeStyles} from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core';
@@ -30,6 +32,8 @@ import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
 import { getCompetition } from '../handlers/competitions';
 import './login.scss'
+import Info from './Competitions/Info';
+import Team from './Competitions/Team';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -119,14 +123,17 @@ function Competition() {
             <Tab label="Info" icon={<InfoIcon/>} value={0}/>
             <Tab label="My Team" icon={<Group/>} value={1}/>
             <Tab label="Problem" icon = {<Quiz/>} value={2}/>
-            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} valiue = {3}/> 
+            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3}/> 
+            <Tab label = "Submissions" icon = {<Grading/>} value = {4} />
+            <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} />
           </Tabs>
-          <div style={{ flexGrow: 1 }} />
+          <div style={{ flexGrow: 1 ,color: 'inherit'}} />
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
+            color='inherit'
           >
             <AccountCircleIcon />
           </IconButton>
@@ -144,6 +151,7 @@ function Competition() {
               }}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
+              color='inherit'
             >
               <MenuItem onClick={handleProfileClick}>
                 <ListItemIcon>
@@ -163,8 +171,8 @@ function Competition() {
       </AppBar>
       </div>
      </Card>
-      {/* {tab === 0 && !loading && <ThemeProvider theme={darkTheme}><div> { data.data.compdesc }</div></ThemeProvider>}
-      {tab === 1 && <div> Hello world </div>} */}
+      {tab === 0 && !loading && <Info data = {data.data}/>}
+      {tab === 1 && !loading && <Team id = {compid} />}
     </ThemeProvider>
   );
 }

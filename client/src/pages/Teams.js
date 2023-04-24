@@ -23,14 +23,13 @@ import ReactPlayer from 'react-player';
 import ErrorMessage from '../components/Error.js';
 import Success from '../components/Success.js';
 import Clipboard from '../components/Clipboard.js';
+import { darkTheme } from '../components/styles/Theme.js';
 
-function TeamRegister() {
+export function TeamRegister(props) {
   const classes = useStyles();
   const [error,setError] = useState(null) ;
   const [success, setSuccess] = useState(null);
-  const location = useLocation();
-  const compName = location.state.compName;
-  const compid = location.state.compid;
+  const compid = props.compid;
   const userid = useSelector(state=>state.auth.userID)
   const [selectedValue, setSelected] = useState('');
   const [code,setcode] = useState(null)
@@ -85,18 +84,7 @@ function TeamRegister() {
   }
 
   return (
-    <ThemeProvider theme={myTheme}>
-       <div className={classes.root}>
-      <ReactPlayer 
-        className = {classes.player}
-        url = {video}
-        playing
-        loop
-        muted
-        width= "100%"
-        height = "auto"
-      />
-      <div className={classes.content}>
+    <ThemeProvider theme={darkTheme}>
       <Box sx={{ display: 'flex'}}>
         <CssBaseline />
         <Box
@@ -108,10 +96,6 @@ function TeamRegister() {
           }}
         >
           <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
-          <div className='font'>
-          <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#006400" }}>
-            SIGN UP FOR THE {compName.toUpperCase()}
-          </Typography></div>
           <Container sx = {{ mt : 4, mb : 4}}>
             <RadioGroup value = {selectedValue} onChange = {toggleChange}>
               <FormControlLabel
@@ -136,7 +120,6 @@ function TeamRegister() {
                     id="name"
                     label="Team Name"
                     variant = "filled"
-                    color='black'
                     name="name"
                     InputProps={{
                       style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
@@ -183,7 +166,7 @@ function TeamRegister() {
                       style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
                     }}
                     variant='filled'
-                    color = 'black'
+                  
                   />
                 {success && <Success text = {success} />}
                {error && <ErrorMessage errmsg = {error} />}
@@ -205,8 +188,6 @@ function TeamRegister() {
           </Container>
         </Box>
       </Box>
-      </div>
-      </div>
     </ThemeProvider>
   );
 }

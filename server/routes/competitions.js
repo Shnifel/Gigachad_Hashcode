@@ -11,4 +11,5 @@ competitionRouter.post("/getCompetition", getCompetition);
 competitionRouter.post("/createTeams",createTeams);
 competitionRouter.post("/joinTeams",joinTeam);
 competitionRouter.post("/getTeams", getTeams);
+competitionRouter.post("/getTeam", getTeam);
 export default competitionRouter;

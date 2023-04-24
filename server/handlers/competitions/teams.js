@@ -60,6 +60,8 @@ export const getTeam = async(req, res) => {
         const compid = req.body.compid
         const user = req.body.uid
 
+        console.log(compid, user)
+
         const competitionDoc = await db.collection('Competitions').doc(compid).get();
         const teams = competitionDoc.data().teams
 
@@ -70,13 +72,14 @@ export const getTeam = async(req, res) => {
             if (members.some(memberRef => memberRef.id === user)) {
               const membersPromises = members.map(
                 async (member) => {
-                  const memDoc = member.get()
+                  const memDoc = await member.get()
                   const memData = memDoc.data()
                   return {...memData}
                 }
               )
 
               const memberData = await Promise.all(membersPromises)
+              console.log({...teamDoc.data(), membersData: memberData});
               return res.status(200).json({...teamDoc.data(), membersData: memberData})
             }
         }
@@ -84,6 +87,7 @@ export const getTeam = async(req, res) => {
         return res.status(400).json("You are not registered in this competition")
       }
     catch (error) {
+        console.log(error.message)
         return res.status(400).json("An error has occurred. Access denied")
     }
 }
