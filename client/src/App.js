@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements, useNavigate} from "react-router-dom";
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -15,6 +15,8 @@ import { useDispatch , useSelector} from 'react-redux';
 import { useEffect } from 'react';
 import { setUserID, setLoggedIn } from './stateManagement/state';
 import { Auth } from './Firebase';
+import { logout } from './handlers/auth/auth';
+import Competitions from './pages/Home';
 
 
 const App = () => {
@@ -23,10 +25,11 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path = "/" >
-        <Route exact index element = {<CompetitionsPage/>}/>
+        <Route exact index element = {<Login/>}/>
         <Route path = "Register" element = {<Register/>}/>
         <Route element = {<PrivateRoute/>}>
           <Route path = "Dashboard" element={<Dashboard/>} exact/>
+          <Route path = "Home" element={<Competitions/>} exact />
           <Route path = "Teams" element = {isAdmin ? <TeamAdmin/> : <Teams/>} exact/>
           <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
           <Route path = "ProfilePage" element = {<ProfilePage/>} exact />
@@ -35,6 +38,7 @@ const App = () => {
 
     )
   )
+
   useEffect(() => {
   const unsubscribe = Auth.onAuthStateChanged((user) => {
     dispatch(setUserID(user.uid));
@@ -47,7 +51,7 @@ const App = () => {
     });
 
     return unsubscribe;
-  }, [dispatch]);
+  }, [dispatch, logout]);
   
   return (
     <div className='app'>

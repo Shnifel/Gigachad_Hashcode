@@ -20,10 +20,15 @@ import {
     Dashboard as DashboardIcon,
     Info as InfoIcon,
     ContactMail as ContactMailIcon,
+    Logout,
+    Home,
+    Forum
   } from '@mui/icons-material';
 import {makeStyles} from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core';
 import { useNavigate, Link } from 'react-router-dom';
+import { darkTheme } from './styles/Theme';
+import { logout } from '../handlers/auth/auth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,17 +37,14 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
       backgroundColor: '#0D0D0D',
       boxShadow: "none",
+      display: 'flex',
+      width: '100%'
     },
     tabs: {
       marginLeft: "auto",
     },
   }));
 
-  const darkTheme = createTheme({
-    palette: {
-      type: 'dark',
-    },
-  });
 
 
 function NavBar() {
@@ -75,15 +77,19 @@ function NavBar() {
     navigate("/ProfilePage");
   }
 
+  const handleLogout = () => {
+    logout();
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.appBar}>
-      <AppBar position="static" color='inherit'>
+      <AppBar position="static" >
         <Toolbar>
-          <Tabs value={activeTab} onChange={handleTabChange}>
-            <Tab label="Home" component = {Link} to = "/"/>
-            <Tab label="About" />
-            <Tab label="Contact" />
+          <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
+            <Tab label="Competitions Hub" icon={<Home/>} />
+            <Tab label="About" icon={<InfoIcon/>}/>
+            <Tab label="FAQ" icon = {<Forum/>} />
           </Tabs>
           <div style={{ flexGrow: 1 }} />
           <IconButton
@@ -91,7 +97,6 @@ function NavBar() {
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
-            color="inherit"
           >
             <AccountCircleIcon />
           </IconButton>
@@ -117,23 +122,11 @@ function NavBar() {
                 <ListItemText primary="Profile" />
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
-                  <DashboardIcon fontSize="small" />
+                  <Logout fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ListItemIcon>
-                  <InfoIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="About" />
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <ListItemIcon>
-                  <ContactMailIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Contact" />
+                <ListItemText primary="Logout" />
               </MenuItem>
             </Menu>
         </Toolbar>

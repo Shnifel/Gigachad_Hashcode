@@ -64,7 +64,7 @@ export default function Login() {
       const creds = await googleAuth();
       const isAdmin = creds.isAdmin;
       dispatch(setAdmin(isAdmin));
-      navigate('/Dashboard')
+      navigate('/Home')
     } catch (err) {
       setError(err.message);
     }

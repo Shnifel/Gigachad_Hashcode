@@ -1,5 +1,5 @@
 import {Auth,db} from "../../Firebase.js"
-import { createUserWithEmailAndPassword,sendEmailVerification,signInWithEmailAndPassword,signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
+import { createUserWithEmailAndPassword,sendEmailVerification,signInWithEmailAndPassword,signInWithPopup, sendPasswordResetEmail, signOut} from "firebase/auth";
 import {collection,doc,setDoc,query,onSnapshot,where,documentId} from "firebase/firestore";
 import { googleProvider } from "../../Firebase.js";
 import axios from "axios";
@@ -57,4 +57,8 @@ export const googleAuth = async (response) => {
 
 export const passwordReset = async (email) => {
     await sendPasswordResetEmail(Auth, email)
+}
+
+export const logout = () => {
+    signOut(Auth);
 }
