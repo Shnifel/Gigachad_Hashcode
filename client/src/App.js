@@ -16,7 +16,8 @@ import { useEffect } from 'react';
 import { setUserID, setLoggedIn } from './stateManagement/state';
 import { Auth } from './Firebase';
 import { logout } from './handlers/auth/auth';
-import Competitions from './pages/Home';
+import Home from './pages/Home';
+import Competition from './pages/Competition';
 
 
 const App = () => {
@@ -29,10 +30,11 @@ const App = () => {
         <Route path = "Register" element = {<Register/>}/>
         <Route element = {<PrivateRoute/>}>
           <Route path = "Dashboard" element={<Dashboard/>} exact/>
-          <Route path = "Home" element={<Competitions/>} exact />
+          <Route path = "Home" element={<Home/>} exact />
           <Route path = "Teams" element = {isAdmin ? <TeamAdmin/> : <Teams/>} exact/>
           <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
           <Route path = "ProfilePage" element = {<ProfilePage/>} exact />
+          <Route path = "Competition" element = {<Competition/>}/>
         </Route>
       </Route>
 

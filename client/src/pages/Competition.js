@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -10,23 +10,26 @@ import {
   Divider,
   Tabs,
   Tab,
-  createTheme
+  createTheme,
+  Card,
+  CardMedia,
+  Typography, CircularProgress, CssBaseline
 } from '@material-ui/core';
 import {
     AccountCircle as AccountCircleIcon,
-    Dashboard as DashboardIcon,
+    Leaderboard as LeaderboardIcon,
     Info as InfoIcon,
-    ContactMail as ContactMailIcon,
     Logout,
-    Home as HomeIcon,
-    Forum
-  } from '@mui/icons-material';
+    Group,
+    Quiz
+} from '@mui/icons-material';
 import {makeStyles} from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
-import CompetitionsHub from './Home/CompetitionsHub';
+import { getCompetition } from '../handlers/competitions';
+import './login.scss'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,12 +49,25 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Home() {
+function Competition() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [tab, setTab] = useState(0);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const compid = location.state.compid;
+
+  useEffect(() => {
+    async function fetchdata(){
+      console.log("Competition: " + compid);
+      const response = await getCompetition({compid: compid})
+      setData(response);
+      setLoading(false);
+    }
+     fetchdata()}, []);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -74,15 +90,36 @@ function Home() {
     logout();
   }
 
+  if (loading) {
+    return (<ThemeProvider theme={darkTheme}>
+        <CssBaseline/>
+        <CircularProgress/>
+    </ThemeProvider>)
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
+        <CssBaseline/>
+     <Card sx = {{borderRadius: 30, display: 'flex', width: '100%', maxWidth: "100%"}}>
+     <CardMedia
+            component="img"
+            alt={data.data.compname}
+            height="300"
+            image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
+            /> 
+    <div className='font'>
+     <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
+             {data.data.compname}
+     </Typography>
+     </div>
       <div className={classes.appBar}>
-      <AppBar position="static" >
+      <AppBar position="static" color = "inherit" >
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
-            <Tab label="Competitions Hub" icon={<HomeIcon/>} value={0}/>
-            <Tab label="About" icon={<InfoIcon/>} value={1}/>
-            <Tab label="FAQ" icon = {<Forum/>} value={2}/>
+            <Tab label="Info" icon={<InfoIcon/>} value={0}/>
+            <Tab label="My Team" icon={<Group/>} value={1}/>
+            <Tab label="Problem" icon = {<Quiz/>} value={2}/>
+            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} valiue = {3}/> 
           </Tabs>
           <div style={{ flexGrow: 1 }} />
           <IconButton
@@ -125,10 +162,11 @@ function Home() {
         </Toolbar>
       </AppBar>
       </div>
-      {tab === 0 && <CompetitionsHub/>}
-      {tab === 1 && <div> Hello world </div>}
+     </Card>
+      {/* {tab === 0 && !loading && <ThemeProvider theme={darkTheme}><div> { data.data.compdesc }</div></ThemeProvider>}
+      {tab === 1 && <div> Hello world </div>} */}
     </ThemeProvider>
   );
 }
 
-export default Home;
+export default Competition;
