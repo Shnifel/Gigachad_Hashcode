@@ -1,9 +1,12 @@
-import { createNewCompetitions } from './competitions.js'
+import { createNewCompetitions, createTeam } from './competitions.js'
 import axios from 'axios';
 
 jest.mock('axios');
 
 describe('createNewCompetitions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it('should return the competition data', async () => {
     const expectedResponse = { data: { competitionId: '123' } };
     axios.post.mockResolvedValue(expectedResponse);
@@ -24,3 +27,24 @@ describe('createNewCompetitions', () => {
     expect(result).toEqual(expectedResponse.data);
   });
 });
+
+describe('createTeam', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  it('should create a new team and return join code', async () => {
+    const expectedResponse = { teamCode: 'abcde' };
+    axios.post.mockResolvedValue(expectedResponse);
+
+    const inputs = {
+      teamname: 'TeamName',
+      uid: '123',
+    };
+    const result = await createTeam(inputs);
+
+    expect(axios.post).toHaveBeenCalledTimes(1);
+    expect(axios.post).toHaveBeenCalledWith('/competitions/createTeams', inputs);
+    expect(result).toEqual(expectedResponse.data);
+  });
+});
+
