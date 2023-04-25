@@ -23,5 +23,6 @@ describe('registerHandler', () => {
         await expect(loginHandler({email: 'test@email.com', password: ''})).rejects.toThrow('auth/missing-password');
     });
 })
+
   
 
