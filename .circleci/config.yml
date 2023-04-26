@@ -22,10 +22,21 @@ jobs:
             cd client
             npm test -- --coverage
       - run:
+          name: Install server side dependencies
+          command: |
+            cd server
+            npm install
+      - run:
+          name: Run server side tests
+          command: |
+            cd server
+            npm test -- --coverage
+      - run:
+          name: Install main dependencies
+          command: npm install
+      - run:
           name: Upload Coverage Report
-          command: | 
-            cd client
-            npx codecov
+          command: npx codecov
       - save_cache:
           key: dependency-cache-{{ checksum "client/package-lock.json" }}
           paths:
