@@ -1,7 +1,0 @@
-ignore:
-  - 'src/components/*'
-  - 'src/assets/*'
-  - 'src/routes'
-  - 'Firebase.js'
-  - 'index.js'
-  - 'App.js'

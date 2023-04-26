@@ -1,0 +1,7 @@
+ignore:
+  - 'client/src/components/*'
+  - 'client/src/assets/*'
+  - 'client/src/routes'
+  - 'client/Firebase.js'
+  - 'client/index.js'
+  - 'client/App.js'
