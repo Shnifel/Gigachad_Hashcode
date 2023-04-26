@@ -19,7 +19,7 @@ module.exports = {
       "node_modules/",
       "src/components/",
       "src/assets/",
-      "**/*.scss"
+
     ],
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/src/$1',
