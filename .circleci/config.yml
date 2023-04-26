@@ -20,7 +20,7 @@ jobs:
           name: Run tests with coverage
           command: |
             cd client
-            npm test -- --coverage
+            npm test -- --coverage --watchAll
       - run:
           name: Upload Coverage Report
           command: | 
