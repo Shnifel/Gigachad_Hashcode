@@ -17,7 +17,9 @@ module.exports = {
     coveragePathIgnorePatterns: [
       "test/",
       "node_modules/",
-      "src/components/"
+      "src/components/",
+      "src/assets/",
+      "**/*.scss"
     ],
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/src/$1',

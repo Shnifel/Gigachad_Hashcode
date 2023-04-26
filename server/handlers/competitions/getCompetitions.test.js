@@ -64,7 +64,7 @@ const mockQuerySnapshot = {
       await getCompetitions(req, res);
       expect(db.collection).toHaveBeenCalledWith("Competitions");
       expect(db.collection().get).toHaveBeenCalled();
-    //   expect(res.json).toHaveBeenCalledWith("Database error");
+      expect(res.json).toHaveBeenCalledWith("Database error");
     // expect(res.status).toHaveBeenCalledWith(400);
     });
   
