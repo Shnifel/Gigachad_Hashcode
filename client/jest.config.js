@@ -14,6 +14,11 @@ module.exports = {
         lines: 0,
       },
     },
+    coveragePathIgnorePatterns: [
+      "test/",
+      "node_modules/",
+      "src/components/"
+    ],
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/src/$1',
     },

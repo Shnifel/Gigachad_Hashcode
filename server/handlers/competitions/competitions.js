@@ -24,6 +24,7 @@ export const createCompetition = async(req,res) => {
     const min_teamsize = req.body.min_teamsize // Min people in a team
 
     // Add to competitions collection in firestore
+    console.log(db)
     db.collection('Competitions').add({
         admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams,teams:[] // Teams array with references to all teams entered in competition
       })
@@ -34,7 +35,7 @@ export const createCompetition = async(req,res) => {
       })
       .catch((error) => {
         //Unsuccessful in creating competition - return firebase error
-        console.error('Error adding document: ', error);
+        console.log('Error adding document: ', error);
         return res.status(400).json(error.message)  
       });            
 }
