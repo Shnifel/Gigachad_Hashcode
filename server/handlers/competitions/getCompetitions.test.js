@@ -53,19 +53,22 @@ const mockQuerySnapshot = {
     });
     
     it("should handle database errors and return a 400 status with an error message", async () => {
+      jest.clearAllMocks();
       const req = {};
-      const res = {
-      status: jest.fn(() => res),
-      json: jest.fn(() => res),
-    };
+      const mockRes = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis()
+      };
       const errorMessage = "Database error";
-      const mockCollectionRef = db.collection('Competitions');
+      const mockCollectionRef = db.collection("Competitions");
       mockCollectionRef.get.mockRejectedValueOnce(new Error(errorMessage));
-      await getCompetitions(req, res);
+
+      await getCompetitions(req, mockRes);
+    
       expect(db.collection).toHaveBeenCalledWith("Competitions");
-      expect(db.collection().get).toHaveBeenCalled();
-      expect(res.json).toHaveBeenCalledWith("Database error");
-    // expect(res.status).toHaveBeenCalledWith(400);
+      expect(mockCollectionRef.get).toHaveBeenCalled();
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith(errorMessage);
     });
   
     it("should return a list of competitions with their data and IDs", async () => {

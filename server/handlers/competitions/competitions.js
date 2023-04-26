@@ -49,29 +49,23 @@ export const createCompetition = async(req,res) => {
  * @param {*} res
  * @returns {*}
  */
-export const getCompetitions = async(req,res) => {
-    //Create reference to competitions collection
-    const collectionRef =db.collection("Competitions");
-
+export const getCompetitions = async (req, res) => {
+    // Create reference to competitions collection
+    const collectionRef = db.collection("Competitions");
+  
     // get() data from collection
-
-    collectionRef.get()
-      .then(querySnapshot => {
-        //Extract data from querySnapshot - ("rows" of collection)
-    
-        return res.status(200).json(
-            // Map each document into json array with document id and data belonging to document to be returned to client
-            querySnapshot.docs.map(doc =>({
-            id: doc.id,
-            data:doc.data()
-           })))
-      })
-      .catch(
-        //Error encountered
-        error => {
-        return res.status(400).json(error.message)
-    });
-}
+    try {
+      const querySnapshot = await collectionRef.get();
+      const competitions = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data()
+      }));
+      return res.status(200).json(competitions);
+    } catch (error) {
+      return res.status(400).json(error.message);
+    }
+  };
+  
 
 
 export const getCompetition = async (req, res) => {
