@@ -24,7 +24,6 @@ export const createCompetition = async(req,res) => {
     const min_teamsize = req.body.min_teamsize // Min people in a team
 
     // Add to competitions collection in firestore
-    console.log(db)
     db.collection('Competitions').add({
         admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams,teams:[] // Teams array with references to all teams entered in competition
       })
@@ -53,10 +52,13 @@ export const createCompetition = async(req,res) => {
 export const getCompetitions = async(req,res) => {
     //Create reference to competitions collection
     const collectionRef =db.collection("Competitions");
+
     // get() data from collection
+
     collectionRef.get()
       .then(querySnapshot => {
         //Extract data from querySnapshot - ("rows" of collection)
+    
         return res.status(200).json(
             // Map each document into json array with document id and data belonging to document to be returned to client
             querySnapshot.docs.map(doc =>({
@@ -67,7 +69,6 @@ export const getCompetitions = async(req,res) => {
       .catch(
         //Error encountered
         error => {
-        console.log("Error getting documents: ", error);
         return res.status(400).json(error.message)
     });
 }

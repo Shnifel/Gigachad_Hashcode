@@ -1,5 +1,6 @@
 // Import the function to test and Firebase
 import { createCompetition } from './competitions.js';
+import { getCompetitions } from "./competitions";
 import { db } from '../../database/firebase.js';
 
 // Mock the Firebase Firestore methods
@@ -37,8 +38,6 @@ describe('createCompetition', () => {
       status: jest.fn(() => res),
       json: jest.fn(() => res),
     };
-
-    console.log(db)
 
     // Call the function
     await createCompetition(req, res);
