@@ -35,6 +35,14 @@ jobs:
           name: Install main dependencies
           command: npm install
       - run:
+          name: Merge client side and server side coverage reports
+          command: |
+            mkdir reports
+            cp server/coverage/coverage-final.json reports/server.json
+            cp client/coverage/coverage-final.json reports/client.json
+            nyc merge reports merged/coverage-final.json
+            nyc report -t merged --report-dir coverage --reporter=html --reporter=cobertura
+      - run:
           name: Upload Coverage Report
           command: npx codecov
       - save_cache:
