@@ -1,19 +1,20 @@
 module.exports = {
-    testEnvironment: "node",
-    testEnvironmentOptions: {
-        "resources": "usable"
+    verbose: true,
+    testEnvironment: 'node',
+    testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(spec|test).js?(x)'],
+    collectCoverage: true,
+    coverageReporters: ['json', 'lcov', 'text', 'clover'],
+    collectCoverageFrom: ['src/**/*.js'],
+    coverageDirectory: 'coverage',
+    coverageThreshold: {
+      global: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
+      },
     },
-    transform: {
-      "^.+\\.jsx?$": "babel-jest"
+    moduleNameMapper: {
+      '^@/(.*)$': '<rootDir>/src/$1',
     },
-    "moduleNameMapper": {
-        "\\.(css|less|sass|scss)$": "identity-obj-proxy",
-        "\\.mp4$" : "identity-obj-proxy"
-    },
-    "transformIgnorePatterns": [
-        "/node_modules/"
-        
-    ]
-
   };
-  
