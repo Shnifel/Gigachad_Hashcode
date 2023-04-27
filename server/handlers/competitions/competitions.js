@@ -133,7 +133,9 @@ export const updateCompetition = async(req, res) => {
  * @param {*} res 
  */
 export const deleteCompetition = async(req, res) => {
-    //Get competition id
+
+    try {
+        //Get competition id
     const compid = req.body.compid
     const docRef = db.collection("Competitions").doc(compid)
 
@@ -150,16 +152,15 @@ export const deleteCompetition = async(req, res) => {
 
     // Commit the batch operation
     batch.commit()
-    .then(() => {
-        docRef.delete().then(() => {
-            return res.status(200).json("Successfully deleted competition")
-        }).catch((error) => {
-            return res.status(400).json("Error in deleting competition - please try again")
-        })
-    })
-    .catch((error) => {
-       return res.status(400).json('Error deleting competition: ', error);
-    });
+    docRef.delete();
+    return res.status(200).json("Successfully deleted competition");
+       
+    
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+    
 
 }
 
