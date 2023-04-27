@@ -20,7 +20,7 @@ module.exports = {
       "src/components/",
       "src/assets/",
       "src/App.js",
-      "src/pages/"
+      
 
     ],
     moduleNameMapper: {
