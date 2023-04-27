@@ -19,6 +19,8 @@ module.exports = {
       "node_modules/",
       "src/components/",
       "src/assets/",
+      "src/App.js",
+      "src/pages/"
 
     ],
     moduleNameMapper: {
