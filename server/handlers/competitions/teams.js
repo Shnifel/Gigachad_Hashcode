@@ -97,7 +97,8 @@ export const getTeam = async(req, res) => {
  * @returns {unknown}
  */
 export const createTeams = async(req,res) => {
-    //Extract data from request body
+  try {
+     //Extract data from request body
     const user = req.body.uid //UserID
     const teamname=req.body.teamname //TeamName
     const compid= req.body.compid //ID of competition
@@ -110,9 +111,7 @@ export const createTeams = async(req,res) => {
     // Check each team in the competition
      for (const teamRef of teams) {
     // Get the team document
-    const teamDoc = await teamRef.get().catch(error => {
-      return res.status(400).json("Team data retrieval unsuccessful");
-    });
+    const teamDoc = await teamRef.get();
   
     // Check if the user is already a member of the team
     const members = teamDoc.data().members;
@@ -121,30 +120,29 @@ export const createTeams = async(req,res) => {
     }
   
     // Check if the team name is already taken
-    if (teamDoc.data().name === teamname) {
+    if (teamDoc.data().teamname === teamname) {
       return res.status(400).json("Team name is already taken, please choose a different one");
     }
     }
 
     // Value is unique and user isn't a part of a team, add the document to the collection
     
-    await db.collection('Teams').add({teamname,teamCode,members:[db.collection('Users').doc(user)] }).then((TeamRef) => {
-        //Update teams in Competition Document to add current team
-        const competitionRef = db.collection('Competitions').doc(compid);
-        competitionRef.update({
-            teams: Admin.firestore.FieldValue.arrayUnion(TeamRef)
-          }).then(() => {
-            return res.status(200).json({teamCode}) //Return Team Join Code
-          }).catch((error) => {
-            return res.status(400).json(error.message) //Error has occurred   
-          });
+    const TeamRef = await db.collection('Teams').add({teamname,teamCode,members:[db.collection('Users').doc(user)] })
+    //Update teams in Competition Document to add current team
+    const competitionRef = db.collection('Competitions').doc(compid);
+    competitionRef.update({
+        teams: Admin.firestore.FieldValue.arrayUnion(TeamRef)
+    });
+    return res.status(200).json({id: TeamRef.id, teamCode}) //Return Team Join Code
+      
         
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      return res.status(400).json(error.message)  
-      });
+      
 
+  } catch (error) {
+    console.log(error.message);
+    return res.status(400).json(error.message);
+  }
+   
   }
 
 /**
@@ -154,6 +152,7 @@ export const createTeams = async(req,res) => {
  * @returns 
  */
   export const joinTeam = async(req,res) => {
+    try {
     const user = req.body.uid;
     const compid = req.body.compid;
     const teamCode = req.body.teamCode;
@@ -164,33 +163,32 @@ export const createTeams = async(req,res) => {
     // Check each team in the competition
     for (const teamRef of teams) {
       // Get the team document
-      const teamDoc = await teamRef.get().catch(error => {
-        return res.status(400).json("Team data retrieval unsuccessful");
-      });
-    
+      const teamDoc = await teamRef.get();
       // Check if the user is already a member of the team
       const members = teamDoc.data().members;
       if (members.some(memberRef => memberRef.id === user)) {
         return res.status(400).json("You are already registered in a team in this competition");
       }
-      }
+    }
   
     
-    await db.collection('Teams').where('teamCode', '==', teamCode).get().then((querySnapshot) => {
+    const querySnapshot = await db.collection('Teams').where('teamCode', '==', teamCode).get()
       //Invalid join code passed
       if (querySnapshot.empty) {
             return res.status(404).json("No such team found")
-        }
+      }
+      //Team found, add user to team
+      const teamid = querySnapshot.docs[0].id
+      const teamref =  db.collection('Teams').doc(teamid)
+      teamref.update({members: Admin.firestore.FieldValue.arrayUnion(db.collection('Users').doc(user))})
+      return res.status(200).json("Succesfully joined team")
 
-       //Team found, add user to team
-        const teamid = querySnapshot.docs[0].id
-        const teamref =  db.collection('Teams').doc(teamid)
-        teamref.update({members: Admin.firestore.FieldValue.arrayUnion(db.collection('Users').doc(user))})
-        return res.status(200).json("Succesfully joined team")
-    })
-    .catch((error) => {
-        return res.status(400).json("Failed to join team")
-    });  
+  
+    } catch (error) {
+      console.log(error.message)
+      return res.status(400).json("Failed to join team");
+    }
+    
  }
 
 /**
