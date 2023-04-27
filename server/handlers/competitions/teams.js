@@ -16,36 +16,34 @@ export const getTeams = async(req,res) => {
     const compid = req.body.compid; // Competition ID
     const competitionDoc = await db.collection('Competitions').doc(compid).get(); //Obtain data from firestore
     const teamsRefs = competitionDoc.data().teams; //Get array of references to team collections
-
     const teamsPromises = teamsRefs.map( // Take each team reference and get data
         async(teamRef) => {
           const teamDoc = await teamRef.get()
-          const members = teamDoc.data().members
+          const mems = teamDoc.data().members
 
-          const memberPromises = members.map(
+          const memberPromises = mems.map(
             //Get data for each member in team
             async (member) => {
               const memberDoc = await member.get()
               const memberData = memberDoc.data()
-              return {...memberData}
+              return {id: memberDoc.id, ...memberData}
             }
           )
 
           const membersData = await Promise.all(memberPromises)
-          return {...teamDoc.data(), memebersData : membersData}
+
+          const {members, ...teamData} = teamDoc.data();
+
+          return {id: teamDoc.id, teamData, members: membersData};
     });
 
     //Promise ensures that all async requests to teams data is obtained before proceeding
     const teamsSnapshots = await Promise.all(teamsPromises);
 
     //Convert teams data for given competition into array of teams data
-    return res.status(200).json(teamsSnapshots.map(teamSnapshot => {
-        const teamData = teamSnapshot.data();
-        return { id: teamSnapshot.id, ...teamData };
-    }));
+    return res.status(200).json(teamsSnapshots);
     } catch (error) {
-        console.log(error.data);
-        return res.status(400).json("An unexpected error has occurred retrieving teams data");
+        return res.status(400).json(error.message);
     }
 }
 
@@ -60,35 +58,33 @@ export const getTeam = async(req, res) => {
         const compid = req.body.compid
         const user = req.body.uid
 
-        console.log(compid, user)
-
         const competitionDoc = await db.collection('Competitions').doc(compid).get();
+        console.log(competitionDoc)
         const teams = competitionDoc.data().teams
 
         for (const teamRef of teams) {
             const teamDoc = await teamRef.get()
-            const members = teamDoc.data().members
+            const {members, ...teamData} = teamDoc.data()
 
             if (members.some(memberRef => memberRef.id === user)) {
               const membersPromises = members.map(
                 async (member) => {
                   const memDoc = await member.get()
                   const memData = memDoc.data()
-                  return {...memData}
+                  return {id: memDoc.id, ...memData}
                 }
               )
 
               const memberData = await Promise.all(membersPromises)
-              console.log({...teamDoc.data(), membersData: memberData});
-              return res.status(200).json({...teamDoc.data(), membersData: memberData})
+              
+              return res.status(200).json({id: teamDoc.id, teamData, membersData: memberData})
             }
         }
 
         return res.status(400).json("You are not registered in this competition")
       }
     catch (error) {
-        console.log(error.message)
-        return res.status(400).json("An error has occurred. Access denied")
+        return res.status(400).json(error.message)
     }
 }
 
