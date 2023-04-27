@@ -35,6 +35,12 @@ jobs:
           name: Install main dependencies
           command: npm install
       - run:
+          name: Clean up folders
+          command: |
+            rm -rf reports
+            rm -rf merged
+            rm -rf coverage
+      - run:
           name: Merge client side and server side coverage reports
           command: |
             mkdir reports

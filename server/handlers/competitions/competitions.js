@@ -70,24 +70,18 @@ export const getCompetitions = async (req, res) => {
 
 export const getCompetition = async (req, res) => {
     try {
-        const compid = req.body.compid;
-    console.log(compid);
-    const compRef = db.collection("Competitions").doc(compid);
+     const compid = req.body.compid;
+     const compRef = db.collection("Competitions").doc(compid);
 
-    await compRef.get().then(
-        query => {
-            return res.status(200).json(
-                {
-                    id: query.id,
-                    data: query.data()
-                }
-            )
+    const query = await compRef.get();
+    return res.status(200).json(
+        {
+            id: query.id,
+            data: query.data()
         }
-    ).catch(
-        error => {return res.status(400).json(error.message)}
     )
     } catch (error) {
-      return res.status(400).json("Unexpected error")  
+      return res.status(400).json(error.message);  
     }
     
 }
@@ -102,7 +96,8 @@ export const getCompetition = async (req, res) => {
  */
 export const updateCompetition = async(req, res) => {
     //Given competition data, will update any changes made to it
-
+    try {
+        
     const compid = req.body.compid //Extract competition id from request body
     const docRef = db.collection("Competitions").doc(compid);
 
@@ -120,11 +115,16 @@ export const updateCompetition = async(req, res) => {
 
 
     //Perform update
-    docRef.update(updatedData).then(() => {
-        return res.status(200).json("Successfully updated competition data")
-    }).catch((error) => {
-        return res.status(400).json("An error has occurred in attempting to update the competition")
-    })
+    await docRef.update(updatedData)
+    return res.status(200).json("Successfully updated competition data");
+   
+        
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+
+    
 }
 
 /**
