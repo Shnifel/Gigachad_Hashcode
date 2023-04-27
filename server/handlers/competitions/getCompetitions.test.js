@@ -226,8 +226,8 @@ const mockQuerySnapshot = {
       };
       const mockCollectionRef = db.collection('Competitions');
       const mockCollectionDoc = mockCollectionRef.doc(req.body.compid);
-      mockCollectionDoc.get.mockResolvedValue(mockSnapshot);
-      await getCompetition(req, res);
+      mockCollectionDoc.update.mockResolvedValue();
+      await updateCompetition(req, res);
       expect(db.collection).toHaveBeenCalledWith("Competitions");
       expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
       expect(db.collection().doc().update).toHaveBeenCalledWith({
