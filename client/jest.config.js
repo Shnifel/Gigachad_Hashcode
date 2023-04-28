@@ -1,6 +1,5 @@
 module.exports = {
     verbose: true,
-    testEnvironment: 'node',
     testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(spec|test).js?(x)'],
     collectCoverage: true,
     coverageReporters: ['json', 'lcov', 'text', 'clover'],
@@ -20,7 +19,15 @@ module.exports = {
       "src/components/",
       "src/assets/",
       "src/App.js",
-      
+      "src/pages/Login.js",
+      "src/pages/Register.js",
+      "src/pages/adminViews",
+      "src/pages/Dashboard.js",
+      "src/pages/Teams.js",
+      "stateManagement/",
+      "src/pages/Home"
+
+  
 
     ],
     moduleNameMapper: {
