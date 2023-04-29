@@ -27,7 +27,7 @@ const Clipboard = (props) => {
     <Paper sx = {{ m: 1, borderRadius: 3}}>
         <Grid container sx = {{display: 'flex', alignItems : 'center', m: 1}}>
             <Typography container = "h1">
-                {label + ": " + copy}
+                {label  + copy}
             </Typography> 
             <IconButton onClick={handleCopy} className = {classes.iconButton}>
             <ContentCopyIcon />

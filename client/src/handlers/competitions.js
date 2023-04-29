@@ -4,7 +4,6 @@ import axios from "axios";
 export const createNewCompetitions = async(inputs) => {
     const response = await axios.post("/competitions/createCompetition", inputs); 
     return response.data;
-
 }
 
 export const getCompetitions = async() => {
@@ -18,7 +17,6 @@ export const getCompetition = async(inputs) => {
     return response.data;
 }
 
-
 export const createTeam = async(inputs) => {
     const response = await axios.post("/competitions/createTeams",inputs); 
     return response.data;
@@ -28,13 +26,13 @@ export const createTeam = async(inputs) => {
 export const joinTeams = async(inputs) => {
     const response = await axios.post("/competitions/joinTeams",inputs); 
     return response.data;
-
 }
 
 export const getTeams = async(inputs) => {
     const response = await axios.post("/competitions/getTeams", inputs);
     return response.data;
 }
+
 
 export const getTeam = async(inputs) => {
     const response = await axios.post("/competitions/getTeam", inputs);

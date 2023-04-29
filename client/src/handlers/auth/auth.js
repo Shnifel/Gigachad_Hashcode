@@ -20,8 +20,9 @@ export const registerHandler = async (req) => {
         const email=req.email
         const usercredential = await createUserWithEmailAndPassword(Auth,req.email,req.password)
         const uid = usercredential.user.uid
+        const image = usercredential.user.photoURL
         const userref = doc(db,"Users",uid)
-        await setDoc(userref,{name,surname,email,isAdmin:false})
+        await setDoc(userref,{name,surname,email,isAdmin:false, image})
         sendEmailVerification(Auth.currentUser)
 
         return new Success("Successfully registered ! Please check your emails to verify the email sent to you");
@@ -47,18 +48,22 @@ export const loginHandler = async (inputs) => {
 
 
 export const googleAuth = async (response) => {
-    const user = await signInWithPopup(Auth,googleProvider)
+    const user = await signInWithPopup(Auth,googleProvider);
     const id = user.user.uid
-
     const creds = {uid : id}
     const res = await axios.post("/auth/login",creds); 
     return res.data;
 }
 
 export const passwordReset = async (email) => {
-    await sendPasswordResetEmail(Auth, email)
+    await sendPasswordResetEmail(Auth, email);
 }
 
 export const logout = () => {
     signOut(Auth);
+}
+
+export const updateProfile = async(data) => {
+    const response = await axios.post("/auth/updateProfile", data);
+    return response.data;
 }
