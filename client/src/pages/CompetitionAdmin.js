@@ -36,7 +36,6 @@ import Info from './Competitions/Info';
 import Team from './Competitions/Team';
 import Leaderboard from './Competitions/Leaderboard';
 import PdfViewer from './Competitions/Problem';
-import Teams from './CompetitionsAdmin/Teams'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Competition() {
+function CompetitionAdmin() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
@@ -131,7 +130,7 @@ function Competition() {
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
             <Tab label="Info" icon={<InfoIcon/>} value={0}/>
-            <Tab label="My Team" icon={<Group/>} value={1}/>
+            <Tab label="Teams" icon={<Group/>} value={1}/>
             <Tab label="Problem" icon = {<Quiz/>} value={2}/>
             <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3}/> 
             <Tab label = "Submissions" icon = {<Grading/>} value = {4} />
@@ -182,7 +181,7 @@ function Competition() {
       </div>
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
-      {tab === 1 && !loading && <Teams id = {compid} />}
+      {tab === 1 && !loading && <Team id = {compid} />}
       {tab === 2 && <PdfViewer pdfFile = { {
   name: 'dummy.pdf',
   url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
@@ -197,4 +196,4 @@ function Competition() {
   );
 }
 
-export default Competition;
+export default CompetitionAdmin;

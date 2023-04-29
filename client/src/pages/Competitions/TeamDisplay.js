@@ -33,6 +33,7 @@ import '../login.scss'
 import TypewriterTitle from '../../components/TypewriterTitle';
 import Clipboard from '../../components/Clipboard';
 import { useSelector } from 'react-redux';
+import { removeMember } from '../../handlers/competitions';
 
 const darkTheme = createTheme({
   palette: {
@@ -57,12 +58,10 @@ const darkTheme = createTheme({
 
 const TeamDisplay = (props) => {
   const data = props.data;
-  console.log(data);
   const teamID = data.id
   const teamData = data.teamData
   const members = data.membersData
   const [teamName, setTeamName] = useState(teamData.teamname);
-  console.log(teamName);
   const uid = useSelector(state => state.auth.userID);
 
   const [editMode, setEditMode] = useState(false);
@@ -74,30 +73,10 @@ const TeamDisplay = (props) => {
     setEditMode(!editMode);
   }
 
-
-  const handleTeamNameChange = (event, teamId) => {
-    setTeamName(event.target.value);
-    setUnsavedChanges(true);
+  const handleMemberDelete = async (id) => {
+   await removeMember({uid : id, teamid: teamID});
   };
 
-
-
-  const handleTeamDelete = (teamId) => {
-   
-  };
-
-  const handleMemberDelete = (teamIndex, memberIndex) => {
-    
-  };
-
-  const handleTeamExpand = (index) => {
-    setExpandedTeamIndex(index === expandedTeamIndex ? -1 : index);
-  };
-
-  const handleSaveChanges = () => {
-    // Handle saving changes here
-    setUnsavedChanges(false);
-  };
 
 return (
     <ThemeProvider theme={darkTheme}>
@@ -139,7 +118,7 @@ return (
                   <TableCell> {member.email} </TableCell>
                   <TableCell sx = {{width : '100%', justifyContent: 'right', display: 'flex'}}>
                     {editMode && (
-                      <IconButton onClick={() => handleMemberDelete(index)}>
+                      <IconButton onClick={async () => handleMemberDelete(member.id)}>
                         <Delete />
                       </IconButton>
                     )}
