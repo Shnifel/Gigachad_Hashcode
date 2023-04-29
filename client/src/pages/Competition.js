@@ -108,7 +108,7 @@ function Competition() {
      <CardMedia
             component="img"
             alt={data.data.compname}
-            height="300"
+            height="100"
             image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
             /> 
     <div className='font'>
