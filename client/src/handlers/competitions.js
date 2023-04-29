@@ -18,23 +18,27 @@ export const getCompetition = async(inputs) => {
 }
 
 export const createTeam = async(inputs) => {
-    const response = await axios.post("/competitions/createTeams",inputs); 
+    const response = await axios.post("/teams/createTeams",inputs); 
     return response.data;
 
 }
 
 export const joinTeams = async(inputs) => {
-    const response = await axios.post("/competitions/joinTeams",inputs); 
+    const response = await axios.post("/teams/joinTeams",inputs); 
     return response.data;
 }
 
 export const getTeams = async(inputs) => {
-    const response = await axios.post("/competitions/getTeams", inputs);
+    const response = await axios.post("/teams/getTeams", inputs);
     return response.data;
 }
 
 
 export const getTeam = async(inputs) => {
-    const response = await axios.post("/competitions/getTeam", inputs);
+    const response = await axios.post("/teams/getTeam", inputs);
     return response.data;
+}
+
+export const removeMember = async(inputs) => {
+    const response = await axios.post("/teams/removeMember", inputs);
 }

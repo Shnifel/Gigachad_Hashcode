@@ -43,7 +43,7 @@ describe('createTeam', () => {
     const result = await createTeam(inputs);
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('/competitions/createTeams', inputs);
+    expect(axios.post).toHaveBeenCalledWith('/teams/createTeams', inputs);
     expect(result).toEqual(expectedResponse.data);
   });
 });
@@ -63,7 +63,7 @@ describe('joinTeams', () => {
     const result = await joinTeams(inputs);
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('/competitions/joinTeams', inputs);
+    expect(axios.post).toHaveBeenCalledWith('/teams/joinTeams', inputs);
     expect(result).toEqual(expectedResponse.data);
   });
 });

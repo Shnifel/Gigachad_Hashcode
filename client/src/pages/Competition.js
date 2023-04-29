@@ -35,6 +35,7 @@ import './login.scss'
 import Info from './Competitions/Info';
 import Team from './Competitions/Team';
 import Leaderboard from './Competitions/Leaderboard';
+import PdfViewer from './Competitions/Problem';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -181,6 +182,10 @@ function Competition() {
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
       {tab === 1 && !loading && <Team id = {compid} />}
+      {tab === 2 && <PdfViewer pdfFile = { {
+  name: 'dummy.pdf',
+  url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+}} textFiles={["test1"]}/>}
       {tab === 3 && <div>
       <Typography variant="h4" component="h1">
         Leaderboard

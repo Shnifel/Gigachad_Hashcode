@@ -16,7 +16,8 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  Box
+  Box,
+  Grid
 } from '@material-ui/core';
 import {
   Edit,
@@ -111,7 +112,7 @@ return (
         {teamName}
        </Typography>
 
-      <Clipboard label = "Team join code: " copy = {teamData.teamCode} />
+      <Clipboard label = "Team join code: " copy = {teamData.teamCode} color = "inherit" />
 
       <Typography component="h1">
         Members
@@ -149,6 +150,12 @@ return (
           </TableBody>
         </Table>
         </TableContainer>
+
+        <Grid container>
+          <Button>
+            LEAVE TEAM
+          </Button>
+        </Grid>
     
         </Box>
         </ThemeProvider>

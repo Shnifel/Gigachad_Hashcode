@@ -6,6 +6,8 @@ import { Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@mui/material/Grid';
+import { darkTheme } from './styles/Theme';
+import { ThemeProvider } from '@material-ui/core';
 
 const useStyles = makeStyles({
   iconButton: {
@@ -24,16 +26,18 @@ const Clipboard = (props) => {
   }
 
   return (
-    <Paper sx = {{ m: 1, borderRadius: 3}}>
+    <ThemeProvider theme={darkTheme}>
+    <Paper sx = {{  borderRadius: 3, backgroundColor: "inherit", color: "inherit"}} color = "inherit">
         <Grid container sx = {{display: 'flex', alignItems : 'center', m: 1}}>
             <Typography container = "h1">
                 {label  + copy}
             </Typography> 
-            <IconButton onClick={handleCopy} className = {classes.iconButton}>
+            <IconButton onClick={handleCopy} className = {classes.iconButton} color='inherit'>
             <ContentCopyIcon />
             </IconButton>
         </Grid>
     </Paper>
+    </ThemeProvider>
   )
 }
 
