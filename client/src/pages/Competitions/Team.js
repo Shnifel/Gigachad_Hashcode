@@ -34,6 +34,8 @@ const Team = (props) => {
         }
          fetchdata()}, []);
 
+
+
   if (loading) // Data not yet back
   return (
     <ThemeProvider theme={darkTheme}>

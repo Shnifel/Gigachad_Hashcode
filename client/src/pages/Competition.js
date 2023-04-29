@@ -34,6 +34,7 @@ import { getCompetition } from '../handlers/competitions';
 import './login.scss'
 import Info from './Competitions/Info';
 import Team from './Competitions/Team';
+import Leaderboard from './Competitions/Leaderboard';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -93,6 +94,13 @@ function Competition() {
   const handleLogout = () => {
     logout();
   }
+
+  const teams = [
+    { name: 'Team A', scores: [10, 15, 20], totalScore: 45, isHighlighted: false },
+    { name: 'Team B', scores: [5, 8, 12], totalScore: 25, isHighlighted: true },
+    { name: 'Team C', scores: [7, 12, 15], totalScore: 34, isHighlighted: false },
+    { name: 'Team D', scores: [9, 14, 19], totalScore: 42, isHighlighted: false },
+  ];
 
   if (loading) {
     return (<ThemeProvider theme={darkTheme}>
@@ -173,6 +181,12 @@ function Competition() {
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
       {tab === 1 && !loading && <Team id = {compid} />}
+      {tab === 3 && <div>
+      <Typography variant="h4" component="h1">
+        Leaderboard
+      </Typography>
+      <Leaderboard teams={teams} />
+    </div>}
     </ThemeProvider>
   );
 }
