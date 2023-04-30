@@ -11,6 +11,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 // Import styles of default layout plugin
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { uploadCompetitionProblem } from '../../handlers/competitions';
 
 function PDFViewer() {
 
@@ -23,6 +24,11 @@ function PDFViewer() {
   // pdf file error state
   const [pdfError, setPdfError]=useState('');
 
+  const handleUpload = async (file) =>{
+    const res = await uploadCompetitionProblem(file)
+    console.log(res);
+  }
+
 
   // handle file onChange event
   const allowedFiles = ['application/pdf'];
@@ -31,6 +37,7 @@ function PDFViewer() {
     // console.log(selectedFile.type);
     if(selectedFile){
       if(selectedFile&&allowedFiles.includes(selectedFile.type)){
+        handleUpload(selectedFile);
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend=(e)=>{

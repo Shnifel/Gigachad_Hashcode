@@ -229,8 +229,21 @@ export const createTeams = async(req,res) => {
       return res.status(200).json("Successfully deleted team")
     })
   } catch (error) {
+    console.log(error.message);
     return res.status(400).json("Error deleting team")
   }
+ }
+
+ export const updateTeam = async(req, res) => {
+  try {
+    const {teamid, ...updatedData} = req.body;
+    const teamRef = db.collection("Teams").doc(teamid);
+    await teamRef.update(updatedData);
+    return res.status(200).json("Successfully update team");
+  } catch (error) {
+    return res.status(400).json("An unexpected error has occurred")
+  }
+  
  }
   
 

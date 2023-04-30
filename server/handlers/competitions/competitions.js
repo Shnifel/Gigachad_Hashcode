@@ -98,21 +98,8 @@ export const updateCompetition = async(req, res) => {
     //Given competition data, will update any changes made to it
     try {
         
-    const compid = req.body.compid //Extract competition id from request body
+    const {compid, ...updatedData} = req.body //Extract competition id from request body
     const docRef = db.collection("Competitions").doc(compid);
-
-    //Assumes all competition metadata will be sent from client to be updated
-    const updatedData = {
-    compname : req.body.compname, // What is the competition name
-    compdesc : req.body.compdesc, // A description of what the competition is about
-    regstartdate : req.body.regstartdate, // When does registration open
-    regenddate : req.body.regenddate, // When does registration close
-    compdate : req.body.compdate, // When is the competition + time starts
-    max_teamsize : req.body.max_teamsize ,// Limit on number of team numbers
-    numteams : req.body.numteams, // Limit on number of teams
-    min_teamsize : req.body.min_teamsize ,// Min people in a team
-    }
-
 
     //Perform update
     await docRef.update(updatedData)

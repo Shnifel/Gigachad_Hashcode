@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import { darkTheme } from '../../components/styles/Theme';
 import {CircularProgress} from '@material-ui/core';
-import { getTeams } from '../../handlers/competitions';
+import { deleteTeam, getTeams, removeMember, updateTeam } from '../../handlers/competitions';
 
 
 const Teams = (props) => {
@@ -38,6 +38,8 @@ const Teams = (props) => {
     const [editMode, setEditMode] = useState(false);
     const [unsavedChanges, setUnsavedChanges] = useState(false);
     const [expandedTeamIndex, setExpandedTeamIndex] = useState(-1);
+    const [teamsChange, setTeamsChange] = useState(null);
+    const [change, setChanges] = useState(false);
      
     
     useEffect(() => {
@@ -45,6 +47,7 @@ const Teams = (props) => {
          try {
           const response = await getTeams({compid: id})
           setTeams(response);
+          setTeamsChange(Array.from(response));
           setLoading(false);
 
          } catch (error) {
@@ -52,47 +55,52 @@ const Teams = (props) => {
          }
          
         }
-         fetchdata()}, []);
+         fetchdata()}, [change]);
 
-  const handleEditClick = (event, teamId) => {
+  const handleEditClick = async (event) => {
+
+    if (editMode && unsavedChanges) {
+      setLoading(true);
+      const updatedTeams = teamsChange.filter((team, index) => {
+        return team.teamData.teamname !== teams[index].teamData.teamname;
+      })
+      console.log(updatedTeams);
+      for (const team of updatedTeams){
+        await updateTeam({teamid: team.id, teamname: team.teamData.teamname})
+      }
+
+      setChanges(true);
+      setUnsavedChanges(false);
+    }
+
     setEditMode(!editMode);
   }
 
-  const handleTeamNameChange = (event, teamId) => {
-    const newTeams = teams.map((team) => {
-      if (team.id === teamId) {
-        return { ...team, name: event.target.value };
-      }
-      return team;
-    });
-    console.log(newTeams);
-    setTeams(newTeams);
-    setUnsavedChanges(true);
-  };
+  const handleTeamNameChange = (event, index, teamId) => {
+    const updatedTeamName = event.target.value;
 
-  const handleJoinCodeChange = (event, teamId) => {
-    const newTeams = teams.map((team) => {
-      if (team.id === teamId) {
-        return { ...team, joinCode: event.target.value };
-      }
-      return team;
-    });
-    setTeams(newTeams);
+    // Create a copy of the updated teams array
+   const newUpdatedTeams = Array.from(teamsChange);
+
+  // Update the team name in the copied array
+  newUpdatedTeams[index] = { ...newUpdatedTeams[index], teamData: {teamname: updatedTeamName}};
+
+  // Set the updated teams state
+  setTeamsChange(newUpdatedTeams);
     setUnsavedChanges(true);
   };
 
 
-  const handleTeamDelete = (teamId) => {
-    const newTeams = teams.filter((team) => team.id !== teamId);
-    setTeams(newTeams);
-    setUnsavedChanges(true);
+  const handleTeamDelete = async (teamId) => {
+    setLoading(true);
+    await deleteTeam({teamid: teamId, compid: id})
+    setChanges(true);
   };
 
-  const handleMemberDelete = (teamIndex, memberIndex) => {
-    const newTeams = [...teams];
-    newTeams[teamIndex].members.splice(memberIndex, 1);
-    setTeams(newTeams);
-    setUnsavedChanges(true);
+  const handleMemberDelete = async (teamIndex, memberIndex) => {
+    setLoading(true);
+    await removeMember({uid: memberIndex, teamid: teamIndex});
+    setChanges(true);
   };
 
   const handleTeamExpand = (index) => {
@@ -141,7 +149,7 @@ return (
                   <TableCell>
                     {editMode ? (
                       <TextField
-                        value={team.teamData.teamname}
+                        value={teamsChange[index].teamData.teamname}
                         onChange={(event) =>
                           handleTeamNameChange(event, index)
                         }
@@ -157,7 +165,7 @@ return (
                       {expandedTeamIndex === index ? <ExpandLess /> : <ExpandMore />}
                     </IconButton>
                     {editMode && (
-                      <IconButton onClick={() => handleTeamDelete(index)} color='inherit'>
+                      <IconButton onClick={() => handleTeamDelete(team.id)} color='inherit'>
                         <Delete />
                       </IconButton>
                     )}
@@ -192,7 +200,7 @@ return (
                               </TableCell>
                               <TableCell>
                                 {editMode && (
-                                  <IconButton onClick={() => handleMemberDelete(index, memberIndex)} color='inherit'>
+                                  <IconButton onClick={() => handleMemberDelete(team.id, member.id)} color='inherit'>
                                     <Delete />
                                   </IconButton>
                                 )}

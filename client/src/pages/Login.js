@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import {  ThemeProvider } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
 import "./login.scss";
-import {loginHandler, googleAuth} from "../handlers/auth/auth.js"
+import {loginHandler, googleAuth, passwordReset} from "../handlers/auth/auth.js"
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TypewriterTitle from '../components/TypewriterTitle';
@@ -25,6 +25,7 @@ import ReactPlayer from 'react-player';
 import myTheme from '../components/styles/Theme';
 import GoogleButton from 'react-google-button';
 import { useStyles } from '../components/styles/Theme';
+import Success from '../components/Success';
 
 
 export default function Login() {
@@ -33,6 +34,8 @@ export default function Login() {
   
 
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState(null);
   const navigate = useNavigate();
  
   const handleSubmit = async (event) => {
@@ -57,6 +60,11 @@ export default function Login() {
     }
   };
 
+  const onEmailChange = (event) => {
+    event.preventDefault();
+    setEmail(event.target.value);
+  }
+
 
   const handlegoogle = async(event) => {
     event.preventDefault()
@@ -67,6 +75,19 @@ export default function Login() {
       navigate('/Home')
     } catch (err) {
       setError(err.message);
+    }
+  }
+
+  const handlePasswordReset = async () => {
+    try {
+      console.log(email);
+      await passwordReset(email);
+      setError(null);
+      setSuccess(true);
+    } catch (error) {
+      console.log(error.message);
+      setError("Please enter a valid email address");
+      setSuccess(null);
     }
   }
 
@@ -127,7 +148,7 @@ export default function Login() {
                 InputProps={{
                   style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
                 }}
-                
+                onChange = {onEmailChange}
               />
               <TextField
                 margin="normal"
@@ -157,6 +178,7 @@ export default function Login() {
               <p> {error} </p>
               </div>
               }
+              {success && <Success text = "Please check your emails to reset your password"/>}
               
       
               <Button
@@ -170,7 +192,7 @@ export default function Login() {
 
               <Grid container sx = {{mt: 2}}>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link href="#" variant="body2" onClick={handlePasswordReset}>
                     Forgot password?
                   </Link>
                 </Grid>
