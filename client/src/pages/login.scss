@@ -3,7 +3,11 @@ export default {};
 @font-face{
     font-family: "Scififont";
     src: url("../assets/BlocTekRegular-gxEZ4.ttf") format("truetype");
+}
 
+@font-face {
+    font-family: "Arcade";
+    src: url("../assets/ARCADE_N.TTF") format("truetype");
 }
 
 .typewriter {
@@ -20,7 +24,7 @@ export default {};
 
 .typewriterDisplay {
     font-size: 50px;
-    font-family: 'Scififont';
+    font-family: 'Arcade';
     color: #0084ff;
     font-weight: normal;
     font-style: normal;

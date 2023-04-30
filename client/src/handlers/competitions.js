@@ -1,6 +1,6 @@
 import axios from "axios";
 import { storage } from "../Firebase";
-import { ref, uploadBytes } from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 export const createNewCompetitions = async(inputs) => {
     const response = await axios.post("/competitions/createCompetition", inputs); 
@@ -66,3 +66,38 @@ export const uploadCompetitionProblem = async(file) => {
         throw new Error('Error uploading file to Firebase Storage');
       }
 }
+
+export const downloadCompetitionProblem = (path) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const storageRef = ref(storage, path);
+        getDownloadURL(storageRef)
+          .then((url) => {
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+  
+            xhr.onload = (event) => {
+              const blob = xhr.response;
+              let reader = new FileReader();
+              reader.readAsDataURL(blob);
+              reader.onloadend = (e) => {
+                resolve(e.target.result);
+              };
+            };
+  
+            xhr.onerror = (error) => {
+              reject(error);
+            };
+  
+            xhr.open('GET', url);
+            xhr.send();
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+  

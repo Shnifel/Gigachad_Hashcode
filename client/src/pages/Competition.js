@@ -36,7 +36,8 @@ import Info from './Competitions/Info';
 import Team from './Competitions/Team';
 import Leaderboard from './Competitions/Leaderboard';
 import PdfViewer from './Competitions/Problem';
-import Teams from './CompetitionsAdmin/Teams'
+import Teams from './CompetitionsAdmin/Teams';
+import ProblemAdmin from './CompetitionsAdmin/Problem';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -193,6 +194,7 @@ function Competition() {
       </Typography>
       <Leaderboard teams={teams} />
     </div>}
+    {tab === 4 && <ProblemAdmin/>}
     </ThemeProvider>
   );
 }

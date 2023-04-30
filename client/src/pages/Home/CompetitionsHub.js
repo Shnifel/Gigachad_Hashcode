@@ -69,7 +69,7 @@ function CompetitionContent() {
           > 
             <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
             <div className='font'>
-            <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
+            <Typography variant= "h1" fontFamily="'Arcade'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
               CODING COMPETITIONS
             </Typography></div>
             {isAdmin &&
