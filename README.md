@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/Shnifel/Gigachad_Hashcode/branch/master/graph/badge.svg?token=31J6539TLG)](https://codecov.io/gh/Shnifel/Gigachad_Hashcode)
 
 # Gigachad_Hashcode
-Revival of Google's Hash_code
+Revival of Google's Hash Code
 
 used git push -f origin to force push to origin
 
