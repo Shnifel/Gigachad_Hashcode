@@ -122,7 +122,7 @@ export function TeamRegister(props) {
                     variant = "filled"
                     name="name"
                     InputProps={{
-                      style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                      style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden', color: "black"}
                     }}
                     autoFocus
                   />

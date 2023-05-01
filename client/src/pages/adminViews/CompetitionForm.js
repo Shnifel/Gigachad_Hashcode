@@ -22,10 +22,11 @@ import { useStyles } from '../../components/styles/Theme.js';
 import ErrorMessage from '../../components/Error.js';
 import Success from '../../components/Success.js';
 import { Grid } from '@mui/material';
-import { Edit as EditIcon , Description as PdfIcon} from '@mui/icons-material';
+import { Edit as EditIcon , Home, Description as PdfIcon} from '@mui/icons-material';
 import { select } from 'async';
 import { uploadFile } from '../../handlers/competitions.js';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useNavigate } from 'react-router-dom';
 
 
 function CompetitionCreate() {
@@ -38,6 +39,7 @@ function CompetitionCreate() {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const pdfInputRef = useRef(null);
+  const navigate = useNavigate();
 
 
   const handleImageChange = (e) => {
@@ -81,7 +83,8 @@ function CompetitionCreate() {
         max_teamsize: data.get("numPeople"),
         min_teamsize: data.get("minPeople"),
         numteams: data.get("numTeams"),
-        compdate : data.get("compDate")
+        compdate : data.get("compDate"),
+        num_tests : data.get("NumTests")
 
       };
       try {
@@ -93,6 +96,7 @@ function CompetitionCreate() {
         setLoading(false); 
         setSuccess(response.compid);
         setError(null);
+        navigate("Home")
       } catch (err) {
         setLoading(false);
         setSuccess(null);
@@ -280,13 +284,27 @@ function CompetitionCreate() {
                   required
                   color = "black"
                   variant = "filled"
-                  name = "numPeople"
+                  name = "minPeople"
                   label = "Min people per team"
                   id = "minPeople"
                   InputProps={{
                     style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
                   }}
                   />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                margin = "normal"
+                type = "number"
+                required
+                color = "black"
+                variant = "filled"
+                name = "NumTests"
+                label = "Number of Test Cases"
+                id = "numTeams"
+                InputProps={{
+                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                }}/>
                   </Grid>
                 </Grid>
                 <input type='file' color='white'  ref = {pdfInputRef} onChange={handleFile} style={{display: 'none'}}/>

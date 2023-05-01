@@ -43,7 +43,12 @@ function CompetitionContent() {
 
     const gotoComp = (event, compid) => {
         console.log(compid);
-        navigate("/Competition", {state:{compid: compid}});
+        
+        if (isAdmin){
+          navigate("/CompetitionsAdmin", {state:{compid: compid}});
+        }else{
+          navigate("/Competition", {state:{compid: compid}});
+        }
     }
 
     if (loading) {
@@ -108,7 +113,7 @@ function CompetitionContent() {
                  <Typography variant="body2" color="textSecondary" component="p">
                    {competition.data.compdesc}
                  </Typography>
-                 <IconButton onClick={event => gotoComp(event, competition.id)}>
+                 <IconButton onClick={event => gotoComp(event, competition.id)} style={{color:"#FFFFFF"}}>
                    <ArrowForward />
                  </IconButton>
                </CardContent>

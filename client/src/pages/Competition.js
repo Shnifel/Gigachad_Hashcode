@@ -191,7 +191,7 @@ function Competition() {
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
       {tab === 1 && !loading && <Team id = {compid} />}
-      {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {3}/>}
+      {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && <div>
       <Typography variant="h4" component="h1">
         Leaderboard

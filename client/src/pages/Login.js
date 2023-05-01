@@ -52,7 +52,7 @@ export default function Login() {
       const login = await loginHandler(inputs);
       const isAdmin = login.isAdmin;
       dispatch(setAdmin(isAdmin));
-      navigate("/Dashboard");
+      navigate("/Home");
     }
     catch (err){
       setError(err.message);
@@ -166,10 +166,7 @@ export default function Login() {
                 }}
 
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="secondary" />}
-                label="Remember me"
-              />
+             
 
               {error && <div className='error'>
               <Avatar sx = {{bgcolor: 'rgb(255, 204, 204)', color: 'red'}} >
@@ -197,15 +194,16 @@ export default function Login() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <NavLink to = "/Register">
+                  <NavLink to = "/Register" style={{color:"#FFFFFF"}}>
                     {"Don't have an account? Sign Up"}
+                    
                   </NavLink>
                 </Grid>
               </Grid>
 
               <Grid container sx = {{mt : 1, mb : 1, width: '100%', justifyContent: 'center'}}>
                 <Grid item>
-                  <Typography component = "h3" sx = {{textAlign: 'center'}}>
+                  <Typography component = "h3" sx = {{textAlign: 'center'} } style={{color:"#FFFFFF"}}>
                       OR
                   </Typography>
                 </Grid>

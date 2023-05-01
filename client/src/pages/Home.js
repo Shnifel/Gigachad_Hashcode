@@ -28,7 +28,6 @@ import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
 import CompetitionsHub from './Home/CompetitionsHub';
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -52,6 +51,7 @@ function Home() {
   const [activeTab, setActiveTab] = useState(0);
   const [tab, setTab] = useState(0);
   const navigate = useNavigate();
+ 
 
   const handleMenuClose = () => {
     setAnchorEl(null);

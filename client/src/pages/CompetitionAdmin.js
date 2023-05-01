@@ -32,7 +32,7 @@ import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
 import { getCompetition } from '../handlers/competitions';
 import './login.scss'
-import Teams from './Teams';
+import Teams from './CompetitionsAdmin/Teams';
 import ProblemAdmin from './CompetitionsAdmin/Problem';
 import Leaderboard from './Competitions/Leaderboard';
 import Info from './Competitions/Info';
@@ -183,7 +183,7 @@ function CompetitionAdmin() {
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
       {tab === 1 && !loading && <Teams id = {compid} />}
-      {tab === 2 && <ProblemAdmin compid={compid} numtests = {3}/>}
+      {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && <div>
       <Typography variant="h4" component="h1">
         Leaderboard

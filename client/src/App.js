@@ -14,6 +14,7 @@ import { Auth } from './Firebase';
 import { logout } from './handlers/auth/auth';
 import Home from './pages/Home';
 import Competition from './pages/Competition';
+import CompetitionAdmin from './pages/CompetitionAdmin';
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
           <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
           <Route path = "ProfilePage" element = {<ProfilePage/>} exact />
           <Route path = "Competition" element = {<Competition/>}/>
+          <Route path = "CompetitionsAdmin" element = {<CompetitionAdmin/>}/>
         </Route>
       </Route>
 
