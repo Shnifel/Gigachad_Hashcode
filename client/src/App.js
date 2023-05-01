@@ -6,7 +6,6 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
 import Teams from './pages/Teams'
-import TeamAdmin from './pages/adminViews/Teams';
 import CompetitionForm from './pages/adminViews/CompetitionForm'
 import ProfilePage from './pages/ProfilePage';
 import { useDispatch , useSelector} from 'react-redux';
@@ -29,7 +28,6 @@ const App = () => {
         <Route element = {<PrivateRoute/>}>
           <Route path = "Dashboard" element={<Dashboard/>} exact/>
           <Route path = "Home" element={<Home/>} exact />
-          <Route path = "Teams" element = {isAdmin ? <TeamAdmin/> : <Teams/>} exact/>
           <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
           <Route path = "ProfilePage" element = {<ProfilePage/>} exact />
           <Route path = "Competition" element = {<Competition/>}/>
