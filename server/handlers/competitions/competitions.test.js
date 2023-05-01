@@ -39,6 +39,7 @@ const mockQuerySnapshot = {
         compdate: "2022-06-01",
         min_teamsize: 2,
         max_teamsize: 5,
+        num_tests: 6,
         admin: "admin-1",
         teams: ["abcdef", "efgh", "pqrstuv"]
       })
@@ -54,6 +55,7 @@ const mockQuerySnapshot = {
         compdate: "2022-06-10",
         min_teamsize: 3,
         max_teamsize: 6,
+        num_tests: 6,
         admin: "admin-2",
         teams: []
       })
@@ -79,6 +81,7 @@ describe('createCompetition', () => {
         compdate: '2023-06-01',
         max_teamsize: 5,
         numteams: 10,
+        num_tests: 6,
         min_teamsize: 2,
       },
     };
@@ -101,6 +104,7 @@ describe('createCompetition', () => {
       compdate: '2023-06-01',
       max_teamsize: 5,
       numteams: 10,
+      num_tests: 6,
       min_teamsize: 2,
       teams: [],
     });
@@ -160,6 +164,7 @@ describe("getCompetitions function", () => {
           compdate: "2022-06-01",
           min_teamsize: 2,
           max_teamsize: 5,
+          num_tests: 6,
           admin: "admin-1",
           teams: ["abcdef", "efgh", "pqrstuv"]
         }
@@ -175,6 +180,7 @@ describe("getCompetitions function", () => {
           compdate: "2022-06-10",
           min_teamsize: 3,
           max_teamsize: 6,
+          num_tests: 6,
           admin: "admin-2",
           teams: []
         }

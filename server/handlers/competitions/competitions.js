@@ -23,10 +23,11 @@ export const createCompetition = async(req,res) => {
     const max_teamsize = req.body.max_teamsize // Limit on number of team numbers
     const numteams = req.body.numteams // Limit on number of teams
     const min_teamsize = req.body.min_teamsize // Min people in a team
+    const num_tests = req.body.num_tests
 
     // Add to competitions collection in firestore
     db.collection('Competitions').add({
-        admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams,teams:[] // Teams array with references to all teams entered in competition
+        admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams, num_tests, teams:[] // Teams array with references to all teams entered in competition
       })
       .then((docRef) => {
         // Get competition reference for current competition and return it back to client
