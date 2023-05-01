@@ -29,7 +29,8 @@ module.exports = {
       "src/pages/Competitions",
       "src/pages/CompetitionsAdmin",
       "src/pages/ProfilePage.js",
-      "src/routes/"
+      "src/routes/",
+      "src/Home.js"
 
   
 
