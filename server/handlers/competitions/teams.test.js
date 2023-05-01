@@ -467,6 +467,7 @@ describe("deleteMember function", () => {
         expect(db.collection().doc().update).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith("Successfully removed member");
+        expect(res.status).toHaveBeenCalled();
 
 
 
