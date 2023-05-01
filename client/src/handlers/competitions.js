@@ -89,6 +89,7 @@ export const downloadFile = (path) => {
         const storageRef = ref(storage, path);
         getDownloadURL(storageRef)
           .then((url) => {
+            console.log(url)
             const xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
   
@@ -97,7 +98,6 @@ export const downloadFile = (path) => {
               let reader = new FileReader();
               reader.readAsDataURL(blob);
               reader.onloadend = (e) => {
-                console.log("Here 2")
                 resolve(e.target.result);
               };
             };

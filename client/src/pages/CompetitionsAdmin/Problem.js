@@ -62,6 +62,7 @@ function ProblemAdmin(props) {
   }
 
  const downloadFileLocal = (data, filename) => {
+    console.log("Here")
     const link = document.createElement("a");
     link.href = data;
     link.download = filename;
@@ -79,18 +80,20 @@ function ProblemAdmin(props) {
       try {
       
        const response = await downloadFile(compid + "/problem.pdf")
+       console.log(response)
        console.log("Here")
        setPdfFile(response);
 
+       const newTests = [];
+
        for (let i = 1; i <= numtests; i++){
         const response = await downloadFile(compid + "/testCases/test_case_" + i + ".txt");
-        const newArray = [...tests]
-        newArray[i-1] = response;
-        setTests(newArray);
+       
+        newTests[i-1] = response;
+       
        }
 
-
-
+       setTests(newTests)
       } catch (error) {
         console.log(error.message);
         setPdfError(error.message);
@@ -127,8 +130,7 @@ function ProblemAdmin(props) {
     console.log("Here at uploadFileButton")
     
     if (selectedFile){
-      console.log(selectedFile.name);
-      await handleUpload(compid + "/testCases/test_case_" + i + ".txt")
+      await handleUpload(compid + "/testCases/test_case_" + i + ".txt", selectedFile)
     }
   }
 
@@ -199,12 +201,9 @@ function ProblemAdmin(props) {
                   <IconButton color='inherit'  onClick = {async () => await handleTextFileChange(index)}>
                     <CloudUpload />
                   </IconButton>
-                  {test &&
-                  <Typography>
-                    {test.name}
-                  </Typography>}
-               
-                {tests[index] && (
+                  
+               {console.log(tests)}
+                {test && (
                   <IconButton onClick={() => downloadFileLocal(test, "test_case_" + (index+1) + ".txt")} color='inherit'>
                     <CloudDownload />
                   </IconButton>
