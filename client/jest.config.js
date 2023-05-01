@@ -27,7 +27,8 @@ module.exports = {
       "stateManagement/",
       "src/pages/Home",
       "src/pages/Competitions",
-      "src/pages/CompetitionsAdmin"
+      "src/pages/CompetitionsAdmin",
+      "src/pages/ProfilePage.js"
 
   
 
