@@ -4,12 +4,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
-import AdminRoute from './routes/AdminRoute';
 import './App.css';
 import Teams from './pages/Teams'
 import TeamAdmin from './pages/adminViews/Teams';
 import CompetitionForm from './pages/adminViews/CompetitionForm'
-import CompetitionsPage from './pages/adminViews/Competition';
 import ProfilePage from './pages/ProfilePage';
 import { useDispatch , useSelector} from 'react-redux';
 import { useEffect } from 'react';

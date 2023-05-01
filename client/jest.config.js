@@ -25,7 +25,9 @@ module.exports = {
       "src/pages/Dashboard.js",
       "src/pages/Teams.js",
       "stateManagement/",
-      "src/pages/Home"
+      "src/pages/Home",
+      "src/pages/Competitions",
+      "src/pages/CompetitionsAdmin"
 
   
 
