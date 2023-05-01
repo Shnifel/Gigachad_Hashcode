@@ -67,7 +67,23 @@ export const uploadCompetitionProblem = async(file) => {
       }
 }
 
-export const downloadCompetitionProblem = (path) => {
+export const uploadFile = (path, file) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const storageRef = ref(storage, path);
+  
+      uploadBytes(storageRef, file).then((snapshot) => {
+        console.log("Done");
+        resolve(snapshot); // Resolve the promise with the snapshot
+      });
+    } catch (error) {
+      console.log(error.message);
+      reject(new Error('Error uploading file to Firebase Storage')); // Reject the promise with the error
+    }
+  });
+};
+
+export const downloadFile = (path) => {
     return new Promise((resolve, reject) => {
       try {
         const storageRef = ref(storage, path);
@@ -81,6 +97,7 @@ export const downloadCompetitionProblem = (path) => {
               let reader = new FileReader();
               reader.readAsDataURL(blob);
               reader.onloadend = (e) => {
+                console.log("Here 2")
                 resolve(e.target.result);
               };
             };
@@ -97,6 +114,7 @@ export const downloadCompetitionProblem = (path) => {
           });
       } catch (error) {
         reject(error);
+        console.log(error.message);
       }
     });
   };

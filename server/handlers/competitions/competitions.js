@@ -12,6 +12,7 @@ import { db } from "../../database/firebase.js";
  * @returns {*}
  */
 export const createCompetition = async(req,res) => {
+  try {
     // Extract competition details from request
     const admin = req.body.uid  // Which admin is creating this competition
     const compname = req.body.compname // What is the competition name
@@ -36,7 +37,11 @@ export const createCompetition = async(req,res) => {
         //Unsuccessful in creating competition - return firebase error
         console.log('Error adding document: ', error);
         return res.status(400).json(error.message)  
-      });            
+      });         
+  } catch (error) {
+    return res.status(400).json(error.message);
+  }
+       
 }
 
 

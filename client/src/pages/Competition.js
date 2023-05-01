@@ -98,11 +98,20 @@ function Competition() {
     logout();
   }
 
-  const teams = [
-    { name: 'Team A', scores: [10, 15, 20], totalScore: 45, isHighlighted: false },
-    { name: 'Team B', scores: [5, 8, 12], totalScore: 25, isHighlighted: true },
-    { name: 'Team C', scores: [7, 12, 15], totalScore: 34, isHighlighted: false },
-    { name: 'Team D', scores: [9, 14, 19], totalScore: 42, isHighlighted: false },
+  const teams =  [
+    {
+      location: 'Team A',
+      testCases: [10, 20, 30],
+      aggregate: 60,
+      timeTaken: '2h 30m',
+    },
+    {
+      location: 'Team B',
+      testCases: [15, 25, 35],
+      aggregate: 75,
+      timeTaken: '1h 45m',
+    },
+    // Add more team objects as needed
   ];
 
   if (loading) {
@@ -122,21 +131,20 @@ function Competition() {
             height="100"
             image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
             /> 
-    <div className='font'>
-     <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
+     <Typography variant= "h1" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', }} style={{fontFamily: 'Arcade', color: "#6700ff"}}>
              {data.data.compname}
      </Typography>
-     </div>
+
       <div className={classes.appBar}>
       <AppBar position="static" color = "inherit" >
         <Toolbar>
-          <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
-            <Tab label="Info" icon={<InfoIcon/>} value={0}/>
-            <Tab label="My Team" icon={<Group/>} value={1}/>
-            <Tab label="Problem" icon = {<Quiz/>} value={2}/>
-            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3}/> 
-            <Tab label = "Submissions" icon = {<Grading/>} value = {4} />
-            <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} />
+          <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary' >
+            <Tab label="Info" icon={<InfoIcon/>} value={0} style={{fontFamily: 'Arcade'}}/>
+            <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>
+            <Tab label="Problem" icon = {<Quiz/>} value={2} style={{fontFamily: 'Arcade'}}/>
+            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3} style={{fontFamily: 'Arcade'}}/> 
+            <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>
+            <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} style={{fontFamily: 'Arcade'}} />
           </Tabs>
           <div style={{ flexGrow: 1 ,color: 'inherit'}} />
           <IconButton
@@ -184,17 +192,14 @@ function Competition() {
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
       {tab === 1 && !loading && <Teams id = {compid} />}
-      {tab === 2 && <PdfViewer pdfFile = { {
-  name: 'dummy.pdf',
-  url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-}} textFiles={["test1"]}/>}
+      {tab === 2 && !loading && <PdfViewer compid= {compid}/>}
       {tab === 3 && <div>
       <Typography variant="h4" component="h1">
         Leaderboard
       </Typography>
       <Leaderboard teams={teams} />
     </div>}
-    {tab === 4 && <ProblemAdmin/>}
+    {tab === 4 && <ProblemAdmin compid={compid} numtests = {3}/>}
     </ThemeProvider>
   );
 }
