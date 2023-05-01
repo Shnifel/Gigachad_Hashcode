@@ -12,9 +12,11 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { downloadFile, uploadCompetitionProblem } from '../../handlers/competitions';
 import TestCasesBox from '../../components/TestCasesBox';
 import { darkTheme } from '../../components/styles/Theme';
-import { CssBaseline, ThemeProvider, Box, Paper } from '@material-ui/core';
+import { CssBaseline, ThemeProvider, Box, Paper, Avatar, Grid } from '@material-ui/core';
 import { Typography, IconButton } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import {CircularProgress} from '@material-ui/core';
+import { Description as PdfIcon } from '@mui/icons-material';
 
 const PDFViewer = (props) => {
 
@@ -26,10 +28,10 @@ const PDFViewer = (props) => {
 
   // pdf file onChange state
   const [pdfFile, setPdfFile]=useState(null);
-  const [tests, setTests] = useState(Array(numtests).fill(null))
-
+ const [tests, setTests] = useState([])
   // pdf file error state
   const [pdfError, setPdfError]=useState('');
+  const [loading, setLoading] = useState(true);
 
 
  const downloadFileLocal = (data, filename) => {
@@ -43,7 +45,7 @@ const PDFViewer = (props) => {
     document.body.removeChild(link);
   }
 
-  const [testCases, setTestCases] = useState(["file1", "file2"])
+ 
 
    useEffect(() => {
     async function fetchdata(){
@@ -51,35 +53,70 @@ const PDFViewer = (props) => {
        const response = await downloadFile(compid + "/problem.pdf")
        setPdfFile(response);
 
-      
+       const newTests = Array(numtests).fill(null);
+
+       for (let i = 1; i <= numtests; i++){
+        try {
+          const response = await downloadFile(compid + "/testCases/test_case_" + i + ".txt");
+          newTests[i-1] = response;
+        } catch (error) {
+          continue;
+        }
+       }
+
+       setTests(newTests)
+       setLoading(false);
    
 
       } catch (error) {
-        setPdfError(error.message);
+        setLoading(false);
+        console.log(error.message);
       }
      }
       fetchdata();
    }, [])
+
+   if (loading) // Data not yet back
+   return (
+     <ThemeProvider theme={darkTheme}>
+         <CssBaseline/>
+         <div style = {{display: 'flex', width: '100%', height: "100%", justifyContent: 'center'}}>
+             <CircularProgress/>
+         </div>
+     </ThemeProvider>
+   )
 
 
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
     <div className="container">
-      {pdfFile && <Paper sx = {{marginLeft: 20, display: 'flex', borderRadius: 5}}>
-     <Box sx = {{
-      display: 'flex',
-      alignItems: 'center',
-      marginBottom: 1,
-      paddingLeft: 2,
-      paddingRight: 2
-    }} >
-        <Typography> Competition problem </Typography>
-         <IconButton onClick={() => downloadFileLocal(pdfFile, "Competition problem")} color='inherit'>
-          <SaveAltIcon />
-        </IconButton>
-        </Box></Paper>}
-      <TestCasesBox />
+    <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
+        Competition Problem
+      </Typography>
+    {pdfFile && <Box sx = {{m: 2}}><Paper sx = {{marginLeft: 20, display: 'flex', borderRadius: 5}} spacing = {2}>
+      
+      <Box sx = {{
+       display: 'flex',
+       alignItems: 'center',
+       marginBottom: 1,
+       paddingLeft: 2,
+       paddingRight: 2
+     }} >
+       <Avatar variant='square'>
+         <PdfIcon/>
+       </Avatar>
+         <Typography sx = {{ m : 1}}> Competition problem </Typography>
+          <IconButton onClick={() => downloadFileLocal(pdfFile, "Competition problem")} color='inherit'>
+           <SaveAltIcon />
+         </IconButton>
+         </Box></Paper> <Grid container>
+           </Grid></Box>}
+  
+      <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#2A3492", m: 2 }}>
+       Test Cases
+      </Typography>
+      <TestCasesBox testCases = {tests} />
 
       {/* View PDF */}
       <div className="viewer">
@@ -95,9 +132,6 @@ const PDFViewer = (props) => {
           </Worker>
           </Box></Box>
         )}
-
-        {/* render this if we have pdfFile state null   */}
-        {!pdfFile&&<>No file is selected yet</>}
 
       </div>
 

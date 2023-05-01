@@ -32,10 +32,11 @@ import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
 import { getCompetition } from '../handlers/competitions';
 import './login.scss'
-import Info from './Competitions/Info';
-import Team from './Competitions/Team';
+import Teams from './Teams';
+import ProblemAdmin from './CompetitionsAdmin/Problem';
 import Leaderboard from './Competitions/Leaderboard';
-import PdfViewer from './Competitions/Problem';
+import Info from './Competitions/Info';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -181,11 +182,8 @@ function CompetitionAdmin() {
       </div>
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
-      {tab === 1 && !loading && <Team id = {compid} />}
-      {tab === 2 && <PdfViewer pdfFile = { {
-  name: 'dummy.pdf',
-  url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-}} textFiles={["test1"]}/>}
+      {tab === 1 && !loading && <Teams id = {compid} />}
+      {tab === 2 && <ProblemAdmin compid={compid} numtests = {3}/>}
       {tab === 3 && <div>
       <Typography variant="h4" component="h1">
         Leaderboard

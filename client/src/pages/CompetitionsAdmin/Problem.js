@@ -19,6 +19,8 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { Edit, Add, Save, Description as PdfIcon} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
+import {CircularProgress} from '@material-ui/core';
+
 import "../login.scss";
 
 function ProblemAdmin(props) {
@@ -35,8 +37,12 @@ function ProblemAdmin(props) {
   const [tests, setTests] = useState(Array(numtests).fill(null))
   const [editMode, setEditmode] = useState(false);
   const [changes, setChanges] = useState(false);
+  const [marker, setMarker] = useState(null);
+  const [markerName, setMarkerName] = useState("marker.py")
   const pdfInputRef  = useRef(null);
+  const markerInputRef = useRef(null);
   const testInputs = useRef([]);
+  const [loading, setLoading] = useState(true);
 
   const handleUpload = async (path, file) =>{
     try {
@@ -59,6 +65,10 @@ function ProblemAdmin(props) {
 
   const handlePdfInput = async () => {
     await pdfInputRef.current.click();
+  }
+
+  const handleMarkerInput = async () => {
+    await markerInputRef.current.click();
   }
 
  const downloadFileLocal = (data, filename) => {
@@ -84,19 +94,24 @@ function ProblemAdmin(props) {
        console.log("Here")
        setPdfFile(response);
 
-       const newTests = [];
+       const newTests = Array(numtests).fill(null);
 
        for (let i = 1; i <= numtests; i++){
-        const response = await downloadFile(compid + "/testCases/test_case_" + i + ".txt");
-       
-        newTests[i-1] = response;
-       
+        try {
+          const response = await downloadFile(compid + "/testCases/test_case_" + i + ".txt");
+          newTests[i-1] = response;
+        } catch (error) {
+          continue;
+        }
        }
 
        setTests(newTests)
+       const res = await downloadFile(compid + "/marker.py");
+       setMarker(res);
+
+       setLoading(false);
       } catch (error) {
-        console.log(error.message);
-        setPdfError(error.message);
+        setLoading(false);
       }
      }
       fetchdata();
@@ -127,12 +142,29 @@ function ProblemAdmin(props) {
   const uploadTextFile = async (e, index) => {
     let selectedFile = e.target.files[0];
     let i = index + 1;
-    console.log("Here at uploadFileButton")
+ 
     
     if (selectedFile){
       await handleUpload(compid + "/testCases/test_case_" + i + ".txt", selectedFile)
     }
   }
+
+  const uploadMarkerFile = async(e) => {
+    let selectedFile = e.target.files[0];
+    if (selectedFile){
+      await handleUpload(compid + "/marker.py", selectedFile)
+    }
+  }
+
+  if (loading) // Data not yet back
+  return (
+    <ThemeProvider theme={darkTheme}>
+        <CssBaseline/>
+        <div style = {{display: 'flex', width: '100%', height: "100%", justifyContent: 'center'}}>
+            <CircularProgress/>
+        </div>
+    </ThemeProvider>
+  )
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -144,7 +176,7 @@ function ProblemAdmin(props) {
       <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
         Competition Problem
       </Typography>
-    <label><h2></h2></label>
+    
     {pdfFile && <Box sx = {{m: 2}}><Paper sx = {{marginLeft: 20, display: 'flex', borderRadius: 5}} spacing = {2}>
       
      <Box sx = {{
@@ -215,18 +247,38 @@ function ProblemAdmin(props) {
       </Table>
     </TableContainer>
     </Box>
-      <form>
+    <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#6ded8a", m: 2 }}>
+        MARKER FILE
+      </Typography>
 
-        <label><h2>Upload PDF</h2></label>
-        <br></br>
-
-        <input type='file' className="form-control"
-        onChange={handleFile}></input>
-
-       
-        {pdfError&&<span className='text-danger'>{pdfError}</span>}
-
-      </form>
+      {marker && <Box sx = {{m: 2}}><Paper sx = {{marginLeft: 20, display: 'flex', borderRadius: 5}} spacing = {2}>
+      
+      <Box sx = {{
+       display: 'flex',
+       alignItems: 'center',
+       marginBottom: 1,
+       paddingLeft: 2,
+       paddingRight: 2
+     }} >
+       <Avatar variant='square'>
+         <PdfIcon/>
+       </Avatar>
+         <Typography sx = {{ m : 1}}> {markerName} </Typography>
+          <IconButton onClick={() => downloadFileLocal(marker, "Competition Marker")} color='inherit'>
+           <SaveAltIcon />
+         </IconButton>
+         </Box></Paper> <Grid container>
+           </Grid></Box>}
+         <Box sx={{ml: 2}}>
+        <Button
+           variant="outlined"
+           size="small"
+           onClick={handleMarkerInput}
+           
+         >
+           {marker ? "Change marker"  : "Upload competition marker"}
+         </Button> <input type='file' color='white' accept = '.py' ref = {markerInputRef} onChange={uploadMarkerFile} style={{display: 'none'}}/></Box>
+      
 
       {/* View PDF */}
       <div className="viewer">
@@ -243,8 +295,7 @@ function ProblemAdmin(props) {
           </Box></Box>
         )}
 
-        {/* render this if we have pdfFile state null   */}
-        {!pdfFile&&<>No file is selected yet</>}
+       
 
       </div>
 

@@ -36,8 +36,7 @@ import Info from './Competitions/Info';
 import Team from './Competitions/Team';
 import Leaderboard from './Competitions/Leaderboard';
 import PdfViewer from './Competitions/Problem';
-import Teams from './CompetitionsAdmin/Teams';
-import ProblemAdmin from './CompetitionsAdmin/Problem';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -191,15 +190,14 @@ function Competition() {
       </div>
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
-      {tab === 1 && !loading && <Teams id = {compid} />}
-      {tab === 2 && !loading && <PdfViewer compid= {compid}/>}
+      {tab === 1 && !loading && <Team id = {compid} />}
+      {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {3}/>}
       {tab === 3 && <div>
       <Typography variant="h4" component="h1">
         Leaderboard
       </Typography>
       <Leaderboard teams={teams} />
     </div>}
-    {tab === 4 && <ProblemAdmin compid={compid} numtests = {3}/>}
     </ThemeProvider>
   );
 }

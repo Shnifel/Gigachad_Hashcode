@@ -23,16 +23,30 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2)
   },
 }));
 
-const TestCasesBox = () => {
+const TestCasesBox = (props) => {
   const classes = useStyles();
 
+  const testCases = props.testCases;
+
+  const downloadFileLocal = (data, filename) => {
+    const link = document.createElement("a");
+    link.href = data;
+    link.download = filename;
+    link.target = "_blank";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   // Mock test case data
-  const testCases = ['Test Case 1', 'Test Case 2', 'Test Case 3'];
+  
 
   const handleDownload = (testCase) => {
     // Logic to download the text file for the given testCase
@@ -48,10 +62,10 @@ const TestCasesBox = () => {
       </Box>
       {testCases.map((testCase, index) => (
         <Box key={index} className={classes.row}>
-          <Typography>{testCase}</Typography>
-          <IconButton onClick={() => handleDownload(testCase)} color='inherit'>
+          <Typography>{"Test Case " + (index + 1)}</Typography>
+          {testCase && <IconButton onClick={() => downloadFileLocal(testCase, "test_case_" + (index+1) + ".txt")} color='inherit'>
             <SaveAltIcon />
-          </IconButton>
+          </IconButton>}
         </Box>
       ))}
     </Box>
