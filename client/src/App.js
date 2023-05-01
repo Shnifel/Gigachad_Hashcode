@@ -2,7 +2,6 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider, Route, createRoutesFromElements, useNavigate} from "react-router-dom";
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 import './App.css';
 import Teams from './pages/Teams'
@@ -26,7 +25,6 @@ const App = () => {
         <Route exact index element = {<Login/>}/>
         <Route path = "Register" element = {<Register/>}/>
         <Route element = {<PrivateRoute/>}>
-          <Route path = "Dashboard" element={<Dashboard/>} exact/>
           <Route path = "Home" element={<Home/>} exact />
           <Route path = "CreateCompetition" element = {<CompetitionForm/>} exact />
           <Route path = "ProfilePage" element = {<ProfilePage/>} exact />
