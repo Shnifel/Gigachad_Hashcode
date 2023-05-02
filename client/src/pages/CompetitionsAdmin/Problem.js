@@ -122,7 +122,6 @@ function ProblemAdmin(props) {
   const allowedFiles = ['application/pdf'];
   const handleFile = async (e) =>{
     let selectedFile = e.target.files[0];
-    // console.log(selectedFile.type);
     if(selectedFile){
       if(selectedFile&&allowedFiles.includes(selectedFile.type)){
         

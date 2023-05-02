@@ -35,7 +35,7 @@ import './login.scss'
 import Teams from './CompetitionsAdmin/Teams';
 import ProblemAdmin from './CompetitionsAdmin/Problem';
 import Leaderboard from './Competitions/Leaderboard';
-import Info from './Competitions/Info';
+import InfoAdmin from './CompetitionsAdmin/Info';
 
 
 
@@ -122,7 +122,7 @@ function CompetitionAdmin() {
             image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
             /> 
     <div className='font'>
-     <Typography variant= "h1" fontFamily="'Scififont'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
+     <Typography variant= "h1" style={{fontFamily: 'Arcade', color: "#6700ff"}} sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
              {data.data.compname}
      </Typography>
      </div>
@@ -130,12 +130,12 @@ function CompetitionAdmin() {
       <AppBar position="static" color = "inherit" >
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
-            <Tab label="Info" icon={<InfoIcon/>} value={0}/>
-            <Tab label="Teams" icon={<Group/>} value={1}/>
-            <Tab label="Problem" icon = {<Quiz/>} value={2}/>
-            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3}/> 
-            <Tab label = "Submissions" icon = {<Grading/>} value = {4} />
-            <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} />
+            <Tab label="Info" icon={<InfoIcon/>} value={0} style={{fontFamily: 'Arcade'}}/>
+            <Tab label="Teams" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>
+            <Tab label="Problem" icon = {<Quiz/>} value={2} style={{fontFamily: 'Arcade'}}/>
+            <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3} style={{fontFamily: 'Arcade'}}/> 
+            <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>
+            <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} style={{fontFamily: 'Arcade'}}/>
           </Tabs>
           <div style={{ flexGrow: 1 ,color: 'inherit'}} />
           <IconButton
@@ -181,7 +181,7 @@ function CompetitionAdmin() {
       </AppBar>
       </div>
      </Card>
-      {tab === 0 && !loading && <Info data = {data.data}/>}
+      {tab === 0 && !loading && <InfoAdmin data = {data.data}/>}
       {tab === 1 && !loading && <Teams id = {compid} />}
       {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && <div>
