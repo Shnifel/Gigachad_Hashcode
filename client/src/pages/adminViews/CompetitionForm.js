@@ -96,7 +96,7 @@ function CompetitionCreate() {
         setLoading(false); 
         setSuccess(response.compid);
         setError(null);
-        navigate("Home")
+        navigate("/Home")
       } catch (err) {
         setLoading(false);
         setSuccess(null);

@@ -263,7 +263,7 @@ function ProblemAdmin(props) {
          <PdfIcon/>
        </Avatar>
          <Typography sx = {{ m : 1}}> {markerName} </Typography>
-          <IconButton onClick={() => downloadFileLocal(marker, "Competition Marker")} color='inherit'>
+          <IconButton onClick={() => downloadFileLocal(marker, "marker.py")} color='inherit'>
            <SaveAltIcon />
          </IconButton>
          </Box></Paper> <Grid container>
