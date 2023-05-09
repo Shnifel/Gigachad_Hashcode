@@ -12,9 +12,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import '../login.scss'; 
 import { useEffect,useState } from 'react';
-import { getCompetitions } from '../../handlers/competitions.js';
+import { getCompetitions, downloadFile } from '../../handlers/competitions.js';
 import { darkTheme } from '../../components/styles/Theme.js';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, responsiveFontSizes } from '@material-ui/core';
 import { Grid, Card, CardContent, CardMedia, IconButton } from "@material-ui/core";
 import { ArrowForward } from "@mui/icons-material";
 
@@ -22,13 +22,21 @@ import { ArrowForward } from "@mui/icons-material";
 function CompetitionContent() {
     const [comps,setcomps] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [images, setImages] = useState([]);
+
 
 
     useEffect(() => {
       async function fetchdata(){
-        const response = await getCompetitions()
+        try {
+          const response = await getCompetitions()
+       
         setcomps(response);
         setLoading(false);
+        } catch (error) {
+          setLoading(false);
+        }
+        
       }
        fetchdata()
        console.log(comps)
@@ -53,9 +61,12 @@ function CompetitionContent() {
 
     if (loading) {
         return (
+          <ThemeProvider theme={darkTheme}>
+            <CssBaseline/>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
               <CircularProgress />
             </div>
+            </ThemeProvider>
           );
     }
 
@@ -97,14 +108,14 @@ function CompetitionContent() {
             <Grid container>
        
        <Grid container spacing={3}>
-         {comps.map((competition) => (
+         {comps.map((competition, index) => (
            <Grid key={competition.id} item xs={12} sm={6} md={4}>
              <Card sx = {{borderRadius : 30}}>
                <CardMedia
                  component="img"
                  alt={competition.title}
                  height="200"
-                 image="https://source.unsplash.com/random"
+                 image = {"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"}
                />
                <CardContent>
                  <Typography gutterBottom variant="h5" component="h2">

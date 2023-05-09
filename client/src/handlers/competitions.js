@@ -57,12 +57,10 @@ export const uploadCompetitionProblem = async(file) => {
         const storageRef = ref(storage, "problems/test.pdf")
     
         uploadBytes(storageRef, file).then((snapshot) => {
-            console.log(snapshot.metadata.fullPath);
-            console.log('Uploaded a blob or file!');
+          
           })
       } catch (error) {
         // Handle any error
-        console.log(error.message);
         throw new Error('Error uploading file to Firebase Storage');
       }
 }
@@ -73,11 +71,10 @@ export const uploadFile = (path, file) => {
       const storageRef = ref(storage, path);
   
       uploadBytes(storageRef, file).then((snapshot) => {
-        console.log("Done");
+  
         resolve(snapshot); // Resolve the promise with the snapshot
       });
     } catch (error) {
-      console.log(error.message);
       reject(new Error('Error uploading file to Firebase Storage')); // Reject the promise with the error
     }
   });

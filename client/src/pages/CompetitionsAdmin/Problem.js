@@ -20,6 +20,7 @@ import { Edit, Add, Save, Description as PdfIcon} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
 import {CircularProgress} from '@material-ui/core';
+import { markFile } from '../../handlers/marker';
 
 import "../login.scss";
 
@@ -47,7 +48,6 @@ function ProblemAdmin(props) {
   const handleUpload = async (path, file) =>{
     try {
       const res =  await uploadFile(path, file);
-      console.log("Uploaded")
       setChanges(!changes);
     } catch (error) {
       console.log(error.message);
@@ -57,7 +57,6 @@ function ProblemAdmin(props) {
   const handleTextFileChange = async (index) => {
     const inputFileRef = testInputs.current[index];
     if (inputFileRef) {
-      console.log("Here at handleFileChange")
       await inputFileRef.click(); // Trigger click on the corresponding file input
     }
   };
@@ -72,7 +71,6 @@ function ProblemAdmin(props) {
   }
 
  const downloadFileLocal = (data, filename) => {
-    console.log("Here")
     const link = document.createElement("a");
     link.href = data;
     link.download = filename;
@@ -90,8 +88,6 @@ function ProblemAdmin(props) {
       try {
       
        const response = await downloadFile(compid + "/problem.pdf")
-       console.log(response)
-       console.log("Here")
        setPdfFile(response);
 
        const newTests = Array(numtests).fill(null);
@@ -152,6 +148,12 @@ function ProblemAdmin(props) {
     let selectedFile = e.target.files[0];
     if (selectedFile){
       await handleUpload(compid + "/marker.py", selectedFile)
+    }
+    try {
+      const res = await markFile({compid});
+      console.log(res);
+    } catch (error) {
+      console.log(error.message);
     }
   }
 
@@ -233,7 +235,6 @@ function ProblemAdmin(props) {
                     <CloudUpload />
                   </IconButton>
                   
-               {console.log(tests)}
                 {test && (
                   <IconButton onClick={() => downloadFileLocal(test, "test_case_" + (index+1) + ".txt")} color='inherit'>
                     <CloudDownload />
@@ -263,7 +264,7 @@ function ProblemAdmin(props) {
          <PdfIcon/>
        </Avatar>
          <Typography sx = {{ m : 1}}> {markerName} </Typography>
-          <IconButton onClick={() => downloadFileLocal(marker, "Competition Marker")} color='inherit'>
+          <IconButton onClick={() => downloadFileLocal(marker, "marker.py")} color='inherit'>
            <SaveAltIcon />
          </IconButton>
          </Box></Paper> <Grid container>

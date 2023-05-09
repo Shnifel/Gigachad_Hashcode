@@ -33,4 +33,6 @@ export const googleProvider = new GoogleAuthProvider();
 export const app = initializeApp(firebaseConfig);
 export const Auth = getAuth(app);
 export const db = admin.firestore();
+export const storage = admin.storage();
+export const bucket = storage.bucket("hashcode-45476.appspot.com")
 export const Admin = admin
