@@ -26,9 +26,6 @@ export const markFile = async(req, res) => {
         return res.status(200).json(data.toString());
   });
 
-   
-
-
     } catch (error) {
         console.log(error.message);
         
