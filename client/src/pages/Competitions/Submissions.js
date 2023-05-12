@@ -39,7 +39,7 @@ function Submissions(props) {
   useEffect(() => {
     async function fetchdata(){
       try {
-       const response = await getSubmissions({subsid})
+       const response = await getSubmissions({subsRef: subsid})
        setSubsdata(response);
        setLoading(false);
 
@@ -139,10 +139,11 @@ function Submissions(props) {
         updated[index] = feedback;
         console.log("Here");
         setMarkedState(updated);
+        console.log(feedback)
       }
 
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     } 
   }
 
@@ -254,6 +255,7 @@ function Submissions(props) {
                  <Close/>
               </IconButton>
 
+              {console.log(subsdata)}
              
          </Box> : <Box sx = {{alignItems: 'center', display: 'flex'}} onClick={() => {toggleSubmit(index)}}> 
          <AddRounded/> Add Submission </Box>

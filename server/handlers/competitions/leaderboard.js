@@ -17,7 +17,7 @@ export const getLeaderboard = async (req, res) => {
           const teamData = teamDoc.data()
           const subs = teamData.subsRef
 
-          const subScores = (await subs.get()).data().max_scores
+          const subScores = (await db.collection("Submissions").doc(subs).get()).data().max_scores
 
           return {id: teamDoc.id, teamname, scores: subScores};
     });

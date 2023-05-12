@@ -6,6 +6,6 @@ export const addSubmission = async(inputs) => {
 }
 
 export const getSubmissions = async(inputs) => {
-    const res = await axios.post("/submissions/getSubmission", inputs)
+    const res = await axios.post("/submissions/getSubmissions", inputs)
     return res.data;
 }

@@ -6,18 +6,19 @@ export const addSubmission = async (req, res) => {
 
     try {
         const subsid = req.body.subsid;
+        console.log(subsid);
         const compid = req.body.compid;
         const test_case = req.body.test_case;
         const subsRef = db.collection("Submissions").doc(subsid);
 
         const data = (await subsRef.get()).data();
-        const max_score = data.max_scores[index];
+        const max_score = data.max_scores[test_case];
 
 
-        const feedback = markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", test_case);
+        const feedback = await markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", test_case);
         
         const score = parseInt(feedback);
-        const subData = {time: new Date().toLocaleString(), score, test_num}
+        const subData = {time: new Date().toLocaleString(), score, test_case}
         
 
         await subsRef.update({subs_history: Admin.firestore.FieldValue.arrayUnion(subData)})
@@ -28,7 +29,7 @@ export const addSubmission = async (req, res) => {
 
         if (score > max_score){
             const updated_scores = [...data.max_scores]
-            updated_scores[index] = score
+            updated_scores[test_case - 1] = score
             await subsRef.update({max_scores: updated_scores})
         }
 
@@ -36,6 +37,7 @@ export const addSubmission = async (req, res) => {
 
 
     } catch (error) {
+        console.log(error.message)
 
         return res.status(400).json(error.message);
     }    

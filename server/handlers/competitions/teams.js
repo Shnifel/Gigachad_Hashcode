@@ -129,9 +129,9 @@ export const createTeams = async(req,res) => {
     // Value is unique and user isn't a part of a team, add the document to the collection
     //Create a submissions reference for team
 
-    const subsRef = await db.collection('Submissions').add({max_scores: Array(comp_data.num_tests).fill(null), subs_history : []})
+    const subsRef = await db.collection('Submissions').add({max_scores: Array(parseInt(comp_data.num_tests)).fill(null), subs_history : []})
     
-    const TeamRef = await db.collection('Teams').add({teamname,teamCode,members:[db.collection('Users').doc(user)], subsRef: subsRef })
+    const TeamRef = await db.collection('Teams').add({teamname,teamCode,members:[db.collection('Users').doc(user)], subsRef: subsRef.id })
     //Update teams in Competition Document to add current team
     const competitionRef = db.collection('Competitions').doc(compid);
     await competitionRef.update({

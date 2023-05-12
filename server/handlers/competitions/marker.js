@@ -14,22 +14,32 @@ const downloadFile = async (path) => {
     
 }
 
-export const markFile = async(markerPath, testPath, test_case) => {
+export const markFile = (markerPath, testPath, test_case) => {
+  return new Promise(async (resolve, reject) => {
     try {
       const markerFile = await downloadFile(markerPath);
       const subFile = await downloadFile(testPath);
 
       const pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()]);
+
+      let output = '';
       pythonProcess.stdout.on('data', data => {
-        return data.toString();
+        output += data.toString();
       });
 
       pythonProcess.stderr.on("error", err => {
-        return -1;
-      } )
+        reject(err);
+      });
 
+      pythonProcess.on('close', (code) => {
+        if (code !== 0) {
+          reject(new Error(`Python process exited with code ${code}`));
+        } else {
+          resolve(output);
+        }
+      });
     } catch (error) {
-        
-        return error.message;
+      reject(error);
     }
-}
+  });
+};

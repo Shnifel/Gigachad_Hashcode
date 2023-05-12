@@ -70,7 +70,7 @@ function Competition() {
   const location = useLocation();
   const compid = location.state.compid;
   const [subsid, setSubsid] = useState(null);
-  const uid = useSelector(state => state.auth.userId);
+  const uid = useSelector(state => state.auth.userID);
 
 
   useEffect(() => {
@@ -79,9 +79,11 @@ function Competition() {
         const response = await getCompetition({compid: compid})
        setData(response);
         const team = await getTeam({compid, uid})
-        setSubsid(team.teamData.subsRef.id);
+        setSubsid(team.teamData.subsRef);
+        console.log(subsid)
       setLoading(false);
       } catch (error) {
+        console.log(error);
         setLoading(false);
       }
       
