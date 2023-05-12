@@ -36,6 +36,7 @@ import Teams from './CompetitionsAdmin/Teams';
 import ProblemAdmin from './CompetitionsAdmin/Problem';
 import Leaderboard from './Competitions/Leaderboard';
 import InfoAdmin from './CompetitionsAdmin/Info';
+import Submissions from './Competitions/Submissions';
 
 
 
@@ -190,6 +191,7 @@ function CompetitionAdmin() {
       </Typography>
       <Leaderboard teams={teams} />
     </div>}
+    {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = "1234"/> }
     </ThemeProvider>
   );
 }

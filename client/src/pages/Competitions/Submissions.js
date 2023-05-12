@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, useCallback} from 'react'
 import React from 'react';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { downloadFile, uploadFile } from '../../handlers/competitions';
@@ -16,21 +16,38 @@ import "../login.scss";
 
 function Submissions(props) {
 
-  const compid = props.compid;
-  const numtests = props.numtests;
-  const subsid = props.subsid;
+  const compid = props.compid; //obtain competition id
+  const numtests = props.numtests; //obtain number of test cases
+  const subsid = props.subsid; //obtain submission id for team in competition
 
-  // pdf file error state
-  const [pdfError, setPdfError]=useState('');
-  const [subs, setSubs] = useState(Array(numtests).fill(null));
-  const [submit, setSubmit] = useState(Array(numtests).fill(false));
-  const [markedState, setMarkedState] = useState(Array(numtests).fill(null));
-  const [subsdata, setSubsdata] = useState(null);
-  const [changedSubs, setChangedSubs] = useState(Array(numtests).fill(null));
-  const zipInputRefs = useRef([]);
-  const solnInputRefs = useRef(null);
-  const [loading, setLoading] = useState(true);
+  const [subs, setSubs] = useState(Array(numtests).fill(null)); // submission files - latest
+  const [submit, setSubmit] = useState(Array(numtests).fill(false)); // submit state toggled for each 
+  const [markedState, setMarkedState] = useState(Array(numtests).fill(null)); // judgement on marked or not
+  const [subsdata, setSubsdata] = useState({max_score: 80, subs: [{date: "12-05-2023 21:00", feedback: "Successfully passed test case", score: 80}]}); // All submissions metadata including times, scores, feedback
+  const [changedSubs, setChangedSubs] = useState(Array(numtests).fill(null)); // submission file has pending changes
+  const [changedZips, setChangedZips] = useState(Array(numtests).fill(null));
+  const zipInputRefs = useRef([]); //input refs for zip files uploads
+  const solnInputRefs = useRef([]); // input refs for solution file uploads
+  const [loading, setLoading] = useState(true); // loading submissions data
+  const [changes, setChanges] = useState(true);
+  const array = Array(numtests).fill(null);
 
+
+  
+  //Fetch submissions data for given subs id
+  useEffect(() => {
+    async function fetchdata(){
+      try {
+
+       setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+     }
+      fetchdata();
+   }, [])
+
+  //Upload file
   const handleUpload = async (path, file) =>{
     try {
       const res =  await uploadFile(path, file);
@@ -40,12 +57,66 @@ function Submissions(props) {
     }
   }
 
+
   const handleZipFileChange = (index) => {
     const zipFileRef = zipInputRefs.current[index];
     if (zipFileRef) {
        zipFileRef.click(); // Trigger click on the corresponding file input
+    
+  }
+}
+
+  const updateZipFile =(e, index) => {
+    const selectedFile = e.target.files[0];
+    const arr = [...changedZips];
+    arr[index] = selectedFile;
+    setChangedZips(arr);
+  }
+
+  const handleSubsFileChange = (index) => {
+    const subsRef = solnInputRefs.current[index];
+    if (subsRef) {
+      subsRef.click(); // Trigger click on the corresponding file input
     }
-  };
+  }
+
+  const updateSolnFile =(e, index) => {
+    const selectedFile = e.target.files[0];
+    const arr = [...changedSubs];
+    arr[index] = selectedFile;
+    setChangedSubs(arr);
+  }
+
+  const handleSubmit =  async (index) => {
+    try {
+      const zipFile = changedZips[index];
+      let test_case = index + 1;
+      if (zipFile) {
+        await handleUpload(compid + "/submissions/" + subsid + "/src_code_" + test_case + ".zip", zipFile);
+        const arr = [...changedZips]
+        arr[index] = null
+        setChangedZips(arr);
+      }
+
+      const solnFile = changedSubs[index];
+      if (solnFile) {
+        await handleUpload(compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", solnFile);
+        const arr = [...changedSubs]
+        arr[index] = null
+        setChangedSubs(arr);
+
+        const marked = [...markedState];
+        marked[index] = "Pending Judgement"
+        setMarkedState(marked);
+        const feedback = await markFile({compid});
+        marked[index] = feedback;
+        setMarkedState(marked);
+      }
+
+    } catch (error) {
+      console.log(error.message);
+    } 
+  }
 
 
  const downloadFileLocal = (data, filename) => {
@@ -61,71 +132,18 @@ function Submissions(props) {
 
 
 
-   useEffect(() => {
-    async function fetchdata(){
-      try {
-
-       setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-     }
-      fetchdata();
-   }, [changes])
+   
 
 
-  // handle file onChange event
-  const allowedFiles = ['application/pdf'];
-  const handleFile = async (e) =>{
-    let selectedFile = e.target.files[0];
-    if(selectedFile){
-      if(selectedFile&&allowedFiles.includes(selectedFile.type)){
-        
-        await handleUpload(compid + "/problem.pdf", selectedFile);
-        setPdfFile(null);
-        
-      }
-      else{
-        setPdfError('Not a valid pdf: Please select only PDF');
-      }
-    }
-    else{
-      console.log('please select a PDF');
-    }
-  }
-
-  const uploadTextFile = async (e, index) => {
-    let selectedFile = e.target.files[0];
-    let i = index + 1;
- 
-    
-    if (selectedFile){
-      await handleUpload(compid + "/testCases/test_case_" + i + ".txt", selectedFile)
-    }
-  }
-
-  const uploadMarkerFile = async(e) => {
-    let selectedFile = e.target.files[0];
-    if (selectedFile){
-      await handleUpload(compid + "/marker.py", selectedFile)
-    }
-    try {
-      const res = await markFile({compid});
-      console.log(res);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  if (loading) // Data not yet back
-  return (
-    <ThemeProvider theme={darkTheme}>
-        <CssBaseline/>
-        <div style = {{display: 'flex', width: '100%', height: "100%", justifyContent: 'center'}}>
-            <CircularProgress/>
-        </div>
-    </ThemeProvider>
-  )
+  // if (loading) // Data not yet back
+  // return (
+  //   <ThemeProvider theme={darkTheme}>
+  //       <CssBaseline/>
+  //       <div style = {{display: 'flex', width: '100%', height: "100%", justifyContent: 'center'}}>
+  //           <CircularProgress/>
+  //       </div>
+  //   </ThemeProvider>
+  // )
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -148,34 +166,59 @@ function Submissions(props) {
             <TableCell style={{fontFamily: 'Arcade'}}>SOURCE CODE</TableCell>
             <TableCell style={{fontFamily: 'Arcade'}}>SOLUTION</TableCell>
             <TableCell style={{fontFamily: 'Arcade'}}>SCORE KEPT</TableCell>
-            <TableCell></TableCell>
+            <TableCell></TableCell> 
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {tests.map((test, index) => (
+
+          {array.map((state, index) => (
             <React.Fragment key={index}>
             <TableRow key={index}>
               <TableCell>{"Test Case " + (index +1)}</TableCell>
               <TableCell>
               <input
                       type="file"
+                      accept='.zip'
+                      style={{ display: 'none' }}
+                      ref={(ref) => (zipInputRefs.current[index] = ref)} // Store ref to the file input
+                      onChange = {  (event) => { updateZipFile(event, index)}}
+                    />
+                  <IconButton color='inherit'  onClick = {() => {handleZipFileChange(index)}}>
+                    <CloudUpload />
+               </IconButton>
+              </TableCell>
+              <TableCell>
+              <input
+                      type="file"
                       accept='.txt'
                       style={{ display: 'none' }}
-                      ref={(ref) => (testInputs.current[index] = ref)} // Store ref to the file input
-                      onChange = { async (event) => { await uploadTextFile(event, index)}}
+                      ref={(ref) => (solnInputRefs.current[index] = ref)} // Store ref to the file input
+                      onChange = {  (event) => {updateSolnFile(event, index)}}
                     />
-                  <IconButton color='inherit'  onClick = {async () => await handleTextFileChange(index)}>
+                  <IconButton color='inherit'  onClick = {(event) => handleSubsFileChange(index)}>
                     <CloudUpload />
-                  </IconButton>
-                  
-               
+               </IconButton>
               </TableCell>
               <TableCell>
+                
+                {subsdata.max_score}
 
               </TableCell>
-              <TableCell>
 
+              <TableCell>
+                {markedState[index]}
+              </TableCell>
+
+              <TableCell>
+              <Box sx={{ml: 2}}>
+             <Button
+           variant="outlined"
+           size="small"
+           onClick={async () => {await handleSubmit(index)}}>
+            SUBMIT
+              </Button>
+         </Box> 
               </TableCell>
 
             </TableRow></React.Fragment>
@@ -183,17 +226,7 @@ function Submissions(props) {
         </TableBody>
       </Table>
     </TableContainer>
-    </Box>
-         <Box sx={{ml: 2}}>
-        <Button
-           variant="outlined"
-           size="small"
-           onClick={handleMarkerInput}
-           
-         >
-           {marker ? "Change marker"  : "Upload competition marker"}
-         </Button> <input type='file' color='white' accept = '.py' ref = {markerInputRef} onChange={uploadMarkerFile} style={{display: 'none'}}/></Box>
-
+    </Box>  
     </div>
     </ThemeProvider>
   );
