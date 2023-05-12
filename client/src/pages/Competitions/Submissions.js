@@ -6,11 +6,12 @@ import { darkTheme } from '../../components/styles/Theme';
 import { CssBaseline, ThemeProvider, Box, Paper, Button, Grid, Avatar } from '@material-ui/core';
 import { Typography, IconButton } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { Edit, Add, Save, Description as PdfIcon} from '@mui/icons-material';
+import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
 import {CircularProgress} from '@material-ui/core';
 import { markFile } from '../../handlers/marker';
+import { FileUploadRounded } from '@mui/icons-material';
 
 import "../login.scss";
 
@@ -51,7 +52,6 @@ function Submissions(props) {
   const handleUpload = async (path, file) =>{
     try {
       const res =  await uploadFile(path, file);
-      setChanges(!changes);
     } catch (error) {
       console.log(error.message);
     }
@@ -65,6 +65,12 @@ function Submissions(props) {
     
   }
 }
+
+  const toggleSubmit = (index) => {
+    const arr = [...submit]
+    arr[index] = !arr[index]
+    setSubmit(arr);
+  }
 
   const updateZipFile =(e, index) => {
     const selectedFile = e.target.files[0];
@@ -109,8 +115,10 @@ function Submissions(props) {
         marked[index] = "Pending Judgement"
         setMarkedState(marked);
         const feedback = await markFile({compid});
-        marked[index] = feedback;
-        setMarkedState(marked);
+        const updated = [...markedState]
+        updated[index] = feedback;
+        console.log("Here");
+        setMarkedState(updated);
       }
 
     } catch (error) {
@@ -185,7 +193,7 @@ function Submissions(props) {
                       onChange = {  (event) => { updateZipFile(event, index)}}
                     />
                   <IconButton color='inherit'  onClick = {() => {handleZipFileChange(index)}}>
-                    <CloudUpload />
+                     <FileUploadRounded/>
                </IconButton>
               </TableCell>
               <TableCell>
@@ -197,7 +205,7 @@ function Submissions(props) {
                       onChange = {  (event) => {updateSolnFile(event, index)}}
                     />
                   <IconButton color='inherit'  onClick = {(event) => handleSubsFileChange(index)}>
-                    <CloudUpload />
+                    <FileUploadRounded/>
                </IconButton>
               </TableCell>
               <TableCell>
@@ -207,10 +215,15 @@ function Submissions(props) {
               </TableCell>
 
               <TableCell>
+                {markedState[index] === "Pending Judgement" && 
+                  <CircularProgress/>
+                   }
+
                 {markedState[index]}
               </TableCell>
 
               <TableCell>
+                {submit[index] ? 
               <Box sx={{ml: 2}}>
              <Button
            variant="outlined"
@@ -218,7 +231,14 @@ function Submissions(props) {
            onClick={async () => {await handleSubmit(index)}}>
             SUBMIT
               </Button>
-         </Box> 
+              <IconButton color = "inherit" onClick={() => toggleSubmit(index)}>
+                 <Close/>
+              </IconButton>
+
+             
+         </Box> : <Box sx = {{alignItems: 'center', display: 'flex'}} onClick={() => {toggleSubmit(index)}}> 
+         <AddRounded/> Add Submission </Box>
+         }
               </TableCell>
 
             </TableRow></React.Fragment>

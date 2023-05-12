@@ -106,7 +106,8 @@ export const createTeams = async(req,res) => {
     const buffer = crypto.randomBytes(5) //Generate random code for joining a team
     const teamCode= buffer.toString("base64") //Convert to base 64
 
-    const teams = (await db.collection("Competitions").doc(compid).get()).data().teams
+    const comp_data = (await db.collection("Competitions").doc(compid).get()).data()
+    const teams = comp_data.teams
 
     // Check each team in the competition
      for (const teamRef of teams) {
@@ -126,11 +127,14 @@ export const createTeams = async(req,res) => {
     }
 
     // Value is unique and user isn't a part of a team, add the document to the collection
+    //Create a submissions reference for team
+
+    const subsRef = await db.collection('Submissions').add({max_scores: Array(comp_data.num_tests).fill(null), subs_history : []})
     
-    const TeamRef = await db.collection('Teams').add({teamname,teamCode,members:[db.collection('Users').doc(user)] })
+    const TeamRef = await db.collection('Teams').add({teamname,teamCode,members:[db.collection('Users').doc(user)], subsRef: subsRef })
     //Update teams in Competition Document to add current team
     const competitionRef = db.collection('Competitions').doc(compid);
-    competitionRef.update({
+    await competitionRef.update({
         teams: Admin.firestore.FieldValue.arrayUnion(TeamRef)
     });
     return res.status(200).json({id: TeamRef.id, teamCode}) //Return Team Join Code

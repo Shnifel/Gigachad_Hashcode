@@ -46,6 +46,7 @@ const mockSnapshot = {
       numteams: 10,
       min_teamsize: 2,
       max_teamsize: 5,
+      num_tests: 8,
       teams: [db.collection("Teams").doc("team-a"), db.collection("Teams").doc("team-b")]
     })
 };
