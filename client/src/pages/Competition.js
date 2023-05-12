@@ -30,12 +30,15 @@ import { ThemeProvider } from '@material-ui/core';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
-import { getCompetition } from '../handlers/competitions';
+import { getCompetition, getTeam } from '../handlers/competitions';
 import './login.scss'
 import Info from './Competitions/Info';
 import Team from './Competitions/Team';
 import Leaderboard from './Competitions/Leaderboard';
 import PdfViewer from './Competitions/Problem';
+import Submissions from './Competitions/Submissions';
+import { useSelector } from 'react-redux';
+
 
 
 
@@ -66,13 +69,22 @@ function Competition() {
   const navigate = useNavigate();
   const location = useLocation();
   const compid = location.state.compid;
+  const [subsid, setSubsid] = useState(null);
+  const uid = useSelector(state => state.auth.userId);
+
 
   useEffect(() => {
     async function fetchdata(){
-      console.log("Competition: " + compid);
-      const response = await getCompetition({compid: compid})
-      setData(response);
+      try {
+        const response = await getCompetition({compid: compid})
+       setData(response);
+        const team = await getTeam({compid, uid})
+        setSubsid(team.teamData.subsRef.id);
       setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+      
     }
      fetchdata()}, []);
 
@@ -198,6 +210,7 @@ function Competition() {
       </Typography>
       <Leaderboard teams={teams} />
     </div>}
+    {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = {subsid}/>}
     </ThemeProvider>
   );
 }

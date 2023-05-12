@@ -6,12 +6,13 @@ import { darkTheme } from '../../components/styles/Theme';
 import { CssBaseline, ThemeProvider, Box, Paper, Button, Grid, Avatar } from '@material-ui/core';
 import { Typography, IconButton } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close} from '@mui/icons-material';
+import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close, ExpandMore, ExpandLess} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
 import {CircularProgress} from '@material-ui/core';
 import { markFile } from '../../handlers/marker';
 import { FileUploadRounded } from '@mui/icons-material';
+import { addSubmission, getSubmissions } from '../../handlers/submissions';
 
 import "../login.scss";
 
@@ -24,7 +25,7 @@ function Submissions(props) {
   const [subs, setSubs] = useState(Array(numtests).fill(null)); // submission files - latest
   const [submit, setSubmit] = useState(Array(numtests).fill(false)); // submit state toggled for each 
   const [markedState, setMarkedState] = useState(Array(numtests).fill(null)); // judgement on marked or not
-  const [subsdata, setSubsdata] = useState({max_score: 80, subs: [{date: "12-05-2023 21:00", feedback: "Successfully passed test case", score: 80}]}); // All submissions metadata including times, scores, feedback
+  const [subsdata, setSubsdata] = useState({max_scores: [80, 0, null, 0,  0], subs_history: [{time: "12-05-2023 21:00", score: 80, test_case: 1}, {time: "12-06-2023 21:00", score: 90, test_case: 3}]}); // All submissions metadata including times, scores, feedback
   const [changedSubs, setChangedSubs] = useState(Array(numtests).fill(null)); // submission file has pending changes
   const [changedZips, setChangedZips] = useState(Array(numtests).fill(null));
   const zipInputRefs = useRef([]); //input refs for zip files uploads
@@ -32,21 +33,22 @@ function Submissions(props) {
   const [loading, setLoading] = useState(true); // loading submissions data
   const [changes, setChanges] = useState(true);
   const array = Array(numtests).fill(null);
-
-
+  const [expanded, setExpanded] = useState(null);
   
   //Fetch submissions data for given subs id
   useEffect(() => {
     async function fetchdata(){
       try {
-
+       const response = await getSubmissions({subsid})
+       setSubsdata(response);
        setLoading(false);
+
       } catch (error) {
-        setLoading(false);
+         setLoading(false);
       }
+      
      }
-      fetchdata();
-   }, [])
+      fetchdata()}, [])
 
   //Upload file
   const handleUpload = async (path, file) =>{
@@ -64,13 +66,31 @@ function Submissions(props) {
        zipFileRef.click(); // Trigger click on the corresponding file input
     
   }
-}
-
+  }
+  
   const toggleSubmit = (index) => {
     const arr = [...submit]
     arr[index] = !arr[index]
+    const zips = [...changedZips]
+    zips[index] = null
+    setChangedZips(zips)
+    const subs = [...changedSubs]
+    subs[index] = null
+    setChangedSubs(subs)
     setSubmit(arr);
   }
+
+  const toggleExpanded = (index) => {
+    if (expanded === index){
+      setExpanded(null);
+    }
+    else{
+      setExpanded(index);
+    }
+    
+  }
+
+  
 
   const updateZipFile =(e, index) => {
     const selectedFile = e.target.files[0];
@@ -114,7 +134,7 @@ function Submissions(props) {
         const marked = [...markedState];
         marked[index] = "Pending Judgement"
         setMarkedState(marked);
-        const feedback = await markFile({compid});
+        const feedback = await addSubmission({compid, subsid, test_case: (index + 1)});
         const updated = [...markedState]
         updated[index] = feedback;
         console.log("Here");
@@ -143,21 +163,19 @@ function Submissions(props) {
    
 
 
-  // if (loading) // Data not yet back
-  // return (
-  //   <ThemeProvider theme={darkTheme}>
-  //       <CssBaseline/>
-  //       <div style = {{display: 'flex', width: '100%', height: "100%", justifyContent: 'center'}}>
-  //           <CircularProgress/>
-  //       </div>
-  //   </ThemeProvider>
-  // )
+  if (loading) // Data not yet back
+  return (
+    <ThemeProvider theme={darkTheme}>
+        <CssBaseline/>
+        <div style = {{display: 'flex', width: '100%', height: "100%", justifyContent: 'center'}}>
+            <CircularProgress/>
+        </div>
+    </ThemeProvider>
+  )
 
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-      
-        
        
     <div className="container">
       <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
@@ -175,6 +193,7 @@ function Submissions(props) {
             <TableCell style={{fontFamily: 'Arcade'}}>SOLUTION</TableCell>
             <TableCell style={{fontFamily: 'Arcade'}}>SCORE KEPT</TableCell>
             <TableCell></TableCell> 
+            <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
@@ -210,12 +229,12 @@ function Submissions(props) {
               </TableCell>
               <TableCell>
                 
-                {subsdata.max_score}
+                {subsdata.max_scores[index] ? subsdata.max_scores[index] : "--"}
 
               </TableCell>
 
               <TableCell>
-                {markedState[index] === "Pending Judgement" && 
+                {markedState[index] === "Delivered to marker. Pending Judgement" && 
                   <CircularProgress/>
                    }
 
@@ -240,8 +259,56 @@ function Submissions(props) {
          <AddRounded/> Add Submission </Box>
          }
               </TableCell>
+              
+              <TableCell>
+                
+                <Box sx = {{display: 'flex', alignItems: 'center'}}>
+                <IconButton color='inherit' onClick={() => toggleExpanded(index)}>
+                  {expanded === index ? <ExpandLess/> : <ExpandMore/>  }
+                </IconButton> 
+                View submissions history
+                </Box>
+              </TableCell>
 
-            </TableRow></React.Fragment>
+            </TableRow>
+            
+            {expanded === index &&
+            (<TableRow>
+             
+                <TableCell colSpan={4}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell> Submissions History </TableCell>
+                        <TableCell> Status </TableCell>
+                        <TableCell> Score </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {subsdata.subs_history.filter(sub => sub.test_case === index + 1).map((sub) => (
+                        <TableRow key={sub.time}>
+                          <TableCell>
+                            {console.log("Here")}
+                            {sub.time}
+                          </TableCell>
+                          <TableCell>
+                            {sub.score === -1 ? "Marking failed" : "Test case scored"}
+                          </TableCell>
+                          <TableCell>
+                            {sub.score}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+
+                    </TableBody>
+                  </Table>
+                </TableCell>
+            
+            </TableRow>)
+            
+            }
+            
+            </React.Fragment>
           ))}
         </TableBody>
       </Table>

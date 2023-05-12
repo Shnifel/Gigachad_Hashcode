@@ -14,21 +14,22 @@ const downloadFile = async (path) => {
     
 }
 
-export const markFile = async(req, res) => {
+export const markFile = async(markerPath, testPath, test_case) => {
     try {
-      console.log("Here")
-      const compid = req.body.compid;
-      const markerFile = await downloadFile(compid + "/marker.py");
-      const pythonProcess = spawn('python', ['-c', markerFile.toString()]);
-      let result = '';
+      const markerFile = await downloadFile(markerPath);
+      const subFile = await downloadFile(testPath);
+
+      const pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()]);
       pythonProcess.stdout.on('data', data => {
-        console.log(data.toString());
-        return res.status(200).json(data.toString());
-  });
+        return data.toString();
+      });
+
+      pythonProcess.stderr.on("error", err => {
+        return -1;
+      } )
 
     } catch (error) {
-        console.log(error.message);
         
-        return res.status(400).json(error.message);
+        return error.message;
     }
 }
