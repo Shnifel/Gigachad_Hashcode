@@ -20,14 +20,25 @@ export const markFile = (markerPath, testPath, test_case) => {
       const markerFile = await downloadFile(markerPath);
       const subFile = await downloadFile(testPath);
 
-      const pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()]);
+      let pythonProcess;
+      try {
+        pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()])
+      } catch (error) {
+        console.log(error.message)
+        reject(error)
+      }
+      
+
+      console.log("Here")
 
       let output = '';
       pythonProcess.stdout.on('data', data => {
-        output += data.toString();
+        console.log(output)
+        output = data.toString();
       });
 
       pythonProcess.stderr.on("error", err => {
+        console.log(err)
         reject(err);
       });
 
@@ -38,7 +49,9 @@ export const markFile = (markerPath, testPath, test_case) => {
           resolve(output);
         }
       });
+
     } catch (error) {
+      console.log(error.message)
       reject(error);
     }
   });

@@ -149,12 +149,6 @@ function ProblemAdmin(props) {
     if (selectedFile){
       await handleUpload(compid + "/marker.py", selectedFile)
     }
-    try {
-      const res = await markFile({compid});
-      console.log(res);
-    } catch (error) {
-      console.log(error.message);
-    }
   }
 
   if (loading) // Data not yet back

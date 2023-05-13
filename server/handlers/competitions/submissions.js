@@ -12,7 +12,7 @@ export const addSubmission = async (req, res) => {
         const subsRef = db.collection("Submissions").doc(subsid);
 
         const data = (await subsRef.get()).data();
-        const max_score = data.max_scores[test_case];
+        const max_score = data.max_scores[test_case - 1];
 
 
         const feedback = await markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", test_case);
