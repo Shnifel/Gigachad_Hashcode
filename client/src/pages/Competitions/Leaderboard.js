@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { getLeaderboard } from '../../handlers/submissions';
+
 import {
   Table,
   TableBody,
@@ -13,10 +15,25 @@ import {
   Typography,
 } from '@mui/material';
 
-const Leaderboard = ({ teams }) => {
+const Leaderboard = ( props ) => {
+  const compid=props.compid
+  const [teams, setTeams] = useState([]);
   const [expandedTeam, setExpandedTeam] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortBy, setSortBy] = useState('location');
+  const [loading,setLoading]=useState(true);
+  useEffect(() => {
+    async function fetchdata(){
+      try {
+       const response = await getLeaderboard({compid})
+        console.log(response)
+      } catch (error) {
+         setLoading(false);
+      }
+      
+     }
+      fetchdata()}, [])
+
 
   const handleSort = (column) => {
     if (column === sortBy) {
@@ -70,6 +87,15 @@ const Leaderboard = ({ teams }) => {
       <Table>
         <TableHead>
           <TableRow>
+          <TableCell>
+              <TableSortLabel
+                active={sortBy === 'Team Name'}
+                direction={sortOrder}
+                onClick={() => handleSort('Team Name')}
+              >
+                Team Name
+              </TableSortLabel>
+            </TableCell>
             <TableCell>
               <TableSortLabel
                 active={sortBy === 'location'}

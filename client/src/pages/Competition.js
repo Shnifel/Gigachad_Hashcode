@@ -210,7 +210,7 @@ function Competition() {
       <Typography variant="h4" component="h1">
         Leaderboard
       </Typography>
-      <Leaderboard teams={teams} />
+      <Leaderboard teams={teams} compid={compid} />
     </div>}
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = {subsid}/>}
     </ThemeProvider>

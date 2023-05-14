@@ -42,16 +42,20 @@ function Submissions(props) {
       try {
        const response = await getSubmissions({subsRef: subsid})
        setSubsdata(response);
+       const arr = Array(numtests).fill(null)
        for (let i = 0; i < numtests; i++){
-        const curr_data = subsdata.subs_history.filter(sub => sub.test_case === (i + 1))
+        const curr_data = await response.subs_history.filter(sub => sub.test_case === (i + 1))
         if (curr_data.length > 0){
-          const arr = [...markedState]
+          
           const latest = curr_data[curr_data.length - 1]
+          
           arr[i] = (latest.score === -1 ? latest.feedback : ("Test case scored " + latest.score))
-          setMarkedState(arr)
+          console.log(arr)
+          
         }
-       }
-       setLoading(false);
+        setMarkedState(arr)   
+      }
+      setLoading(false);
 
       } catch (error) {
          setLoading(false);
@@ -192,11 +196,11 @@ function Submissions(props) {
         </div>
     </ThemeProvider>
   )
-
+  
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-       
+      
     <div className="container">
       <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
         Submissions
