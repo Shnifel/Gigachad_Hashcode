@@ -1,6 +1,4 @@
 import { db, bucket } from "../../database/firebase.js";
-import crypto from "crypto";
-import { Admin } from "../../database/firebase.js";
 import { spawn } from "child_process";
 
 const downloadFile = async (path) => {
@@ -24,16 +22,11 @@ export const markFile = (markerPath, testPath, test_case) => {
       try {
         pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()])
       } catch (error) {
-        console.log(error.message)
         reject(error)
       }
-      
-
-      console.log("Here")
 
       let output = '';
       pythonProcess.stdout.on('data', data => {
-        console.log(output)
         output = data.toString();
       });
 
@@ -42,16 +35,23 @@ export const markFile = (markerPath, testPath, test_case) => {
         reject(err);
       });
 
+      const timeout = setTimeout(() => {
+        pythonProcess.kill();
+        reject(new Error('Marking timed out after 1s'));
+      }, 1000);
+
       pythonProcess.on('close', (code) => {
+        clearTimeout(timeout);
         if (code !== 0) {
-          reject(new Error(`Python process exited with code ${code}`));
+          reject(new Error('An error has occurred'));
         } else {
           resolve(output);
         }
       });
 
+      
+
     } catch (error) {
-      console.log(error.message)
       reject(error);
     }
   });

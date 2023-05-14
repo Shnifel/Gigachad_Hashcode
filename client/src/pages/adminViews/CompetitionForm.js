@@ -62,7 +62,6 @@ function CompetitionCreate() {
     if(selectedFile){
       if(selectedFile&&allowedFiles.includes(selectedFile.type)){
        setPdfFile(selectedFile);
-       console.log(pdfFile);
       }
       else{
         setPdfFile(null);

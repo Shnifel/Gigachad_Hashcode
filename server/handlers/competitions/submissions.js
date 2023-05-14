@@ -6,7 +6,6 @@ export const addSubmission = async (req, res) => {
 
     try {
         const subsid = req.body.subsid;
-        console.log(subsid);
         const compid = req.body.compid;
         const test_case = req.body.test_case;
         const subsRef = db.collection("Submissions").doc(subsid);
@@ -14,8 +13,16 @@ export const addSubmission = async (req, res) => {
         const data = (await subsRef.get()).data();
         const max_score = data.max_scores[test_case - 1];
 
-
-        const feedback = await markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", test_case);
+        let feedback;
+        try {
+            feedback = await markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", test_case);
+        } catch (error) {
+            feedback = error.message;
+            const subData = {time: new Date().toLocaleString(), score: -1, feedback, test_case}
+            await subsRef.update({subs_history: Admin.firestore.FieldValue.arrayUnion(subData)})
+            return res.status(400).json(feedback);
+        }
+        
         
         const score = parseInt(feedback);
         const subData = {time: new Date().toLocaleString(), score, test_case}
@@ -24,7 +31,7 @@ export const addSubmission = async (req, res) => {
         await subsRef.update({subs_history: Admin.firestore.FieldValue.arrayUnion(subData)})
 
         if (feedback === -1){
-            return res.status(400).json("Marking aborted. Kindly check the format of your text file");
+            
         }
 
         if (score > max_score){
@@ -37,7 +44,6 @@ export const addSubmission = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error.message)
 
         return res.status(400).json(error.message);
     }    

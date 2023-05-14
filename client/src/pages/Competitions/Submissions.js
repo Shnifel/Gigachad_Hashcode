@@ -6,7 +6,7 @@ import { darkTheme } from '../../components/styles/Theme';
 import { CssBaseline, ThemeProvider, Box, Paper, Button, Grid, Avatar } from '@material-ui/core';
 import { Typography, IconButton } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close, ExpandMore, ExpandLess} from '@mui/icons-material';
+import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close, ExpandMore, ExpandLess, FolderZip, Article} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
 import {CircularProgress} from '@material-ui/core';
@@ -32,6 +32,7 @@ function Submissions(props) {
   const solnInputRefs = useRef([]); // input refs for solution file uploads
   const [loading, setLoading] = useState(true); // loading submissions data
   const [changes, setChanges] = useState(true);
+
   const array = Array(numtests).fill(null);
   const [expanded, setExpanded] = useState(null);
   
@@ -41,6 +42,15 @@ function Submissions(props) {
       try {
        const response = await getSubmissions({subsRef: subsid})
        setSubsdata(response);
+       for (let i = 0; i < numtests; i++){
+        const curr_data = subsdata.subs_history.filter(sub => sub.test_case === (i + 1))
+        if (curr_data.length > 0){
+          const arr = [...markedState]
+          const latest = curr_data[curr_data.length - 1]
+          arr[i] = (latest.score === -1 ? latest.feedback : ("Test case scored " + latest.score))
+          setMarkedState(arr)
+        }
+       }
        setLoading(false);
 
       } catch (error) {
@@ -48,7 +58,7 @@ function Submissions(props) {
       }
       
      }
-      fetchdata()}, [])
+      fetchdata()}, [changes])
 
   //Upload file
   const handleUpload = async (path, file) =>{
@@ -58,7 +68,6 @@ function Submissions(props) {
       console.log(error.message);
     }
   }
-
 
   const handleZipFileChange = (index) => {
     const zipFileRef = zipInputRefs.current[index];
@@ -117,6 +126,9 @@ function Submissions(props) {
     try {
       const zipFile = changedZips[index];
       let test_case = index + 1;
+      const marked = [...markedState]
+      marked[index] = "Uploading files to marker";
+      setMarkedState(marked);
       if (zipFile) {
         await handleUpload(compid + "/submissions/" + subsid + "/src_code_" + test_case + ".zip", zipFile);
         const arr = [...changedZips]
@@ -137,13 +149,20 @@ function Submissions(props) {
         const feedback = await addSubmission({compid, subsid, test_case: (index + 1)});
         const updated = [...markedState]
         updated[index] = feedback;
-        console.log("Here");
         setMarkedState(updated);
-        console.log(feedback)
+        setChanges(!changes);
       }
+
+      
 
     } catch (error) {
       console.log(error);
+      const updated = [...markedState]
+      updated[index] = error.response.data;
+      setMarkedState(updated);
+      setChanges(!changes);
+
+      toggleSubmit(index);
     } 
   }
 
@@ -190,12 +209,13 @@ function Submissions(props) {
         <TableHead style={{backgroundColor: '#0000ff'}}>
           <TableRow>
             <TableCell style={{fontFamily: 'Arcade'}}>TEST CASES</TableCell>
-            <TableCell style={{fontFamily: 'Arcade'}}>SOURCE CODE</TableCell>
-            <TableCell style={{fontFamily: 'Arcade'}}>SOLUTION</TableCell>
             <TableCell style={{fontFamily: 'Arcade'}}>SCORE KEPT</TableCell>
+            <TableCell style={{fontFamily: 'Arcade'}}>LATEST FEEDBACK</TableCell>
             <TableCell></TableCell> 
             <TableCell></TableCell>
-            <TableCell></TableCell>
+            <TableCell style={{fontFamily: 'Arcade'}}></TableCell>
+            <TableCell style={{fontFamily: 'Arcade'}}></TableCell>
+            <TableCell colSpan={2}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -205,6 +225,52 @@ function Submissions(props) {
             <TableRow key={index}>
               <TableCell>{"Test Case " + (index +1)}</TableCell>
               <TableCell>
+                <Typography style={{fontFamily: 'Arcade', color: '#00ffbb'}}>
+                   {subsdata.max_scores[index] ? subsdata.max_scores[index] : "--"}
+                </Typography>
+               
+
+              </TableCell>
+              <TableCell >
+                <Box style={{alignItems: 'center', display: 'flex'}}>
+                  {(markedState[index] === "Pending Judgement" || markedState[index] == "Uploading files to marker")&& 
+                    <CircularProgress size={17}/>
+                    }
+
+                  {markedState[index]}</Box>
+                </TableCell>
+                 <TableCell>
+                <Box sx = {{display: 'flex', alignItems: 'center'}}>
+                <IconButton color='inherit' onClick={() => toggleExpanded(index)}>
+                  {expanded === index ? <ExpandLess/> : <ExpandMore/>  }
+                </IconButton> 
+                View submissions history
+                </Box>
+              </TableCell>
+
+              <TableCell>
+                {submit[index] ? 
+              <Box sx={{ml: 2}}>
+             <Button
+                variant="outlined"
+                size="small"
+                style={{padding: 11}}
+                onClick={async () => {await handleSubmit(index)}}
+                disabled = {!(changedSubs[index] && changedZips[index])}
+                >
+                  SUBMIT
+                    </Button>
+                    <IconButton color = "inherit" onClick={() => toggleSubmit(index)}>
+                      <Close/>
+                    </IconButton>
+                  
+              </Box> : <Box sx = {{alignItems: 'center', display: 'flex'}} onClick={() => {toggleSubmit(index)}}> 
+              <AddRounded/> Add Submission </Box>
+              }
+              </TableCell>
+
+              {submit[index] && 
+              <TableCell> 
               <input
                       type="file"
                       accept='.zip'
@@ -212,10 +278,21 @@ function Submissions(props) {
                       ref={(ref) => (zipInputRefs.current[index] = ref)} // Store ref to the file input
                       onChange = {  (event) => { updateZipFile(event, index)}}
                     />
-                  <IconButton color='inherit'  onClick = {() => {handleZipFileChange(index)}}>
-                     <FileUploadRounded/>
-               </IconButton>
-              </TableCell>
+                  <Button variant="outlined"
+                size="small" onClick = {() => {handleZipFileChange(index)}}>
+                   
+
+                    <IconButton color='inherit'  >
+                      {changedZips[index] ? <FolderZip/> :  <FileUploadRounded/>}
+                    
+                     </IconButton>
+
+                     {changedZips[index] ? changedZips[index].name: "UPLOAD SOURCE CODE"}
+                  
+                  </Button>
+                  
+              </TableCell>}
+              {submit[index] &&
               <TableCell>
               <input
                       type="file"
@@ -224,53 +301,24 @@ function Submissions(props) {
                       ref={(ref) => (solnInputRefs.current[index] = ref)} // Store ref to the file input
                       onChange = {  (event) => {updateSolnFile(event, index)}}
                     />
-                  <IconButton color='inherit'  onClick = {(event) => handleSubsFileChange(index)}>
-                    <FileUploadRounded/>
-               </IconButton>
-              </TableCell>
-              <TableCell>
-                
-                {subsdata.max_scores[index] ? subsdata.max_scores[index] : "--"}
+                  <Button variant="outlined"
+                size="small" onClick = {() => {handleSubsFileChange(index)}}>
+                    <IconButton color='inherit'  >
+                    {changedSubs[index] ? <Article/> :  <FileUploadRounded/>}
+                   </IconButton>
+                   {changedSubs[index] ? changedSubs[index].name: "UPLOAD SOLUTION"}
+                  </Button>
+              </TableCell>}
 
-              </TableCell>
-
-              <TableCell>
-                {markedState[index] === "Delivered to marker. Pending Judgement" && 
-                  <CircularProgress/>
-                   }
-
-                {markedState[index]}
-              </TableCell>
-
-              <TableCell>
-                {submit[index] ? 
-              <Box sx={{ml: 2}}>
-             <Button
-           variant="outlined"
-           size="small"
-           onClick={async () => {await handleSubmit(index)}}>
-            SUBMIT
-              </Button>
-              <IconButton color = "inherit" onClick={() => toggleSubmit(index)}>
-                 <Close/>
-              </IconButton>
-
-              {console.log(subsdata)}
-             
-         </Box> : <Box sx = {{alignItems: 'center', display: 'flex'}} onClick={() => {toggleSubmit(index)}}> 
-         <AddRounded/> Add Submission </Box>
-         }
-              </TableCell>
+              {!submit[index] &&
+           
+              <TableCell></TableCell>
+             }
               
-              <TableCell>
-                
-                <Box sx = {{display: 'flex', alignItems: 'center'}}>
-                <IconButton color='inherit' onClick={() => toggleExpanded(index)}>
-                  {expanded === index ? <ExpandLess/> : <ExpandMore/>  }
-                </IconButton> 
-                View submissions history
-                </Box>
-              </TableCell>
+              {!submit[index] &&
+           
+           <TableCell></TableCell>
+          }
 
             </TableRow>
             
@@ -294,10 +342,10 @@ function Submissions(props) {
                             {sub.time}
                           </TableCell>
                           <TableCell>
-                            {sub.score === -1 ? "Marking failed" : "Test case scored"}
+                            {sub.score === -1 ? sub.feedback : "Test case scored"}
                           </TableCell>
                           <TableCell>
-                            {sub.score}
+                            {sub.score === -1 ? "--" : sub.score}
                           </TableCell>
                         </TableRow>
                       ))}
