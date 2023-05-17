@@ -7,7 +7,7 @@ const downloadFile = async (path) => {
     const [data] = await file.download();
     return data;
     } catch (error) {
-        console.log(error.message)
+        throw new Error(error.message);
     }
     
 }
@@ -22,7 +22,6 @@ export const markFile = (markerPath, testPath, test_case) => {
       try {
         pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()])
       } catch (error) {
-        console.log("Here")
         reject(error)
       }
 
@@ -32,8 +31,7 @@ export const markFile = (markerPath, testPath, test_case) => {
       });
 
       pythonProcess.stderr.on("error", err => {
-        console.log(err)
-        reject(err);
+        reject(new Error(err));
       });
 
       const timeout = setTimeout(() => {
@@ -57,3 +55,4 @@ export const markFile = (markerPath, testPath, test_case) => {
     }
   });
 };
+

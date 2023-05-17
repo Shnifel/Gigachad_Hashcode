@@ -19,7 +19,7 @@ export const getLeaderboard = async (req, res) => {
 
           const subScores = (await db.collection("Submissions").doc(subs).get()).data().max_scores
 
-          return {id: teamDoc.id, teamname, scores: subScores};
+          return {id: teamDoc.id, teamname: teamData.teamname, scores: subScores};
     });
 
     const leaderboard = await Promise.all(teamsPromises);
@@ -27,7 +27,7 @@ export const getLeaderboard = async (req, res) => {
     return res.status(200).json(leaderboard);
 
     } catch (error) {
-        
+        console.log(error.message);
       return res.status(400).json(error.message)
     }
 }
