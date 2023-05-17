@@ -12,6 +12,16 @@ jest.mock("../../database/firebase.js", () => ({
     get: jest.fn(),
     update: jest.fn(),
   },
+  Admin : {
+    firestore:{
+        FieldValue:{
+            arrayUnion: jest.fn().mockResolvedValue(),
+            arrayRemove: jest.fn().mockResolvedValue()
+        }
+    }
+        
+
+ }
 }));
 jest.mock("./marker.js", () => ({
   markFile: jest.fn(),

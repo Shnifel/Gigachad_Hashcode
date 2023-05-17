@@ -15,7 +15,7 @@ export const addSubmission = async (req, res) => {
 
         let feedback;
         try {
-            feedback = await markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/testcase" + test_case + ".txt", test_case);
+            feedback = await markFile(compid + "/marker.py", compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", test_case);
         } catch (error) {
             feedback = error.message;
             const subData = {time: new Date().toLocaleString(), score: -1, feedback, test_case}
