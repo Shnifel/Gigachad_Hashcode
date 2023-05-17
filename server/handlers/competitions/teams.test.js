@@ -1,5 +1,5 @@
 import { db } from "../../database/firebase.js";
-import { getTeams, getTeam, createTeams, joinTeam, deleteMember } from "./teams.js";
+import { getTeams, getTeam, createTeams, joinTeam, deleteMember, deleteTeam } from "./teams.js";
 
 //Mocking the database object
 jest.mock('../../database/firebase.js', () => {
@@ -469,9 +469,28 @@ describe("deleteMember function", () => {
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith("Successfully removed member");
         expect(res.status).toHaveBeenCalled();
-
-
-
     })
 })
+
+describe("deleteTeam function", () => {
+    it ("should delete team from competitions", async () => {
+        const req = {body: {
+            compid: "competition-1",
+            uid: "luke-id",
+            teamCode: "123"
+        }};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis()
+        };
+
+        await deleteTeam(req, res);
+        expect(db.collection).toHaveBeenCalledWith("Competitions");
+        expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
+        expect(db.collection().doc().update).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith("Successfully deleted team");
+        expect(res.status).toHaveBeenCalled();
+    })
+} )
   

@@ -25,7 +25,8 @@ export default {
         "node_modules/",
         "index.js",
         "database/",
-        "coverage/"
+        "coverage/",
+        "routes/"
       ],
 };
   

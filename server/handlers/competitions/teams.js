@@ -225,13 +225,10 @@ export const createTeams = async(req,res) => {
     const teamRef = db.collection('Teams').doc(team)
     const compRef = db.collection('Competitions').doc(req.body.compid)
 
-    await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(teamRef)}).catch(
-      (error) => { return res.status(400).json("Error encountered")}
-    )
-
-    await teamRef.delete().then(() => {
-      return res.status(200).json("Successfully deleted team")
-    })
+    await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(teamRef)})
+    await teamRef.delete()
+    return res.status(200).json("Successfully deleted team")
+   
   } catch (error) {
     console.log(error.message);
     return res.status(400).json("Error deleting team")
