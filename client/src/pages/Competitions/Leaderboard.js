@@ -1,5 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { getLeaderboard } from '../../handlers/submissions';
+import { darkTheme } from '../../components/styles/Theme';
+
 
 import {
   Table,
@@ -13,10 +15,15 @@ import {
   Collapse,
   Box,
   Typography,
+  CssBaseline,
 } from '@mui/material';
+import Team from './Team';
+import TestCasesBox from '../../components/TestCasesBox';
+import { ThemeProvider } from '@emotion/react';
 
 const Leaderboard = ( props ) => {
-  const compid=props.compid
+  const num_tests=props.num_tests;
+  const compid=props.compid;
   const [teams, setTeams] = useState([]);
   const [expandedTeam, setExpandedTeam] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
@@ -26,6 +33,8 @@ const Leaderboard = ( props ) => {
     async function fetchdata(){
       try {
        const response = await getLeaderboard({compid})
+       setTeams(response)
+       setLoading(false)
         console.log(response)
       } catch (error) {
          setLoading(false);
@@ -49,49 +58,70 @@ const Leaderboard = ( props ) => {
   };
 
   const renderTestCases = (team) => {
-    return team.testCases.map((score, index) => (
+    return team.scores.map((score, index) => (
       <TableCell key={index}>{score}</TableCell>
     ));
   };
 
-  const renderTeams = () => {
-    const sortedTeams = [...teams].sort((a, b) => {
-      const aValue = a[sortBy];
-      const bValue = b[sortBy];
+  const findAgregate = (team) => {
+    return team.scores.reduce((acc, curr) => curr === null || curr === -1 ? acc : acc + curr, 0)
+    
+  }
 
+
+  const renderTeams = () => {
+    
+    const sortedTeams = [...teams].sort((a, b) => {
+      let aValue,bValue
+      if (sortBy === "aggregate") {
+         aValue=findAgregate(a)
+         bValue=findAgregate(b)
+         
+      }else if (sortBy.slice(0,-1) === "testcase"){
+        const num=parseInt(sortBy.slice(-1))
+        aValue=a.scores[num]
+        bValue=b.scores[num]  
+      }
+      else{
+        aValue = a[sortBy];
+        bValue = b[sortBy]; 
+      }
+       
       if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      
       return 0;
     });
 
+    
+    console.log(sortedTeams)
     return sortedTeams.map((team, index) => (
       <React.Fragment key={index}>
         <TableRow onClick={() => handleTeamClick(team)}>
+        <TableCell>{team.teamname}</TableCell>
           <TableCell>{team.location}</TableCell>
           {renderTestCases(team)}
-          <TableCell>{team.aggregate}</TableCell>
-          <TableCell>{team.timeTaken}</TableCell>
+          <TableCell>{findAgregate(team)}</TableCell>
+          
+          
         </TableRow>
-        <Collapse in={team === expandedTeam}>
-          <Box px={4} pb={2}>
-            <Typography variant="subtitle2">More details for {team.location}</Typography>
-            {/* Additional rows with more details */}
-          </Box>
-        </Collapse>
       </React.Fragment>
     ));
   };
 
   return (
+    <ThemeProvider theme= {darkTheme}>
+      <CssBaseline/>
+      <Box sx = {{m : 2}}> 
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
           <TableCell>
               <TableSortLabel
-                active={sortBy === 'Team Name'}
+                active={sortBy === 'teamname'}
                 direction={sortOrder}
-                onClick={() => handleSort('Team Name')}
+                onClick={() => handleSort('teamname')}
               >
                 Team Name
               </TableSortLabel>
@@ -105,7 +135,14 @@ const Leaderboard = ( props ) => {
                 Location
               </TableSortLabel>
             </TableCell>
-            {/* Render test case columns */}
+            {Array(num_tests).fill(null).map((val,index) => ( <TableCell><TableSortLabel
+              
+               active={sortBy === 'testcase'+index}
+                direction={sortOrder}
+                onClick={() => handleSort('testcase'+index)}
+              >
+                Test case {index+1}
+              </TableSortLabel> </TableCell>))}
             <TableCell>
               <TableSortLabel
                 active={sortBy === 'aggregate'}
@@ -115,20 +152,14 @@ const Leaderboard = ( props ) => {
                 Aggregate
               </TableSortLabel>
             </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortBy === 'timeTaken'}
-                direction={sortOrder}
-                onClick={() => handleSort('timeTaken')}
-              >
-                Time Taken
-              </TableSortLabel>
-            </TableCell>
+            
           </TableRow>
         </TableHead>
         <TableBody>{renderTeams()}</TableBody>
       </Table>
     </TableContainer>
+    </Box>
+    </ThemeProvider>
   );
 };
 

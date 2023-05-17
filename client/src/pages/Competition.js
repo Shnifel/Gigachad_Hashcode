@@ -206,12 +206,9 @@ function Competition() {
       {tab === 0 && !loading && <Info data = {data.data}/>}
       {tab === 1 && !loading && <Team id = {compid} />}
       {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {parseInt(data.data.num_tests)}/>}
-      {tab === 3 && <div>
-      <Typography variant="h4" component="h1">
-        Leaderboard
-      </Typography>
-      <Leaderboard teams={teams} compid={compid} />
-    </div>}
+      {tab === 3 && 
+      <Leaderboard teams={teams} compid={compid} num_tests={parseInt(data.data.num_tests)} />
+    }
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = {subsid}/>}
     </ThemeProvider>
   );
