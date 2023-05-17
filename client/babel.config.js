@@ -10,7 +10,7 @@ module.exports = {
       '@babel/plugin-syntax-jsx'
       
     ],
-    ignore: [/node_modules/, /\.scss$/],
+    ignore: [/node_modules/, /\.scss$/, /\.css$/],
     exclude: [/node_modules/, /\.mp4$/],
   };
   

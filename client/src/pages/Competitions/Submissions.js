@@ -1,6 +1,5 @@
 import {useState, useEffect, useRef, useCallback} from 'react'
 import React from 'react';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { downloadFile, uploadFile } from '../../handlers/competitions';
 import { darkTheme } from '../../components/styles/Theme';
 import { CssBaseline, ThemeProvider, Box, Paper, Button, Grid, Avatar } from '@material-ui/core';

@@ -22,6 +22,7 @@ export const markFile = (markerPath, testPath, test_case) => {
       try {
         pythonProcess = spawn('python', ['-c', markerFile.toString(), test_case, subFile.toString()])
       } catch (error) {
+        console.log("Here")
         reject(error)
       }
 
