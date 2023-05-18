@@ -113,6 +113,35 @@ describe('createCompetition', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ compid: 'competition-id' });
   }); 
+
+  it("should return an error on failure", async () => {
+    const req = {
+      body: {
+        uid: 'admin-id',
+        compname: 'Test Competition',
+        compdesc: 'A test competition',
+        regstartdate: '2023-05-01',
+        regenddate: '2023-05-10',
+        compdate: '2023-06-01',
+        max_teamsize: 5,
+        numteams: 10,
+        num_tests: 6,
+        min_teamsize: 2,
+      },
+    };
+    const res = {
+      status: jest.fn(() => res),
+      json: jest.fn(() => res),
+    };
+
+    db.collection().add.mockRejectedValueOnce(new Error("Unsuccessful"));
+
+    await createCompetition(req, res);
+
+    expect(db.collection().add).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith("Unsuccessful")
+  })
 });
 
 /** TEST GETTING ALL COMPETITIONS DATA */
@@ -384,42 +413,27 @@ describe("deleteCompetitions function", () => {
     expect(res.json).toHaveBeenCalledWith("Successfully deleted competition");
   });
 
-  // it("should return error message with status 400 if error", async () => {
-  //   const req = {body: {
-  //     compid: "invalid"
-  //   }};
-  //   const res = {
-  //     status: jest.fn().mockReturnThis(),
-  //     json: jest.fn().mockReturnThis()
-  //   };
-  //   const errorMessage = "Invalid access";
-  //   const mockCollectionRef = db.collection('Competitions');
-  //   const mockCollectionDoc = mockCollectionRef.doc(req.body.compid);
-  //   mockCollectionDoc.get.mockResolvedValue( {
-  //     id: "competition-1",
-  //     data: () => ({
-  //       compname: "Competition 1",
-  //       compdesc: "A competition",
-  //       numteams: 10,
-  //       regstartdate: "2022-05-01",
-  //       regenddate: "2022-05-10",
-  //       compdate: "2022-06-01",
-  //       min_teamsize: 2,
-  //       max_teamsize: 5,
-  //       admin: "admin-1",
-  //       teams: ["a", "b", "c", "d"]
-  //     })
-  //   });
-  //   mockCollectionDoc.delete.mockRejectedValueOnce(new Error(errorMessage));
+  it("should return error message with status 400 if error", async () => {
+    const req = {body: {
+      compid: "invalid"
+    }};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis()
+    };
+    const errorMessage = "Invalid access";
+    const mockCollectionRef = db.collection('Competitions');
+    const mockCollectionDoc = mockCollectionRef.doc(req.body.compid);
+    
+    mockCollectionDoc.get.mockRejectedValueOnce(new Error(errorMessage));
 
-  //   await deleteCompetition(req, res);
+    await deleteCompetition(req, res);
 
-  //   expect(db.collection).toHaveBeenCalledWith("Competitions");
-  //   expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
-  //   expect(db.collection().doc().get).toHaveBeenCalled();
-  //   expect(db.collection().doc().delete).toHaveBeenCalled();
-  //   expect(res.status).toHaveBeenCalledWith(400);
-  //   expect(res.json).toHaveBeenCalledWith(errorMessage);
+    expect(db.collection).toHaveBeenCalledWith("Competitions");
+    expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
+    expect(db.collection().doc().get).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(errorMessage);
 
-  // });
+  });
 })

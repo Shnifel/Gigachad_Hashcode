@@ -328,6 +328,29 @@ describe("createTeam function", () => {
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith("You are already registered in a team in this competition");
     });
+
+    it("should give status 400 with unexpected error", async () => {
+        const req = {body: {
+            compid: "competitio-1",
+            uid: "luke-id",
+            teamname: "b"
+        }};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis()
+        };
+
+        const mockCollectionRef = db.collection('Competitions');
+        const mockCollectionDoc = mockCollectionRef.doc(req.body.compid);
+        mockCollectionDoc.get.mockRejectedValueOnce(new Error("Error"));
+
+        await createTeams(req, res);
+
+        expect(db.collection).toHaveBeenCalledWith("Competitions");
+        expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith("Error");
+    })
 });
 
 /** JOIN TEAM TEST */

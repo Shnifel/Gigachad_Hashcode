@@ -26,19 +26,14 @@ export const createCompetition = async(req,res) => {
     const num_tests = req.body.num_tests
 
     // Add to competitions collection in firestore
-    db.collection('Competitions').add({
+    const docRef = await db.collection('Competitions').add({
         admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams, num_tests, teams:[] // Teams array with references to all teams entered in competition
       })
-      .then((docRef) => {
+   
         // Get competition reference for current competition and return it back to client
         const compid= docRef.id
         return res.status(200).json({compid})
-      })
-      .catch((error) => {
-        //Unsuccessful in creating competition - return firebase error
-        console.log('Error adding document: ', error);
-        return res.status(400).json(error.message)  
-      });         
+       
   } catch (error) {
     return res.status(400).json(error.message);
   }

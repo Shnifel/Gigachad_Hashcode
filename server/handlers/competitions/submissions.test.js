@@ -32,7 +32,7 @@ describe("addSubmission", () => {
     jest.clearAllMocks();
   });
 
-  test("should add submission and return feedback", async () => {
+  it("should add submission and return feedback", async () => {
     // Mock the request and response objects
     const req = {
       body: {
@@ -67,10 +67,48 @@ describe("addSubmission", () => {
     );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(feedback);
-    // Add more assertions based on the logic of your function
+
   });
 
-  test("should handle error in markFile and update submission", async () => {
+  it("should update max score", async () => {
+    // Mock the request and response objects
+    const req = {
+      body: {
+        subsid: "submission-id",
+        compid: "competition-id",
+        test_case: 1,
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    // Mock the submission data
+    const submissionData = {
+      max_scores: [0, 23, 0], // Assuming 3 test cases
+    };
+    db.collection().doc().get.mockResolvedValue({ data: () => submissionData });
+
+    // Mock the markFile function
+    const feedback = "85";
+    markFile.mockResolvedValue(feedback);
+
+    // Call the function under test
+    await addSubmission(req, res);
+
+    // Assertions
+    expect(markFile).toHaveBeenCalledWith(
+      "competition-id/marker.py",
+      "competition-id/submissions/submission-id/test_case_1.txt",
+      1
+    );
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(feedback);
+
+  });
+
+  it("should handle error in markFile and update submission", async () => {
     // Mock the request and response objects
     const req = {
       body: {
@@ -105,10 +143,10 @@ describe("addSubmission", () => {
     );
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(errorMessage);
-    // Add more assertions based on the logic of your function
+    
   });
 
-  // Add more test cases for other scenarios
+
 });
 
 describe("getSubmissions", () => {
@@ -116,7 +154,7 @@ describe("getSubmissions", () => {
     jest.clearAllMocks();
   });
 
-  test("should return submission data", async () => {
+  it("should return submission data", async () => {
     // Mock the request and response objects
     const req = {
       body: {
@@ -138,10 +176,10 @@ describe("getSubmissions", () => {
     // Assertions
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(submissionData);
-    // Add more assertions based on the logic of your function
+   
   });
 
-  test("should handle error in retrieving submission data", async () => {
+  it("should handle error in retrieving submission data", async () => {
     // Mock the request and response objects
     const req = {
       body: {
@@ -163,8 +201,8 @@ describe("getSubmissions", () => {
     // Assertions
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(errorMessage);
-    // Add more assertions based on the logic of your function
+   
   });
 
-  // Add more test cases for other scenarios
+ 
 });
