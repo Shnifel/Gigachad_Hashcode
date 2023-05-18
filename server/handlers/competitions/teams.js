@@ -240,7 +240,7 @@ export const createTeams = async(req,res) => {
     const {teamid, ...updatedData} = req.body;
     const teamRef = db.collection("Teams").doc(teamid);
     await teamRef.update(updatedData);
-    return res.status(200).json("Successfully update team");
+    return res.status(200).json("Successfully updated team");
   } catch (error) {
     return res.status(400).json("An unexpected error has occurred")
   }

@@ -1,5 +1,5 @@
 import { db } from "../../database/firebase.js";
-import { getTeams, getTeam, createTeams, joinTeam, deleteMember, deleteTeam } from "./teams.js";
+import { getTeams, getTeam, createTeams, joinTeam, deleteMember, deleteTeam, updateTeam } from "./teams.js";
 
 //Mocking the database object
 jest.mock('../../database/firebase.js', () => {
@@ -484,6 +484,7 @@ describe("deleteTeam function", () => {
             json: jest.fn().mockReturnThis()
         };
 
+
         await deleteTeam(req, res);
         expect(db.collection).toHaveBeenCalledWith("Competitions");
         expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
@@ -493,4 +494,47 @@ describe("deleteTeam function", () => {
         expect(res.status).toHaveBeenCalled();
     })
 } )
+
+describe("updateTeam function", () => {
+    it ("should update team detail for competition", async () => {
+        const req = {body: {
+            teamid: "123",
+            teamname: "New team name"
+        }};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis()
+        };
+
+        await updateTeam(req, res);
+        expect(db.collection).toHaveBeenCalledWith("Teams");
+        expect(db.collection().doc).toHaveBeenCalledWith(req.body.teamid);
+        expect(db.collection().doc().update).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith("Successfully updated team");
+        expect(res.status).toHaveBeenCalled();
+    })
+
+    it ("should return an error for team update", async () => {
+        const req = {body: {
+            teamid: "123",
+            teamname: "New team name"
+        }};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis()
+        };
+
+        db.collection("Teams").doc(req.body.teamid).update.mockRejectedValueOnce(new Error("Invalid team update"))
+
+        await updateTeam(req, res);
+        expect(db.collection).toHaveBeenCalledWith("Teams");
+        expect(db.collection().doc).toHaveBeenCalledWith(req.body.teamid);
+        expect(db.collection().doc().update).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith("An unexpected error has occurred");
+        expect(res.status).toHaveBeenCalled();
+    })
+} )
+
   
