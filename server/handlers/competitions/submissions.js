@@ -30,10 +30,6 @@ export const addSubmission = async (req, res) => {
 
         await subsRef.update({subs_history: Admin.firestore.FieldValue.arrayUnion(subData)})
 
-        if (feedback === -1){
-
-        }
-
         if (score > max_score){
             const updated_scores = [...data.max_scores]
             updated_scores[test_case - 1] = score

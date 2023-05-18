@@ -53,7 +53,7 @@ describe("addSubmission", () => {
     db.collection().doc().get.mockResolvedValue({ data: () => submissionData });
 
     // Mock the markFile function
-    const feedback = "Test feedback";
+    const feedback = "-1";
     markFile.mockResolvedValue(feedback);
 
     // Call the function under test
@@ -86,7 +86,8 @@ describe("addSubmission", () => {
 
     // Mock the submission data
     const submissionData = {
-      max_scores: [0, 23, 0], // Assuming 3 test cases
+      max_scores: [0, 23, 0],
+      subs_history: [{time: "2023-05-11 13:00", score: "23",test_case: "1"}] // Assuming 3 test cases
     };
     db.collection().doc().get.mockResolvedValue({ data: () => submissionData });
 
@@ -103,6 +104,7 @@ describe("addSubmission", () => {
       "competition-id/submissions/submission-id/test_case_1.txt",
       1
     );
+    expect(db.collection().doc().update).toHaveBeenCalledTimes(2)
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(feedback);
 
@@ -145,6 +147,48 @@ describe("addSubmission", () => {
     expect(res.json).toHaveBeenCalledWith(errorMessage);
     
   });
+
+  it("should handle error in update submission in firestore", async () => {
+    // Mock the request and response objects
+    const req = {
+      body: {
+        subsid: "submission-id",
+        compid: "competition-id",
+        test_case: 1,
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    // Mock the submission data
+    const submissionData = {
+      max_scores: [0, 0, 0], // Assuming 3 test cases
+    };
+    db.collection().doc().get.mockResolvedValueOnce({ data: () => submissionData });
+
+    // Mock the markFile function to throw an error
+    const errorMessage = "Error updating file";
+    markFile.mockRejectedValue(new Error(errorMessage));
+
+    db.collection().doc().update.mockRejectedValue(new Error(errorMessage))
+
+    // Call the function under test
+    await addSubmission(req, res);
+
+    // Assertions
+    expect(markFile).toHaveBeenCalledWith(
+      "competition-id/marker.py",
+      "competition-id/submissions/submission-id/test_case_1.txt",
+      1
+    );
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(errorMessage);
+    
+  });
+
+  
 
 
 });
