@@ -77,7 +77,7 @@ function Home() {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.appBar}>
-      <AppBar position="static" >
+      <AppBar position="static" color='inherit'>
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
             <Tab label="Competitions Hub" icon={<HomeIcon/>} value={0}/>
@@ -105,10 +105,11 @@ function Home() {
                 vertical: 'top',
                 horizontal: 'right',
               }}
+              color='inherit'
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={handleProfileClick}>
+              <MenuItem onClick={handleProfileClick} style={{color: '#ffffff'}}>
                 <ListItemIcon>
                   <AccountCircleIcon fontSize="small" />
                 </ListItemIcon>

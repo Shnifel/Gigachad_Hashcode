@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import CompetitionCard from '../../components/CompetitionCard.js';
 import { useSelector} from "react-redux";
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,7 +15,54 @@ import { getCompetitions, downloadFile, getUserCompetitions } from '../../handle
 import { darkTheme } from '../../components/styles/Theme.js';
 import { CircularProgress, responsiveFontSizes } from '@material-ui/core';
 import { Grid, Card, CardContent, CardMedia, IconButton } from "@material-ui/core";
+import CircleIcon from '@mui/icons-material/Circle';
 import { ArrowForward } from "@mui/icons-material";
+
+function CompetitionCard(props) {
+  const competition = props.competition
+  const isAdmin = props.isAdmin
+
+  const navigate = useNavigate();
+
+  const gotoComp = (event, compid) => {
+    if (isAdmin){
+      navigate("/CompetitionsAdmin", {state:{compid: compid}});
+    }else{
+      navigate("/Competition", {state:{compid: compid}});
+    }
+}
+
+  return(
+    <Grid key={competition.id} item xs={12} sm={4} md={3} style={{borderRadius: 300}}>
+    <Card sx = {{borderRadius : 3}}>
+      <CardMedia
+        component="img"
+        alt={competition.title}
+        height="150"
+        image = {"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {competition.data.compname}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {competition.data.compdesc}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {competition.data.compdesc}
+        </Typography>
+        <IconButton onClick={event => gotoComp(event, competition.id)} style={{color:"#FFFFFF", justifyContent: 'right', display: 'flex', width: '100%'}}>
+          <ArrowForward />
+        </IconButton>
+      </CardContent>
+    </Card>
+    </Grid>
+  )
+
+}
 
 
 function CompetitionContent() {
@@ -53,15 +99,6 @@ function CompetitionContent() {
       navigate("/CreateCompetition");
     }
 
-    const gotoComp = (event, compid) => {
-        console.log(compid);
-        
-        if (isAdmin){
-          navigate("/CompetitionsAdmin", {state:{compid: compid}});
-        }else{
-          navigate("/Competition", {state:{compid: compid}});
-        }
-    }
 
     if (loading) {
         return (
@@ -74,9 +111,10 @@ function CompetitionContent() {
           );
     }
 
-    console.log(userComps)
-
-
+    const my_comps = comps.filter(comp => userComps.includes(comp.id))
+    const rest = comps.filter(comp => ! my_comps.includes(comp))
+    const past = rest.filter(comp => new Date(comp.data.compdate) <= new Date())
+    const current = rest.filter(comp => !past.includes(comp))
 
     return (
       
@@ -102,47 +140,44 @@ function CompetitionContent() {
                 CREATE NEW COMPETITIONS
               </Button>
             </Box>}
-            {/* <Box>
-            {comps &&
-  
-                comps.map((comp)=>(
-                  
-                  <CompetitionCard key ={comp.id} compid = {comp.id} name = {comp.data.compname} compdate = {comp.data.compdate} isrunning = {new Date(comp.data.regenddate)>=  new Date()} />
-                ))}
-              
-              
-            </Box> */}
-            
-            <Grid container>
-       
-       <Grid container spacing={3}>
-         {comps.map((competition, index) => (
-           <Grid key={competition.id} item xs={12} sm={6} md={4}>
-             <Card sx = {{borderRadius : 30}}>
-               <CardMedia
-                 component="img"
-                 alt={competition.title}
-                 height="200"
-                 image = {"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"}
-               />
-               <CardContent>
-                 <Typography gutterBottom variant="h5" component="h2">
-                   {competition.data.compname}
-                 </Typography>
-                 <Typography variant="body2" color="textSecondary" component="p">
-                   {competition.data.compdesc}
-                 </Typography>
-                 <IconButton onClick={event => gotoComp(event, competition.id)} style={{color:"#FFFFFF"}}>
-                   <ArrowForward />
-                 </IconButton>
-               </CardContent>
-             </Card>
-           </Grid>
+
+      {my_comps.length !== 0 && <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 30, fontStyle: 'bold', color: "#2A3492", m: 2 }}>
+       My competitions
+      </Typography>}
+           
+       <Grid container spacing={3} style={{margin: 2}}>
+         {my_comps.map((competition, index) => (
+           <CompetitionCard isAdmin = {isAdmin} competition = {competition}/>
          ))}
-       </Grid>
-       </Grid>
-            </Container>
-          </Box>
+        </Grid>
+
+
+        {current.length !== 0 && <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 30, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
+       Upcoming competitions
+      </Typography>}
+
+      <Grid container spacing={3} style={{margin: 2}}>
+         {current.map((competition, index) => (
+           <CompetitionCard isAdmin = {isAdmin} competition = {competition}/>
+         ))}
+        </Grid>
+
+
+      {past.length !== 0 && <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 30, fontStyle: 'bold', color: "#6ded8a", m: 2 }}>
+       Past competitions
+      </Typography>}
+
+      <Grid container spacing={3} style={{margin: 2}}>
+         {past.map((competition, index) => (
+           <CompetitionCard isAdmin = {isAdmin} competition = {competition}/>
+         ))}
+        </Grid>
+
+
+
+
+        </Container>
+        </Box>
       </ThemeProvider> 
     );
   }

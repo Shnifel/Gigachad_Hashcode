@@ -85,6 +85,18 @@ export const uploadFile = (path, file) => {
   });
 };
 
+export const getImage = (path) => {
+  return new Promise((resolve, reject) => {
+    try {
+      // const storageRef = ref(storage, path);
+
+
+    } catch (error) {
+      
+    }
+  })
+}
+
 export const downloadFile = (path) => {
     return new Promise((resolve, reject) => {
       try {
