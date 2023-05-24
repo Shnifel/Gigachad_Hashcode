@@ -163,6 +163,7 @@ export const createTeams = async(req,res) => {
 
     const compRef = await db.collection('Competitions').doc(compid).get();
     const teams = compRef.data().teams
+    const max_members = compRef.data().max_teamsize;
 
     // Check each team in the competition
     for (const teamRef of teams) {
@@ -183,8 +184,13 @@ export const createTeams = async(req,res) => {
       }
       //Team found, add user to team
       const teamid = querySnapshot.docs[0].id
+      const teamsData = querySnapshot.docs[0].data().members;
+      if (members.length >= max_members){
+        return res.status(400).json("This team has reached its capacity. Please create a new team or a join another one")
+      }
       const teamref =  db.collection('Teams').doc(teamid)
-      teamref.update({members: Admin.firestore.FieldValue.arrayUnion(db.collection('Users').doc(user))})
+      const min_members = teamD
+      await teamref.update({members: Admin.firestore.FieldValue.arrayUnion(db.collection('Users').doc(user))})
       return res.status(200).json("Succesfully joined team")
 
   

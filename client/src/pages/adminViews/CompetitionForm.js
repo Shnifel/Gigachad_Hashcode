@@ -27,6 +27,7 @@ import { select } from 'async';
 import { uploadFile } from '../../handlers/competitions.js';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom';
+import { MarkdownTextbox } from '../../components/MarkdownTextBox.js';
 
 
 function CompetitionCreate() {
@@ -117,32 +118,22 @@ function CompetitionCreate() {
         playbackRate={0.5}
         width= "100%"
         height = "auto"
-      />
-      <div className={classes.content}>
-      <Box sx={{ display: 'flex', backgroundColor:'transparent', justifyContent: 'center'}}>
-        <CssBaseline />
+      /><CssBaseline />
+      <div className={classes.content}> 
         <Box
-          component="main"
           sx={{
-            my: 4,
-            mx : 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-          }}
-        > 
-      <Box sx={{ display: 'flex'}}>
-        <CssBaseline />
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            height: '100vh',
             overflow: 'auto',
-            justifyContent: 'center'
+            height: '100vh',
+            
           }}
-        >
-          <Toolbar />
+        > <Box sx={{ my: 4,
+            ml : 4,
+            mr: 0,
+            justifyContent: 'center'
+            }}>
           <Container maxWidth="100%" sx={{ mt: 2, mb: 4 }}>
           <Typography component = "h1" fontFamily="'Arcade'" sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "#0000ff"}}>
             CREATE A NEW COMPETITION
@@ -168,7 +159,7 @@ function CompetitionCreate() {
                 label="Competition Name"
                 name="name"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                 }}
                 
                 autoFocus
@@ -183,29 +174,10 @@ function CompetitionCreate() {
                 label="Competition Details"
                 id="user"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                 }}
                 />
                 <Grid container spacing = {3} sx = {{display: 'flex', width: '100%', justifyContent: 'center'}}>
-                  <Grid item sx = {{display: 'flex'}}> 
-                    <TextField
-                      margin="normal"
-                      type = "datetime-local"
-                      color = "black"
-                      variant = "filled"
-                      InputLabelProps={{ shrink: true }}
-                      fullWidth
-                      required
-                      name="compDate"
-                      label="Date of the Competition"
-                      id="compDate"
-                      display = "flex"
-                      width = "100%"
-                      InputProps={{
-                        style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
-                      }}
-                    />
-                  </Grid>
                   <Grid item sx = {{display: 'flex'}}>
                     <TextField
                       InputLabelProps={{ shrink: true }}
@@ -220,7 +192,7 @@ function CompetitionCreate() {
                       id = "regStart"
                       display = "flex"
                       InputProps={{
-                        style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                        style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                       }}
                     />
                   </Grid>
@@ -239,9 +211,46 @@ function CompetitionCreate() {
                       label = "Registration closing date"
                       id = "regClose"
                       InputProps={{
-                        style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                        style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                       }}
                    />
+                  </Grid>
+                  <Grid item sx = {{display: 'flex'}}>
+                    <TextField
+                      InputLabelProps={{ shrink: true }}
+                      margin = "normal"
+                      required
+                      fullWidth
+                      color = "black"
+                      variant = "filled"
+                      type = "datetime-local"
+                      name = "compClose"
+                      label = "Competition closing date"
+                      id = "compClose"
+                      display = "flex"
+                      InputProps={{
+                        style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
+                      }}
+                    />
+                  </Grid>
+                  <Grid item sx = {{display: 'flex'}}> 
+                    <TextField
+                      margin="normal"
+                      type = "datetime-local"
+                      color = "black"
+                      variant = "filled"
+                      InputLabelProps={{ shrink: true }}
+                      fullWidth
+                      required
+                      name="compDate"
+                      label="Date of the Competition"
+                      id="compDate"
+                      display = "flex"
+                      width = "100%"
+                      InputProps={{
+                        style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
+                      }}
+                    />
                   </Grid>
                 </Grid>
 
@@ -257,7 +266,7 @@ function CompetitionCreate() {
                 label = "Max teams"
                 id = "numTeams"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                 }}/>
                   </Grid>
                   <Grid item>
@@ -271,7 +280,7 @@ function CompetitionCreate() {
                 label = "Max people per team"
                 id = "numPeople"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                 }}
                 />
                  
@@ -287,7 +296,7 @@ function CompetitionCreate() {
                   label = "Min people per team"
                   id = "minPeople"
                   InputProps={{
-                    style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                    style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                   }}
                   />
                   </Grid>
@@ -302,7 +311,7 @@ function CompetitionCreate() {
                 label = "Number of Test Cases"
                 id = "numTeams"
                 InputProps={{
-                  style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                  style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                 }}/>
                   </Grid>
                 </Grid>
@@ -349,8 +358,7 @@ function CompetitionCreate() {
           </Grid>
           </Container>
         </Box>
-      </Box> 
-      </Box> 
+
       </Box></div> </div>
     </ThemeProvider>
   );
