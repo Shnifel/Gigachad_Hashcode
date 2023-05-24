@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import '../login.scss'; 
 import { useEffect,useState } from 'react';
-import { getCompetitions, downloadFile } from '../../handlers/competitions.js';
+import { getCompetitions, downloadFile, getUserCompetitions } from '../../handlers/competitions.js';
 import { darkTheme } from '../../components/styles/Theme.js';
 import { CircularProgress, responsiveFontSizes } from '@material-ui/core';
 import { Grid, Card, CardContent, CardMedia, IconButton } from "@material-ui/core";
@@ -21,19 +21,23 @@ import { ArrowForward } from "@mui/icons-material";
 
 function CompetitionContent() {
     const [comps,setcomps] = useState(null);
+    const [userComps, setUserComps] = useState(null);
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState([]);
+    const uid = useSelector(state => state.auth.userID);
 
 
 
     useEffect(() => {
       async function fetchdata(){
         try {
-          const response = await getCompetitions()
-       
+        const response = await getCompetitions()
         setcomps(response);
+        const usercomps = await getUserCompetitions({uid: uid})
+        setUserComps(usercomps);
         setLoading(false);
         } catch (error) {
+          console.log(error)
           setLoading(false);
         }
         
@@ -69,6 +73,10 @@ function CompetitionContent() {
             </ThemeProvider>
           );
     }
+
+    console.log(userComps)
+
+
 
     return (
       

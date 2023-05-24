@@ -13,6 +13,11 @@ export const getCompetitions = async() => {
 
 }
 
+export const getUserCompetitions = async(inputs) => {
+  const response = await axios.post("/competitions/getUserCompetitions", inputs);
+  return response.data;
+}
+
 export const getCompetition = async(inputs) => {
     const response = await axios.post("/competitions/getCompetition", inputs);
     return response.data;

@@ -175,6 +175,8 @@ export const createTeams = async(req,res) => {
         return res.status(400).json("You are already registered in a team in this competition");
       }
     }
+
+    console.log(max_members)
   
     
     const querySnapshot = await db.collection('Teams').where('teamCode', '==', teamCode).get()
@@ -184,12 +186,11 @@ export const createTeams = async(req,res) => {
       }
       //Team found, add user to team
       const teamid = querySnapshot.docs[0].id
-      const teamsData = querySnapshot.docs[0].data().members;
-      if (members.length >= max_members){
+      const teamsMembers = querySnapshot.docs[0].data().members;
+      if (teamsMembers.length >= max_members){
         return res.status(400).json("This team has reached its capacity. Please create a new team or a join another one")
       }
       const teamref =  db.collection('Teams').doc(teamid)
-      const min_members = teamD
       await teamref.update({members: Admin.firestore.FieldValue.arrayUnion(db.collection('Users').doc(user))})
       return res.status(200).json("Succesfully joined team")
 

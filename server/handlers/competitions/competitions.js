@@ -66,7 +66,29 @@ export const getCompetitions = async (req, res) => {
     } catch (error) {
       return res.status(400).json(error.message);
     }
-  };
+};
+
+export const getUserCompetitions = async (req, res) => {
+  try {
+    console.log(req.body.uid)
+    const userRef = db.collection("Users").doc(req.body.uid)
+    const usersTeams = await db.collection("Teams").where("members", "array-contains", userRef).get()
+    
+    const competitionIds = usersTeams.docs.map(async(team) => {
+      const teamRef = db.collection("Teams").doc(team.id)
+      const comp = await db.collection("Competitions").where("teams", "array-contains", teamRef).get()
+      return comp.docs[0].id
+    })
+
+    const data = await Promise.all(competitionIds);
+
+    return res.status(200).json(data)
+    
+  } catch (error) {
+    console.log(error.message)
+    return res.status(400).json(error.message);
+  }
+}
   
 
 
