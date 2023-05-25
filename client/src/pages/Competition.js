@@ -133,7 +133,10 @@ function Competition() {
   }
 
   const isrunning = new Date(data.data.compdate) <= new Date()
-  const regopen = new Date(data.data.regstartdate) <= new Date() <= new Date(data.data.regendate)
+  const regopen = new Date(data.data.regstartdate) <= new Date() <= new Date(data.data.regenddate)
+
+
+  console.log(regopen)
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -154,7 +157,7 @@ function Competition() {
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary' >
             <Tab label="Info" icon={<InfoIcon/>} value={0} style={{fontFamily: 'Arcade'}}/>
-            {(regopen || subsid) && <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>}
+            {regopen  && <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>}
             {isrunning && <Tab label="Problem" icon = {<Quiz/>} value={2} style={{fontFamily: 'Arcade'}}/>}
             <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3} style={{fontFamily: 'Arcade'}}/> 
             {subsid && isrunning && <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>}
