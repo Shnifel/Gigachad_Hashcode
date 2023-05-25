@@ -74,6 +74,7 @@ function CompetitionCreate() {
   const createCompetition = async (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
+      const imName = image ? image.name : null
       const inputs = {
         uid:id,
         compname : data.get("name"),
@@ -84,14 +85,15 @@ function CompetitionCreate() {
         min_teamsize: data.get("minPeople"),
         numteams: data.get("numTeams"),
         compdate : data.get("compDate"),
-        num_tests : data.get("NumTests")
-
+        compenddate : data.get("compClose"),
+        num_tests : data.get("NumTests"),
+        image : imName
       };
       try {
         setLoading(true);
         const response = await createNewCompetitions(inputs)
         
-        {image && await uploadFile(response.compid + "/image" + image.name.split('.').pop().toLowerCase(), image)}
+        {image && await uploadFile(response.compid + "/" + image.name, image)}
         {pdfFile && await uploadFile(response.compid + "/problem.pdf", pdfFile)}
         setLoading(false); 
         setSuccess(response.compid);
@@ -215,24 +217,6 @@ function CompetitionCreate() {
                       }}
                    />
                   </Grid>
-                  <Grid item sx = {{display: 'flex'}}>
-                    <TextField
-                      InputLabelProps={{ shrink: true }}
-                      margin = "normal"
-                      required
-                      fullWidth
-                      color = "black"
-                      variant = "filled"
-                      type = "datetime-local"
-                      name = "compClose"
-                      label = "Competition closing date"
-                      id = "compClose"
-                      display = "flex"
-                      InputProps={{
-                        style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
-                      }}
-                    />
-                  </Grid>
                   <Grid item sx = {{display: 'flex'}}> 
                     <TextField
                       margin="normal"
@@ -247,6 +231,24 @@ function CompetitionCreate() {
                       id="compDate"
                       display = "flex"
                       width = "100%"
+                      InputProps={{
+                        style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
+                      }}
+                    />
+                  </Grid>
+                  <Grid item sx = {{display: 'flex'}}>
+                    <TextField
+                      InputLabelProps={{ shrink: true }}
+                      margin = "normal"
+                      required
+                      fullWidth
+                      color = "black"
+                      variant = "filled"
+                      type = "datetime-local"
+                      name = "compClose"
+                      label = "Competition closing date"
+                      id = "compClose"
+                      display = "flex"
                       InputProps={{
                         style: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden'}
                       }}

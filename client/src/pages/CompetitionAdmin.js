@@ -37,6 +37,7 @@ import ProblemAdmin from './CompetitionsAdmin/Problem';
 import Leaderboard from './Competitions/Leaderboard';
 import InfoAdmin from './CompetitionsAdmin/Info';
 import Submissions from './Competitions/Submissions';
+import { getImage } from '../handlers/competitions';
 
 
 
@@ -64,16 +65,24 @@ function CompetitionAdmin() {
   const [tab, setTab] = useState(0);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const compid = location.state.compid;
 
   useEffect(() => {
     async function fetchdata(){
-      console.log("Competition: " + compid);
-      const response = await getCompetition({compid: compid})
-      setData(response);
+      try {
+        const response = await getCompetition({compid: compid})
+        setData(response);
+        const url = await getImage(await response.id + "/" + await response.data.image)
+        setImage(url)
+      
       setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+      
     }
      fetchdata()}, []);
 
@@ -120,13 +129,13 @@ function CompetitionAdmin() {
             component="img"
             alt={data.data.compname}
             height="100"
-            image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
+            image={image}
             /> 
-    <div className='font'>
-     <Typography variant= "h1" style={{fontFamily: 'Arcade', color: "#6700ff"}} sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
+
+     <Typography variant= "h2" style={{fontFamily: 'Arcade', color: "#6700ff"}} sx = {{textAlign: 'center', fontSize: 10, fontStyle: 'bold', color: "#0000FF" }}>
              {data.data.compname}
      </Typography>
-     </div>
+     
       <div className={classes.appBar}>
       <AppBar position="static" color = "inherit" >
         <Toolbar>

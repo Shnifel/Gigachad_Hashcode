@@ -84,6 +84,7 @@ describe('createCompetition', () => {
         numteams: 10,
         num_tests: 6,
         min_teamsize: 2,
+        image: "myimage.png"
       },
     };
     const res = {
@@ -108,6 +109,7 @@ describe('createCompetition', () => {
       numteams: 10,
       num_tests: 6,
       min_teamsize: 2,
+      image: "myimage.png",
       teams: [],
     });
 
@@ -126,6 +128,7 @@ describe('createCompetition', () => {
         regenddate: '2023-05-10',
         compdate: '2023-06-01',
         compenddate: '2023-06-01',
+        image: "myimage.png",
         max_teamsize: 5,
         numteams: 10,
         num_tests: 6,

@@ -5,7 +5,6 @@ import '../Competitions/competition.scss';
 import '../login.scss';
 
 const InfoAdmin = (props) => {
-console.log(props.data);
    const data = props.data;
    const description = data.compdesc;
    const regstartdate = data.regstartdate;
@@ -14,6 +13,8 @@ console.log(props.data);
    const max_teamsize = data.max_teamsize;
    const min_teamsize = data.min_teamsize;
    const num_tests = data.num_tests;
+   const compenddate = data.compenddate;
+   
 
   return (
     <ThemeProvider theme={darkTheme}>

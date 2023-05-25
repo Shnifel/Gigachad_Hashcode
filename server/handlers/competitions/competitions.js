@@ -25,10 +25,11 @@ export const createCompetition = async(req,res) => {
     const min_teamsize = req.body.min_teamsize // Min people in a team
     const num_tests = req.body.num_tests //Number of test cases
     const compenddate = req.body.compenddate // Competition closing date
+    const image = req.body.image //Image name of competition image
 
     // Add to competitions collection in firestore
     const docRef = await db.collection('Competitions').add({
-        admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams, num_tests, compenddate, teams:[] // Teams array with references to all teams entered in competition
+        admin,compname,compdesc,regstartdate,regenddate,compdate,min_teamsize, max_teamsize,numteams, image, num_tests, compenddate, teams:[] // Teams array with references to all teams entered in competition
       })
    
         // Get competition reference for current competition and return it back to client
@@ -73,7 +74,7 @@ export const getUserCompetitions = async (req, res) => {
     console.log(req.body.uid)
     const userRef = db.collection("Users").doc(req.body.uid)
     const usersTeams = await db.collection("Teams").where("members", "array-contains", userRef).get()
-    
+
     const competitionIds = usersTeams.docs.map(async(team) => {
       const teamRef = db.collection("Teams").doc(team.id)
       const comp = await db.collection("Competitions").where("teams", "array-contains", teamRef).get()

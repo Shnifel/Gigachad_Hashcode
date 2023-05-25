@@ -11,7 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import '../login.scss'; 
 import { useEffect,useState } from 'react';
-import { getCompetitions, downloadFile, getUserCompetitions } from '../../handlers/competitions.js';
+import { getCompetitions, downloadFile, getUserCompetitions, getImage } from '../../handlers/competitions.js';
 import { darkTheme } from '../../components/styles/Theme.js';
 import { CircularProgress, responsiveFontSizes } from '@material-ui/core';
 import { Grid, Card, CardContent, CardMedia, IconButton } from "@material-ui/core";
@@ -21,6 +21,7 @@ import { ArrowForward } from "@mui/icons-material";
 function CompetitionCard(props) {
   const competition = props.competition
   const isAdmin = props.isAdmin
+  const [image, setImage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -30,7 +31,19 @@ function CompetitionCard(props) {
     }else{
       navigate("/Competition", {state:{compid: compid}});
     }
-}
+  }
+
+  useEffect(() => {
+    async function fetchdata(){
+      try {
+       const url = await getImage(competition.id + "/" + competition.data.image)
+       setImage(url)
+      } catch (error) {
+        
+      }
+    }
+     fetchdata()
+        }, []);
 
   return(
     <Grid key={competition.id} item xs={12} sm={4} md={3} style={{borderRadius: 300}}>
@@ -39,7 +52,7 @@ function CompetitionCard(props) {
         component="img"
         alt={competition.title}
         height="150"
-        image = {"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"}
+        image = {image}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
@@ -51,9 +64,16 @@ function CompetitionCard(props) {
         <Typography variant="body2" color="textSecondary" component="p">
 
         </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {competition.data.compdesc}
-        </Typography>
+        
+          {new Date(competition.data.regenddate) >= new Date() && 
+          <Grid container style={{alignItems: 'center', display: 'flex'}} >
+            <CircleIcon sx = {{fontSize: 10}} style={{color: '#00ff00', scale: 0.2, marginRight: 5}}/>
+            <Typography variant="body2" component="p" style = {{color: '#00ff00'}}> 
+            Registration now open
+            </Typography>
+          </Grid>
+          }
+       
         <IconButton onClick={event => gotoComp(event, competition.id)} style={{color:"#FFFFFF", justifyContent: 'right', display: 'flex', width: '100%'}}>
           <ArrowForward />
         </IconButton>
