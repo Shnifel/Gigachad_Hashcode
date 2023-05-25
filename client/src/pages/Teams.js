@@ -163,7 +163,7 @@ export function TeamRegister(props) {
                     label="Enter the team code"
                     id="Team Code"
                     InputProps={{
-                      style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden'}
+                      style: { backgroundColor: 'white', borderRadius: 20, overflow: 'hidden',color: "black"}
                     }}
                     variant='filled'
                   

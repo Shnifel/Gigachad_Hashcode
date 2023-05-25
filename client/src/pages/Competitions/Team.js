@@ -17,6 +17,7 @@ const Team = (props) => {
         uid: userID
     }
     const [registered, setRegistered] = useState(false);
+    const [changes,setChanges] = useState(false);
 
     // Asynchronously load data related to competition
     useEffect(() => {
@@ -32,7 +33,8 @@ const Team = (props) => {
          }
          
         }
-         fetchdata()}, []);
+         fetchdata()}, [changes]);
+        
 
 
 
@@ -50,8 +52,8 @@ const Team = (props) => {
     <ThemeProvider theme={darkTheme}>
         <CssBaseline/>
         {!loading && console.log(teamInfo)}
-        {!loading && !registered && <TeamRegister compid = {id}/>}
-        {!loading && registered && <TeamDisplay data = {teamInfo}/>}
+        {!loading && !registered && <TeamRegister compid = {id} change = {setChanges}/>}
+        {!loading && registered && <TeamDisplay data = {teamInfo} change = {setChanges} minteamsize= {props.minteamsize}/>}
     </ThemeProvider>
   )
 }

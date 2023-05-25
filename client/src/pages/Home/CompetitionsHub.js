@@ -17,6 +17,9 @@ import { CircularProgress, responsiveFontSizes } from '@material-ui/core';
 import { Grid, Card, CardContent, CardMedia, IconButton } from "@material-ui/core";
 import CircleIcon from '@mui/icons-material/Circle';
 import { ArrowForward } from "@mui/icons-material";
+import { useStyles } from '../../components/styles/Theme.js';
+import ReactPlayer from 'react-player';
+import video from "../../assets/black-13495.mp4"
 
 function CompetitionCard(props) {
   const competition = props.competition
@@ -46,6 +49,7 @@ function CompetitionCard(props) {
         }, []);
 
   return(
+
     <Grid key={competition.id} item xs={12} sm={4} md={3} style={{borderRadius: 300}}>
     <Card sx = {{borderRadius : 3}}>
       <CardMedia
@@ -86,6 +90,7 @@ function CompetitionCard(props) {
 
 
 function CompetitionContent() {
+    const classes = useStyles();
     const [comps,setcomps] = useState(null);
     const [userComps, setUserComps] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -139,6 +144,18 @@ function CompetitionContent() {
     return (
       
       <ThemeProvider theme={darkTheme}>
+      <div className={classes.root}>
+    <ReactPlayer
+      data-testid = "Background"
+      className = {classes.player}
+      url = {video}
+      playing
+      loop
+      muted
+      width= "100%"
+      height = "auto"
+    />
+    <div className={classes.content}>
           <CssBaseline />
           <Box
             component="main"
@@ -151,17 +168,17 @@ function CompetitionContent() {
           > 
             <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
             <div className='font'>
-            <Typography variant= "h1" fontFamily="'Arcade'" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', color: "#0000FF" }}>
+            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#FFFFFF", margin: 2 , fontFamily: 'Arcade'}}>
               CODING COMPETITIONS
             </Typography></div>
             {isAdmin &&
             <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex'}}>
-              <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} sx = {{backgroundColor: (theme) => theme.palette.primary.main, color: 'black', margin: '3vh'}}>
+              <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} style = {{backgroundColor: "#4169E1", margin: 10, padding: 10}}>
                 CREATE NEW COMPETITIONS
               </Button>
             </Box>}
 
-      {my_comps.length !== 0 && <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 30, fontStyle: 'bold', color: "#2A3492", m: 2 }}>
+      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#5D3FD3", margin: 2 , fontFamily: 'Arcade'}}>
        My competitions
       </Typography>}
            
@@ -172,7 +189,7 @@ function CompetitionContent() {
         </Grid>
 
 
-        {current.length !== 0 && <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 30, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
+        {current.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#0000FF", margin: 2 , fontFamily: 'Arcade'}}>
        Upcoming competitions
       </Typography>}
 
@@ -183,7 +200,7 @@ function CompetitionContent() {
         </Grid>
 
 
-      {past.length !== 0 && <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 30, fontStyle: 'bold', color: "#6ded8a", m: 2 }}>
+      {past.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#00A36C", margin: 2 , fontFamily: 'Arcade'}}>
        Past competitions
       </Typography>}
 
@@ -198,10 +215,14 @@ function CompetitionContent() {
 
         </Container>
         </Box>
-      </ThemeProvider> 
+        </div>
+      </div> 
+      </ThemeProvider>
+      
     );
   }
   
   export default function CompetitionsHub() {
     return <CompetitionContent />;
   }
+  

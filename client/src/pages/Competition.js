@@ -102,7 +102,7 @@ function Competition() {
   };
 
   const handleProfileClick = () => {
-    navigate("/ProfilePage");
+    navigate("/Home");
   }
 
   const handleLogout = () => {
@@ -148,7 +148,7 @@ function Competition() {
             height="100"
             image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
             /> 
-     <Typography variant= "h1" sx = {{textAlign: 'center', fontSize: 50, fontStyle: 'bold', }} style={{fontFamily: 'Arcade', color: "#6700ff"}}>
+     <Typography variant= "h2" sx = {{textAlign: 'center', fontSize: 20, fontStyle: 'bold', }} style={{fontFamily: 'Arcade', color: "#6700ff"}}>
              {data.data.compname}
      </Typography>
 
@@ -208,7 +208,7 @@ function Competition() {
       </div>
      </Card>
       {tab === 0 && !loading && <Info data = {data.data}/>}
-      {tab === 1 && !loading && <Team id = {compid} />}
+      {tab === 1 && !loading && <Team id = {compid} minteamsize={data.data.min_teamsize} />}
       {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && 
       <Leaderboard teams={teams} compid={compid} num_tests={parseInt(data.data.num_tests)} />

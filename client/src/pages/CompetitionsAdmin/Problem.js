@@ -168,7 +168,7 @@ function ProblemAdmin(props) {
         
        
     <div className="container">
-      <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#f500ff", m: 2 }}>
+    <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
         Competition Problem
       </Typography>
     
@@ -200,7 +200,7 @@ function ProblemAdmin(props) {
           {pdfFile ? "Change pdf"  : "Upload competition problem"}
         </Button> <input type='file' color='white'  ref = {pdfInputRef} onChange={handleFile} style={{display: 'none'}}/></Box>
        
-        <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#2A3492", m: 2 }}>
+        <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
        Test Cases
       </Typography>
       <Box sx={{m: 2, bgcolor: '#1e1e1e', display: 'inline-block'}}>
@@ -241,7 +241,7 @@ function ProblemAdmin(props) {
       </Table>
     </TableContainer>
     </Box>
-    <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#6ded8a", m: 2 }}>
+    <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
         MARKER FILE
       </Typography>
 

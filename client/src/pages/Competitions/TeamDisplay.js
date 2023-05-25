@@ -25,7 +25,8 @@ import {
   ExpandMore,
   ExpandLess,
   Save,
-  Add
+  Add,
+  ChangeCircle
 } from '@mui/icons-material';
 import {Document, Page} from 'react-pdf';
 import NavBar from '../../components/Navbar';
@@ -34,6 +35,7 @@ import TypewriterTitle from '../../components/TypewriterTitle';
 import Clipboard from '../../components/Clipboard';
 import { useSelector } from 'react-redux';
 import { removeMember } from '../../handlers/competitions';
+import ErrorMessage from '../../components/Error';
 
 const darkTheme = createTheme({
   palette: {
@@ -56,7 +58,7 @@ const darkTheme = createTheme({
 });
 
 
-const TeamDisplay = (props) => {
+const TeamDisplay = ({change,...props}) => {
   const data = props.data;
   const teamID = data.id
   const teamData = data.teamData
@@ -74,8 +76,13 @@ const TeamDisplay = (props) => {
   }
 
   const handleMemberDelete = async (id) => {
-   await removeMember({uid : id, teamid: teamID});
-  };
+   try {
+    await removeMember({uid : id, teamid: teamID});
+    change(true)
+   } catch (error) {
+    
+   } 
+   };
 
 
 return (
@@ -92,7 +99,7 @@ return (
        </Typography>
 
       <Clipboard label = "Team join code: " copy = {teamData.teamCode} color = "inherit" />
-
+      {members.length <= props.minteamsize && <ErrorMessage errmsg = {"Your team does not have enough members to participate. Please Invite more members or join a team with more members to participate"}/>}
       <Typography component="h1">
         Members
       </Typography>
@@ -131,7 +138,8 @@ return (
         </TableContainer>
 
         <Grid container>
-          <Button>
+          <Button onClick={async () => handleMemberDelete(uid)}>
+            
             LEAVE TEAM
           </Button>
         </Grid>

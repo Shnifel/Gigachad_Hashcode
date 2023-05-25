@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Avatar, Button, Container, Grid, TextField } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
+import "./login.scss" 
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
+  const navigate= useNavigate();
   const [name, setName] = useState('John');
   const [surname, setSurname] = useState('Doe');
   const [email, setEmail] = useState('johndoe@example.com');
@@ -16,16 +19,16 @@ const ProfilePage = () => {
     // Save changes to the server
     // You can implement your logic here
     console.log('Saved changes:', location);
+    navigate("/Home")
   };
 
-  const imageUrl = "https://en.wikipedia.org/wiki/University_of_the_Witwatersrand#/media/File:Logo_for_the_University_of_the_Witwatersrand,_Johannesburg_(new_logo_as_of_2015).jpg"
-
+ 
   return (
     <Container maxWidth="sm">
       <Grid container spacing={2} alignItems="center" justifyContent="center">
         <Grid item xs={12} align="center">
-        <img src={imageUrl} alt="Profile Picture" style={{ width: 120, height: 120, borderRadius: '50%' }} />
-          <Avatar sx={{ width: 300, height: 300 }} src={imageUrl} alt="Profile Picture" />
+        
+          {/* <Avatar sx={{ width: 300, height: 300 }} src={imageUrl} alt="Profile Picture" /> */}
           <Button startIcon={<EditIcon />} variant="outlined" size="small">
             Change Picture
           </Button>
