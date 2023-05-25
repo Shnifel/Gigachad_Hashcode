@@ -27,6 +27,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
 import CompetitionsHub from './Home/CompetitionsHub';
+import { Avatar } from '@mui/material';
+import { Auth } from '../Firebase';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,6 +74,7 @@ function Home() {
 
   const handleLogout = () => {
     logout();
+    navigate("/")
   }
 
   return (
@@ -91,7 +94,16 @@ function Home() {
             aria-haspopup="true"
             onClick={handleProfileClick}
           >
-            <AccountCircleIcon />
+             <Avatar
+      alt="User Avatar"
+      
+      src={Auth.currentUser && Auth.currentUser.photoURL}
+      sx={{
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+      }}
+    />
           </IconButton>
           <Menu
               id="menu-appbar"

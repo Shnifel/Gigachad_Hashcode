@@ -18,7 +18,6 @@ import CompetitionAdmin from './pages/CompetitionAdmin';
 
 
 const App = () => {
-  const dispatch = useDispatch();
   const isAdmin = useSelector(state => state.auth.isAdmin);
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -36,20 +35,6 @@ const App = () => {
 
     )
   )
-
-  useEffect(() => {
-  const unsubscribe = Auth.onAuthStateChanged((user) => {
-    dispatch(setUserID(user.uid));
-    if (user) {
-      dispatch(setLoggedIn(true));
-    }
-    else{
-      dispatch(setLoggedIn(false));
-    }
-    });
-
-    return unsubscribe;
-  }, [dispatch, logout]);
   
   return (
     <div className='app'>

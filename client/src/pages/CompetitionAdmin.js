@@ -38,6 +38,8 @@ import Leaderboard from './Competitions/Leaderboard';
 import InfoAdmin from './CompetitionsAdmin/Info';
 import Submissions from './Competitions/Submissions';
 import { getImage } from '../handlers/competitions';
+import { Avatar } from '@mui/material';
+import { Auth } from '../Firebase';
 
 
 
@@ -155,7 +157,15 @@ function CompetitionAdmin() {
             onClick={handleMenu}
             color='inherit'
           >
-            <AccountCircleIcon />
+              <Avatar
+      alt="User Avatar" 
+      src={Auth.currentUser && Auth.currentUser.photoURL }
+      sx={{
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+      }}
+    />
           </IconButton>
           <Menu
               id="menu-appbar"

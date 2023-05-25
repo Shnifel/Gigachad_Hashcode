@@ -4,6 +4,7 @@ import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import remarkGfm from 'remark-gfm'
 
 export const MarkdownTextbox = () => {
     const [inputText, setInputText] = React.useState('');
@@ -22,7 +23,7 @@ export const MarkdownTextbox = () => {
         />
         <ReactMarkdown
           children={inputText}
-          remarkPlugins={[remarkMath]}
+          remarkPlugins={[remarkGfm, remarkMath]}
           rehypePlugins={[rehypeKatex]}
           
         />

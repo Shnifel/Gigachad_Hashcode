@@ -44,6 +44,7 @@
     "redux": "^4.2.1",
     "redux-mock-store": "^1.5.4",
     "rehype-katex": "^6.0.3",
+    "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "styled-components": "^5.3.9",
     "text-encoding": "^0.7.0",
