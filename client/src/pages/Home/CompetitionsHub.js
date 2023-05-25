@@ -90,7 +90,7 @@ function CompetitionContent() {
     const [userComps, setUserComps] = useState(null);
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState([]);
-    const uid = useSelector(state => state.auth.userID);
+    const uid = localStorage.getItem("uid");
 
 
 

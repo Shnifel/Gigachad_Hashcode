@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword,sendEmailVerification,signInWithEmailAnd
 import {collection,doc,setDoc,query,onSnapshot,where,documentId} from "firebase/firestore";
 import { googleProvider } from "../../Firebase.js";
 import axios from "axios";
+import CryptoJS from "crypto-js";
 
 
 function Error(message) {
@@ -40,9 +41,14 @@ export const loginHandler = async (inputs) => {
     if (! emailVerified){
         throw new Error("Please verify your email before logging in");
     }
-
     const creds = {uid : id}
+    
     const response = await axios.post("/auth/login",creds); 
+    if (response.status == 200){
+        const user_info = {uid: id, isAdmin: CryptoJS.AES.encrypt(response.data.isAdmin.toString(), "hashcode-123").toString()}
+        localStorage.setItem("STORAGE_STATE", JSON.stringify(user_info))
+    }
+    
     return response.data;
 }
 
@@ -51,7 +57,12 @@ export const googleAuth = async (response) => {
     const user = await signInWithPopup(Auth,googleProvider);
     const id = user.user.uid
     const creds = {uid : id}
+    localStorage.setItem("uid", id)
     const res = await axios.post("/auth/login",creds); 
+    if (res.status == 200){
+        const user_info = {uid: id, isAdmin: CryptoJS.AES.encrypt(res.data.isAdmin.toString(), "hashcode-123").toString()}
+        localStorage.setItem("STORAGE_STATE", JSON.stringify(user_info))
+    }
     return res.data;
 }
 

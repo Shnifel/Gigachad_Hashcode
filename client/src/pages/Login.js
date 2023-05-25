@@ -74,6 +74,7 @@ export default function Login() {
       dispatch(setAdmin(isAdmin));
       navigate('/Home')
     } catch (err) {
+      console.log(err)
       setError(err.message);
     }
   }
