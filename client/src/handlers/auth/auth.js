@@ -72,6 +72,7 @@ export const passwordReset = async (email) => {
 
 export const logout = () => {
     signOut(Auth);
+    localStorage.removeItem("STORAGE_STATE");
 }
 
 export const updateProfile = async(data) => {

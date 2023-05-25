@@ -38,6 +38,8 @@ import Leaderboard from './Competitions/Leaderboard';
 import PdfViewer from './Competitions/Problem';
 import Submissions from './Competitions/Submissions';
 import { useSelector } from 'react-redux';
+import { Avatar } from '@mui/material';
+import { Auth } from '../Firebase';
 
 
 
@@ -171,7 +173,15 @@ function Competition() {
             onClick={handleMenu}
             color='inherit'
           >
-            <AccountCircleIcon />
+             <Avatar
+      alt="User Avatar" 
+      src={Auth.currentUser && Auth.currentUser.photoURL}
+      sx={{
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+      }}
+    />
           </IconButton>
           <Menu
               id="menu-appbar"
