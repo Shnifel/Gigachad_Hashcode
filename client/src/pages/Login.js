@@ -190,7 +190,7 @@ export default function Login() {
 
               <Grid container sx = {{mt: 2}}>
                 <Grid item xs>
-                  <Link href="#" variant="body2" onClick={handlePasswordReset}>
+                  <Link href="#" variant="body2" onClick={handlePasswordReset} style={{color: "#FFFFFF"}}>
                     Forgot password?
                   </Link>
                 </Grid>

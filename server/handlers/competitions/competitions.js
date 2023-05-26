@@ -74,7 +74,6 @@ export const getUserCompetitions = async (req, res) => {
     console.log(req.body.uid)
     const userRef = db.collection("Users").doc(req.body.uid)
     const usersTeams = await db.collection("Teams").where("members", "array-contains", userRef).get()
-
     const competitionIds = usersTeams.docs.map(async(team) => {
       const teamRef = db.collection("Teams").doc(team.id)
       const comp = await db.collection("Competitions").where("teams", "array-contains", teamRef).get()

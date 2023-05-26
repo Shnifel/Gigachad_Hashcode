@@ -173,12 +173,12 @@ function CompetitionContent() {
             </Typography></div>
             {isAdmin &&
             <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex'}}>
-              <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} style = {{backgroundColor: "#4169E1", margin: 10, padding: 10}}>
+              <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} style = {{backgroundColor: "#F2D2BD", margin: 10, padding: 10}}>
                 CREATE NEW COMPETITIONS
               </Button>
             </Box>}
 
-      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#0818A8", margin: 2 , fontFamily: 'Arcade'}}>
+      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#1F51FF", margin: 2 , fontFamily: 'Arcade'}}>
        My competitions
       </Typography>}
            
@@ -189,7 +189,7 @@ function CompetitionContent() {
         </Grid>
 
 
-        {current.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#0000FF", margin: 2 , fontFamily: 'Arcade'}}>
+        {current.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#FF2400", margin: 2 , fontFamily: 'Arcade'}}>
        Upcoming competitions
       </Typography>}
 

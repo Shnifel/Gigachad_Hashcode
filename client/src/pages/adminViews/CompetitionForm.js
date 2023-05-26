@@ -15,7 +15,7 @@ import Paper from '@mui/material/Paper';
 import { createNewCompetitions } from '../../handlers/competitions.js';
 import Avatar from '@mui/material/Avatar';
 import { useSelector } from 'react-redux';
-import Video from "../../assets/retro.mp4";
+import Video from "../../assets/background.mp4";
 import ReactPlayer from 'react-player';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStyles } from '../../components/styles/Theme.js';
