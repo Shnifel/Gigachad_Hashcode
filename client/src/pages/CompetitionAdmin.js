@@ -213,12 +213,7 @@ function CompetitionAdmin() {
       {tab === 0 && !loading && <InfoAdmin data = {data.data} compid = {compid} update = {setUpdate} />}
       {tab === 1 && !loading && <Teams id = {compid} />}
       {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
-      {tab === 3 && <div>
-      <Typography variant="h4" component="h1">
-        Leaderboard
-      </Typography>
-      <Leaderboard teams={teams} />
-    </div>}
+      {tab === 3 &&  <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />}
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = "1234"/> }
     </ThemeProvider>
   );

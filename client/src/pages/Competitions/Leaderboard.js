@@ -93,8 +93,6 @@ const Leaderboard = ( props ) => {
       return 0;
     });
 
-    
-    console.log(sortedTeams)
     return sortedTeams.map((team, index) => (
       <React.Fragment key={index}>
         <TableRow onClick={() => handleTeamClick(team)}>

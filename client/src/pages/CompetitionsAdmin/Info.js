@@ -4,11 +4,12 @@ import { Box, CssBaseline, TextField, ThemeProvider, Typography, Grid, makeStyle
 import '../Competitions/competition.scss';
 import '../login.scss';
 import { useState } from 'react';
-import { CircularProgress, IconButton } from '@mui/material';
-import { Edit, Save } from '@mui/icons-material';
+import { CircularProgress, IconButton, Button } from '@mui/material';
+import { Delete, Edit, Save } from '@mui/icons-material';
 import { MarkdownTextbox } from '../../components/MarkdownTextBox.js';
 import { TextareaAutosize }from '@material-ui/core';
-import { updateCompetition } from '../../handlers/competitions';
+import { deleteCompetition, updateCompetition } from '../../handlers/competitions';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -42,6 +43,7 @@ const InfoAdmin = ({update, data, compid}) => {
    const [upValue, setUpValue] = useState(0);
 
    const [editMode, setEditMode] = useState(false);
+   const navigate = useNavigate();
 
    const toggleEdit = async () => {
     if (editMode && unsaved){
@@ -68,6 +70,15 @@ const InfoAdmin = ({update, data, compid}) => {
       setUnsaved(true);
     }
     setCurrent(prev => ({...prev, [field] : param}))
+   }
+
+   const deleteComp = async() => {
+    try {
+      await deleteCompetition({compid})
+      navigate("/Home")
+    } catch (error) {
+      console.log(error.message)
+    }
    }
 
    const timeString =  `|  | Date | Time |
@@ -194,6 +205,10 @@ const InfoAdmin = ({update, data, compid}) => {
           </Paper>
          </Grid> 
          </Grid>
+
+         <Button variant = "contained" startIcon = { <Delete/>} onClick={deleteComp} style = {{backgroundColor: "#DC143C", margin: 10, padding: 10}}>
+                DELETE COMPETITION
+          </Button>
         </Box>
     </ThemeProvider>
   )
