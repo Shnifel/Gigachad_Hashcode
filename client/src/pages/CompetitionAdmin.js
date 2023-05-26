@@ -40,6 +40,8 @@ import Submissions from './Competitions/Submissions';
 import { getImage } from '../handlers/competitions';
 import { Avatar } from '@mui/material';
 import { Auth } from '../Firebase';
+import CountdownTimer from '../components/CountdownTimer';
+import {Grid} from '@mui/material';
 
 
 
@@ -68,6 +70,7 @@ function CompetitionAdmin() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(null);
+  const [compUpdate, setUpdate] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const compid = location.state.compid;
@@ -86,7 +89,7 @@ function CompetitionAdmin() {
       }
       
     }
-     fetchdata()}, []);
+     fetchdata()}, [compUpdate]);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -134,9 +137,15 @@ function CompetitionAdmin() {
             image={image}
             /> 
 
-     <Typography variant= "h2" style={{fontFamily: 'Arcade', color: "#6700ff"}} sx = {{textAlign: 'center', fontSize: 10, fontStyle: 'bold', color: "#0000FF" }}>
+      <Grid container>
+        <Typography variant= "h2" style={{fontFamily: 'Arcade', color: "#6700ff"}} sx = {{textAlign: 'center', fontSize: 10, fontStyle: 'bold', color: "#0000FF" }}>
              {data.data.compname}
      </Typography>
+     <Grid container style={{display: 'flex', width: '100%', justifyItems: 'right', justifyContent: 'right'}}>
+      <CountdownTimer targetDate={new Date(data.data.compenddate)}/>
+     </Grid>
+      </Grid>
+     
      
       <div className={classes.appBar}>
       <AppBar position="static" color = "inherit" >
@@ -201,7 +210,7 @@ function CompetitionAdmin() {
       </AppBar>
       </div>
      </Card>
-      {tab === 0 && !loading && <InfoAdmin data = {data.data}/>}
+      {tab === 0 && !loading && <InfoAdmin data = {data.data} compid = {compid} update = {setUpdate} />}
       {tab === 1 && !loading && <Teams id = {compid} />}
       {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && <div>

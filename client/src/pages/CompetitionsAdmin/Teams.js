@@ -69,7 +69,7 @@ const Teams = (props) => {
         await updateTeam({teamid: team.id, teamname: team.teamData.teamname})
       }
 
-      setChanges(true);
+      setChanges(!change);
       setUnsavedChanges(false);
     }
 
@@ -94,13 +94,13 @@ const Teams = (props) => {
   const handleTeamDelete = async (teamId) => {
     setLoading(true);
     await deleteTeam({teamid: teamId, compid: id})
-    setChanges(true);
+    setChanges(!change);
   };
 
   const handleMemberDelete = async (teamIndex, memberIndex) => {
     setLoading(true);
     await removeMember({uid: memberIndex, teamid: teamIndex});
-    setChanges(true);
+    setChanges(!change);
   };
 
   const handleTeamExpand = (index) => {
@@ -143,7 +143,7 @@ return (
             </TableRow>
           </TableHead>
           <TableBody>
-            {teams.map((team, index) => (
+            {teams && teams.map((team, index) => (
               <React.Fragment key={team.id}>
                 <TableRow>
                   <TableCell>
