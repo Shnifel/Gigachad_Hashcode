@@ -1,12 +1,27 @@
 import React from 'react'
 import { darkTheme } from '../../components/styles/Theme'
-import { Box, CssBaseline, TextField, ThemeProvider, Typography, Grid } from '@material-ui/core'
+import { Box, CssBaseline, TextField, ThemeProvider, Typography, Grid, makeStyles } from '@material-ui/core'
 import '../Competitions/competition.scss';
 import '../login.scss';
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import { Edit, Save } from '@mui/icons-material';
 import { MarkdownTextbox } from '../../components/MarkdownTextBox.js';
+import { TextareaAutosize }from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  input: {
+    display: 'flex',
+    backgroundColor: 'inherit', // Set background color to inherit
+    width: '100vh', // Set the width of the input
+    height: '20vh',
+    maxWidth: '200%', // Set the fixed height of the input
+    resize: 'none', // Prevent textarea from being resizable
+    overflow: 'hidden'
+ // Add scrollbar when content exceeds the height
+    // Set the color of the scrollbar
+  },
+}));
 
 
 const InfoAdmin = (props) => {
@@ -19,16 +34,21 @@ const InfoAdmin = (props) => {
    const min_teamsize = data.min_teamsize;
    const num_tests = data.num_tests;
    const compenddate = data.compenddate;
+   const compdetails = data.compdetails;
+   const classes = useStyles();
 
    const [editMode, setEditMode] = useState(true);
-   
 
    const toggleEdit = () => {
     setEditMode(!editMode);
    }
 
+   const [changes, setChanges] = useState(false);
+   const [current, setCurrent] = useState(data);
 
-   
+   const handleChange = (field, param) => {
+    setCurrent(prev => ({...prev, [field] : param}))
+   }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -37,17 +57,18 @@ const InfoAdmin = (props) => {
         <Box sx = {{display: 'flex', width: '100%',justifyContent: 'right'}}>
         <IconButton onClick={toggleEdit} color='inherit'>
         {editMode ? <Save /> : <Edit />}
+
       </IconButton>
        </Box>
         <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
          Description
          </Typography>
             
-          {editMode ? <TextField value={description} style={{margin: 20, fontSize: 30}}/>
-          :<Typography component="h2" style={{margin: 20, fontSize: 30}}>
+          {editMode ? <TextField value={current.compdesc} style={{margin: 5, fontSize: 40, width: '100%', maxWidth: '100%' }} onChange={(event) => handleChange('compdesc', event.target.value)}/>
+          :<Typography variant="h3" style={{margin: 20, fontSize: 25}}>
                 {description}
             </Typography>}
-            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#2A3492", margin: 2 , fontFamily: 'Arcade'}}>
+            <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#2A3492", margin: 2 , fontFamily: 'Arcade'}}>
          Dates
          </Typography>
 
@@ -70,17 +91,8 @@ const InfoAdmin = (props) => {
           DETAILS
          </Typography>
 
-
-            <Typography style = {{margin: 20, fontSize: 20}}>
-            <ul style={{ listStyleType: 'circle' }}>
-            <li>At least {min_teamsize} participants in a team</li>
-            <li>At most {max_teamsize} participants in a team</li>
-            <li>Competition has 1 question with {num_tests} test cases to submit solutions to</li>
-            <li> Submit both your zip files and outputs as text files for each test case</li>
-          </ul>
-            </Typography>
-
-            <MarkdownTextbox/>
+         <TextareaAutosize minRows={5} style={{width: '90%', borderColor: '#ffffff', backgroundColor: 'inherit', color: '#eeeeee', marginTop: 10}} placeholder='Please enter markdown text here' value={compdetails && compdetails}/>
+          <MarkdownTextbox/>
         </Box>
     </ThemeProvider>
   )
