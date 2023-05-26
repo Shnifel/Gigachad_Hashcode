@@ -92,7 +92,7 @@ function Home() {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            onClick={handleProfileClick}
+            onClick={handleMenu}
           >
              <Avatar
       alt="User Avatar"

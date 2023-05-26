@@ -1,5 +1,5 @@
 import {Auth,db} from "../../Firebase.js"
-import { createUserWithEmailAndPassword,sendEmailVerification,signInWithEmailAndPassword,signInWithPopup, sendPasswordResetEmail, signOut} from "firebase/auth";
+import { createUserWithEmailAndPassword,sendEmailVerification,signInWithEmailAndPassword,signInWithPopup, sendPasswordResetEmail, signOut, updateEmail, updateProfile} from "firebase/auth";
 import {collection,doc,setDoc,query,onSnapshot,where,documentId} from "firebase/firestore";
 import { googleProvider } from "../../Firebase.js";
 import axios from "axios";
@@ -75,7 +75,19 @@ export const logout = () => {
     localStorage.removeItem("STORAGE_STATE");
 }
 
-export const updateProfile = async(data) => {
+export const updateUserProfile = async(data) => {
     const response = await axios.post("/auth/updateProfile", data);
     return response.data;
+}
+export const getProfile = async(data) => {
+    const response = await axios.post("/auth/login", data);
+    return response.data;
+}
+export const changeEmail = async(email) => {
+    const response = await updateEmail(Auth.currentUser,email)
+    
+}
+export const changeProfile = async(data) => {
+    const response = await updateProfile(Auth.currentUser,data);
+    
 }

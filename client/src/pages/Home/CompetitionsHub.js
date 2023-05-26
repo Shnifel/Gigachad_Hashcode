@@ -168,7 +168,7 @@ function CompetitionContent() {
           > 
             <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
             <div className='font'>
-            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#FFFFFF", margin: 2 , fontFamily: 'Arcade'}}>
+            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#F0FFFF", margin: 2 , fontFamily: 'Arcade'}}>
               CODING COMPETITIONS
             </Typography></div>
             {isAdmin &&
@@ -178,7 +178,7 @@ function CompetitionContent() {
               </Button>
             </Box>}
 
-      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#5D3FD3", margin: 2 , fontFamily: 'Arcade'}}>
+      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#0818A8", margin: 2 , fontFamily: 'Arcade'}}>
        My competitions
       </Typography>}
            

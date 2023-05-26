@@ -109,13 +109,6 @@ function CompetitionAdmin() {
     logout();
   }
 
-  const teams = [
-    { name: 'Team A', scores: [10, 15, 20], totalScore: 45, isHighlighted: false },
-    { name: 'Team B', scores: [5, 8, 12], totalScore: 25, isHighlighted: true },
-    { name: 'Team C', scores: [7, 12, 15], totalScore: 34, isHighlighted: false },
-    { name: 'Team D', scores: [9, 14, 19], totalScore: 42, isHighlighted: false },
-  ];
-
   if (loading) {
     return (<ThemeProvider theme={darkTheme}>
         <CssBaseline/>
@@ -208,7 +201,7 @@ function CompetitionAdmin() {
       <Typography variant="h4" component="h1">
         Leaderboard
       </Typography>
-      <Leaderboard teams={teams} />
+ 
     </div>}
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = "1234"/> }
     </ThemeProvider>
