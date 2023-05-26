@@ -217,7 +217,7 @@ function Competition() {
       </AppBar>
       </div>
      </Card>
-      {tab === 0 && !loading && <Info data = {data.data}/>}
+      {tab === 0 && !loading && <Info data = {data.data} />}
       {tab === 1 && !loading && <Team id = {compid} minteamsize={data.data.min_teamsize} />}
       {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && 
