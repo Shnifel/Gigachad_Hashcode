@@ -159,7 +159,7 @@ function Competition() {
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary' >
             <Tab label="Info" icon={<InfoIcon/>} value={0} style={{fontFamily: 'Arcade'}}/>
-            {(regopen || subsid)  && <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>}
+            {(regopen || subsid) && <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>}
             {isrunning && <Tab label="Problem" icon = {<Quiz/>} value={2} style={{fontFamily: 'Arcade'}}/>}
             <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3} style={{fontFamily: 'Arcade'}}/> 
             {subsid && isrunning && <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>}
@@ -221,7 +221,7 @@ function Competition() {
       {tab === 1 && !loading && <Team id = {compid} minteamsize={data.data.min_teamsize} />}
       {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && 
-      <Leaderboard teams={teams} compid={compid} num_tests={parseInt(data.data.num_tests)} />
+      <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />
     }
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = {subsid}/>}
     </ThemeProvider>
