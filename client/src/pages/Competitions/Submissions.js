@@ -59,9 +59,17 @@ function Submissions(props) {
       } catch (error) {
          setLoading(false);
       }
-      
      }
-      fetchdata()}, [changes])
+      fetchdata();
+
+      const interval = setInterval(fetchdata, 20000);
+
+      // Clean up the interval on component unmount
+      return () => {
+        clearInterval(interval);
+      };
+    
+    }, [changes])
 
   //Upload file
   const handleUpload = async (path, file) =>{
@@ -154,6 +162,7 @@ function Submissions(props) {
         updated[index] = feedback;
         setMarkedState(updated);
         setChanges(!changes);
+        toggleSubmit(index)
       }
 
       

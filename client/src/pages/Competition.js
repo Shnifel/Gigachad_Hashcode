@@ -40,6 +40,7 @@ import Submissions from './Competitions/Submissions';
 import { useSelector } from 'react-redux';
 import { Avatar } from '@mui/material';
 import { Auth } from '../Firebase';
+import Prizes from './Competitions/Prizes';
 
 
 
@@ -88,7 +89,16 @@ function Competition() {
       }
       
     }
-     fetchdata()}, []);
+     fetchdata();
+
+     const interval = setInterval(fetchdata, 20000);
+
+     // Clean up the interval on component unmount
+     return () => {
+       clearInterval(interval);
+     };
+    
+    }, []);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -104,28 +114,13 @@ function Competition() {
   };
 
   const handleProfileClick = () => {
-    navigate("/Home");
+    navigate("/ProfilePage");
   }
 
   const handleLogout = () => {
     logout();
+    navigate("/")
   }
-
-  const teams =  [
-    {
-      location: 'Team A',
-      testCases: [10, 20, 30],
-      aggregate: 60,
-      timeTaken: '2h 30m',
-    },
-    {
-      location: 'Team B',
-      testCases: [15, 25, 35],
-      aggregate: 75,
-      timeTaken: '1h 45m',
-    },
-    // Add more team objects as needed
-  ];
 
   if (loading) {
     return (<ThemeProvider theme={darkTheme}>
@@ -136,9 +131,6 @@ function Competition() {
 
   const isrunning = new Date(data.data.compdate) <= new Date()
   const regopen = new Date(data.data.regstartdate) <= new Date() && new Date() <= new Date(data.data.regenddate) 
-
-
-  console.log(regopen)
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -224,6 +216,7 @@ function Competition() {
       <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />
     }
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = {subsid}/>}
+    {tab === 5 && <Prizes prizeDetails = {data.data.prizeDetails}/>}
     </ThemeProvider>
   );
 }

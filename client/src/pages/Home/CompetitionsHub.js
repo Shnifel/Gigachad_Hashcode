@@ -95,7 +95,7 @@ function CompetitionContent() {
     const [userComps, setUserComps] = useState(null);
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState([]);
-    const uid = localStorage.getItem("uid");
+    const uid = useSelector(state => state.auth.userID);
 
 
 
@@ -114,7 +114,6 @@ function CompetitionContent() {
         
       }
        fetchdata()
-       console.log(comps)
           }, []);
     const isAdmin = useSelector(state => state.auth.isAdmin);
     const navigate = useNavigate();
@@ -135,6 +134,8 @@ function CompetitionContent() {
             </ThemeProvider>
           );
     }
+
+    console.log(comps)
 
     const my_comps = comps.filter(comp => userComps.includes(comp.id))
     const rest = comps.filter(comp => ! my_comps.includes(comp))

@@ -99,7 +99,7 @@ const Teams = (props) => {
 
   const handleMemberDelete = async (teamIndex, memberIndex) => {
     setLoading(true);
-    await removeMember({uid: memberIndex, teamid: teamIndex});
+    await removeMember({uid: memberIndex, teamid: teamIndex, compid: id});
     setChanges(!change);
   };
 

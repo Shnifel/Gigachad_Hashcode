@@ -13,3 +13,8 @@ export const getLeaderboard = async(inputs) => {
     const res = await axios.post("/leaderboard", inputs)
     return res.data;
 }
+
+export const getAllSubmissions = async(inputs) => {
+    const res = await axios.post("/submissions/getAllSubmissions", inputs)
+    return res.data
+}

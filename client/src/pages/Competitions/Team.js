@@ -53,7 +53,7 @@ const Team = (props) => {
         <CssBaseline/>
         {!loading && console.log(teamInfo)}
         {!loading && !registered && <TeamRegister compid = {id} change = {setChanges}/>}
-        {!loading && registered && <TeamDisplay data = {teamInfo} change = {setChanges} minteamsize= {props.minteamsize}/>}
+        {!loading && registered && <TeamDisplay data = {teamInfo} change = {setChanges} minteamsize= {props.minteamsize} compid={id}/>}
     </ThemeProvider>
   )
 }

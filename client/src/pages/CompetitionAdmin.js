@@ -42,6 +42,9 @@ import { Avatar } from '@mui/material';
 import { Auth } from '../Firebase';
 import CountdownTimer from '../components/CountdownTimer';
 import {Grid} from '@mui/material';
+import PrizesAdmin from './CompetitionsAdmin/Prizes';
+import SubmissionsAdmin from './CompetitionsAdmin/Submissions';
+
 
 
 
@@ -89,7 +92,16 @@ function CompetitionAdmin() {
       }
       
     }
-     fetchdata()}, [compUpdate]);
+     fetchdata();
+
+     const interval = setInterval(fetchdata, 20000);
+
+    // Clean up the interval on component unmount
+    return () => {
+      clearInterval(interval);
+    };
+    
+    }, [compUpdate]);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -110,6 +122,7 @@ function CompetitionAdmin() {
 
   const handleLogout = () => {
     logout();
+    navigate("/")
   }
 
   if (loading) {
@@ -207,7 +220,8 @@ function CompetitionAdmin() {
       {tab === 1 && !loading && <Teams id = {compid} />}
       {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 &&  <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />}
-    {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = "1234"/> }
+    {tab === 4 && <SubmissionsAdmin compid={compid}/> }
+    {tab === 5 && <PrizesAdmin compid={compid} prizeDetails={data.data.prizeDetails} update = {setUpdate}/>}
     </ThemeProvider>
   );
 }
