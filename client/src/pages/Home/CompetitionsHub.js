@@ -168,7 +168,7 @@ function CompetitionContent() {
           > 
             <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
             <div className='font'>
-            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#F0FFFF", margin: 2 , fontFamily: 'Arcade'}}>
+            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#F0FFFF", margin: 2 , fontFamily: 'Scififont'}}>
               CODING COMPETITIONS
             </Typography></div>
             {isAdmin &&
@@ -178,8 +178,8 @@ function CompetitionContent() {
               </Button>
             </Box>}
 
-      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#1F51FF", margin: 2 , fontFamily: 'Arcade'}}>
-       My competitions
+      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#1F51FF", margin: 2 , fontFamily: 'Scififont'}}>
+       MY COMPETITIONS
       </Typography>}
            
        <Grid container spacing={3} style={{margin: 2}}>
@@ -189,8 +189,8 @@ function CompetitionContent() {
         </Grid>
 
 
-        {current.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#FF2400", margin: 2 , fontFamily: 'Arcade'}}>
-       Upcoming competitions
+        {current.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#E0115F", margin: 2 , fontFamily: 'Scififont'}}>
+       UPCOMING COMPETITIONS
       </Typography>}
 
       <Grid container spacing={3} style={{margin: 2}}>
@@ -200,8 +200,8 @@ function CompetitionContent() {
         </Grid>
 
 
-      {past.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#00A36C", margin: 2 , fontFamily: 'Arcade'}}>
-       Past competitions
+      {past.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#00A36C", margin: 2 , fontFamily: 'Scififont'}}>
+       PAST COMPETITIONS
       </Typography>}
 
       <Grid container spacing={3} style={{margin: 2}}>

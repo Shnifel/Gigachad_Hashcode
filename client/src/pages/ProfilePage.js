@@ -90,7 +90,7 @@ console.log(Auth.currentUser.photoURL)
         await changeEmail(email)
       }
       if (image) {
-        await uploadFile(uid+"/"+image.name)
+        await uploadFile(uid+"/"+image.name,image)
         const url = await getImage(uid+"/"+image.name)
         await changeProfile({photoURL:url})
 
