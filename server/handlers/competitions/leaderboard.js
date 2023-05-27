@@ -16,10 +16,11 @@ export const getLeaderboard = async (req, res) => {
           const teamDoc = await teamRef.get()
           const teamData = teamDoc.data()
           const subs = teamData.subsRef
-
           const subScores = (await db.collection("Submissions").doc(subs).get()).data().max_scores
+          const member = teamData.members[0]
+          const location = (await member.get()).data().location 
 
-          return {id: teamDoc.id, teamname:teamData.teamname, scores: subScores};
+          return {id: teamDoc.id, teamname:teamData.teamname, scores: subScores, location: location};
     });
 
     const leaderboard = await Promise.all(teamsPromises);

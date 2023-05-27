@@ -59,7 +59,6 @@ export const getTeam = async(req, res) => {
         const user = req.body.uid
 
         const competitionDoc = await db.collection('Competitions').doc(compid).get();
-        console.log(competitionDoc)
         const teams = competitionDoc.data().teams
 
         for (const teamRef of teams) {
@@ -175,8 +174,6 @@ export const createTeams = async(req,res) => {
         return res.status(400).json("You are already registered in a team in this competition");
       }
     }
-
-    console.log(max_members)
   
     
     const querySnapshot = await db.collection('Teams').where('teamCode', '==', teamCode).get()
@@ -212,7 +209,15 @@ export const createTeams = async(req,res) => {
   try {
     const user = db.collection('Users').doc(req.body.uid)
     const team = db.collection('Teams').doc(req.body.teamid)
+    const compRef = db.collection('Competitions').doc(req.body.compid)
     team.update({members : Admin.firestore.FieldValue.arrayRemove(user)})
+
+    const num_members = (await team.get()).data().members.length
+
+    if (num_members === 0){
+      await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(team)})
+      await team.delete()
+    }
 
     return res.status(200).json("Successfully removed member")
   } catch (error) {

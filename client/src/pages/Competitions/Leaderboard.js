@@ -20,6 +20,7 @@ import {
 import Team from './Team';
 import TestCasesBox from '../../components/TestCasesBox';
 import { ThemeProvider } from '@emotion/react';
+import { LocationCity, LocationOn, Scoreboard, Leaderboard as LeaderboardIcon } from '@mui/icons-material';
 
 const Leaderboard = ( props ) => {
   const num_tests=props.num_tests;
@@ -41,7 +42,16 @@ const Leaderboard = ( props ) => {
       }
       
      }
-      fetchdata()}, [])
+      fetchdata();
+
+      const interval = setInterval(fetchdata, 20000);
+
+      // Clean up the interval on component unmount
+      return () => {
+        clearInterval(interval);
+      };
+    
+    }, [])
 
 
   const handleSort = (column) => {
@@ -59,7 +69,7 @@ const Leaderboard = ( props ) => {
 
   const renderTestCases = (team) => {
     return team.scores.map((score, index) => (
-      <TableCell key={index}>{score}</TableCell>
+      <TableCell key={index}>{score ? score : "--"}</TableCell>
     ));
   };
 
@@ -70,8 +80,31 @@ const Leaderboard = ( props ) => {
 
 
   const renderTeams = () => {
+    const rankedTeams = [...teams].sort((a, b) => {
+      const scoreA = findAgregate(a);
+      const scoreB = findAgregate(b);
+
+      if (scoreA < scoreB) return 1
+      if (scoreA > scoreB) return -1
+    })
+
+    const teamsWithRanks = Array(rankedTeams.length);
+
+    let currentScore = -1;
+    let currentRank = -1;
+    for (let i = 0; i < rankedTeams.length; i++){
+      const currentAggregate = findAgregate(rankedTeams[i])
+      if (currentAggregate < currentScore || currentScore === -1){
+        currentScore = currentAggregate
+        currentRank += 1
+      }
+
+      teamsWithRanks[i] = {...rankedTeams[i], rank: currentRank}
+    }
+
+    console.log(teamsWithRanks)
     
-    const sortedTeams = [...teams].sort((a, b) => {
+    const sortedTeams = [...teamsWithRanks].sort((a, b) => {
       let aValue,bValue
       if (sortBy === "aggregate") {
          aValue=findAgregate(a)
@@ -96,8 +129,9 @@ const Leaderboard = ( props ) => {
     return sortedTeams.map((team, index) => (
       <React.Fragment key={index}>
         <TableRow onClick={() => handleTeamClick(team)}>
+          <TableCell>{team.rank}</TableCell>
         <TableCell>{team.teamname}</TableCell>
-          <TableCell>{team.location}</TableCell>
+          <TableCell>{team.location ? team.location : "--"}</TableCell>
           {renderTestCases(team)}
           <TableCell>{findAgregate(team)}</TableCell>
           
@@ -110,12 +144,25 @@ const Leaderboard = ( props ) => {
   return (
     <ThemeProvider theme= {darkTheme}>
       <CssBaseline/>
-      <Box sx = {{m : 2}}> 
+      <Box sx = {{m : 3}}> 
+      <Typography  variant= "h1"  style = {{ fontSize: 30, fontStyle: 'bold', color: "#6ded8a", margin: 10 , fontFamily: 'Arcade'}}>
+          LEADERBOARD
+         </Typography>
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
-          <TableRow>
-          <TableCell>
+        <TableHead style={{backgroundColor: "#0000ff"}}>
+          <TableRow >
+            <TableCell style={{fontFamily: 'Arcade'}}>
+            <TableSortLabel
+                active={sortBy === 'aggregate'}
+                direction={sortOrder}
+                onClick={() => handleSort('aggregate')}
+              >
+                <LeaderboardIcon/>
+                Rank
+              </TableSortLabel>
+            </TableCell>
+          <TableCell style={{fontFamily: 'Arcade'}}>
               <TableSortLabel
                 active={sortBy === 'teamname'}
                 direction={sortOrder}
@@ -124,16 +171,17 @@ const Leaderboard = ( props ) => {
                 Team Name
               </TableSortLabel>
             </TableCell>
-            <TableCell>
+            <TableCell style={{fontFamily: 'Arcade'}}>
               <TableSortLabel
                 active={sortBy === 'location'}
                 direction={sortOrder}
                 onClick={() => handleSort('location')}
               >
+                <LocationOn/>
                 Location
               </TableSortLabel>
-            </TableCell>
-            {Array(num_tests).fill(null).map((val,index) => ( <TableCell><TableSortLabel
+            </TableCell >
+            {Array(num_tests).fill(null).map((val,index) => ( <TableCell style={{fontFamily: 'Arcade'}}><TableSortLabel
               
                active={sortBy === 'testcase'+index}
                 direction={sortOrder}
@@ -141,12 +189,13 @@ const Leaderboard = ( props ) => {
               >
                 Test case {index+1}
               </TableSortLabel> </TableCell>))}
-            <TableCell>
+            <TableCell style={{fontFamily: 'Arcade'}}>
               <TableSortLabel
                 active={sortBy === 'aggregate'}
                 direction={sortOrder}
                 onClick={() => handleSort('aggregate')}
               >
+                <Scoreboard/>
                 Aggregate
               </TableSortLabel>
             </TableCell>
