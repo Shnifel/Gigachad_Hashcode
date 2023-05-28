@@ -220,7 +220,7 @@ function CompetitionAdmin() {
       {tab === 1 && !loading && <Teams id = {compid} />}
       {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 &&  <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />}
-    {tab === 4 && <SubmissionsAdmin compid={compid}/> }
+    {tab === 4 && <SubmissionsAdmin compid={compid} numtests={parseInt(data.data.num_tests)}/> }
     {tab === 5 && <PrizesAdmin compid={compid} prizeDetails={data.data.prizeDetails} update = {setUpdate}/>}
     </ThemeProvider>
   );

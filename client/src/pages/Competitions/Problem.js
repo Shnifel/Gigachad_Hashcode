@@ -23,12 +23,10 @@ const PDFViewer = (props) => {
   // creating new plugin instance
   const compid = props.compid;
   const numtests = props.numtests;
-  console.log(compid);
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   // pdf file onChange state
   const [pdfFile, setPdfFile]=useState(null);
- const [tests, setTests] = useState([])
   // pdf file error state
   const [pdfError, setPdfError]=useState('');
   const [loading, setLoading] = useState(true);
@@ -54,17 +52,6 @@ const PDFViewer = (props) => {
        setPdfFile(response);
 
        const newTests = Array(numtests).fill(null);
-
-       for (let i = 1; i <= numtests; i++){
-        try {
-          const response = await downloadFile(compid + "/testCases/test_case_" + i + ".txt");
-          newTests[i-1] = response;
-        } catch (error) {
-          continue;
-        }
-       }
-
-       setTests(newTests)
        setLoading(false);
    
 
@@ -113,10 +100,6 @@ const PDFViewer = (props) => {
          </Box></Paper> <Grid container>
            </Grid></Box>}
   
-      <Typography  variant= "h1" fontFamily="'Arcade'" sx = {{ fontSize: 20, fontStyle: 'bold', color: "#2A3492", m: 2 }}>
-       Test Cases
-      </Typography>
-      <TestCasesBox testCases = {tests} />
 
       {/* View PDF */}
       <div className="viewer">

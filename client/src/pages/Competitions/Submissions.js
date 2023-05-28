@@ -1,11 +1,11 @@
 import {useState, useEffect, useRef, useCallback} from 'react'
 import React from 'react';
-import { downloadFile, uploadFile } from '../../handlers/competitions';
+import { downloadFile, getURL, uploadFile } from '../../handlers/competitions';
 import { darkTheme } from '../../components/styles/Theme';
 import { CssBaseline, ThemeProvider, Box, Paper, Button, Grid, Avatar } from '@material-ui/core';
 import { Typography, IconButton } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close, ExpandMore, ExpandLess, FolderZip, Article} from '@mui/icons-material';
+import { Edit, Add, Save, Description as PdfIcon, AddRounded, Close, ExpandMore, ExpandLess, FolderZip, Article, Download} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
 import {CircularProgress} from '@material-ui/core';
@@ -14,6 +14,7 @@ import { FileUploadRounded } from '@mui/icons-material';
 import { addSubmission, getSubmissions } from '../../handlers/submissions';
 
 import "../login.scss";
+import { saveAs } from 'file-saver';
 
 function Submissions(props) {
 
@@ -31,6 +32,7 @@ function Submissions(props) {
   const solnInputRefs = useRef([]); // input refs for solution file uploads
   const [loading, setLoading] = useState(true); // loading submissions data
   const [changes, setChanges] = useState(true);
+  const [tests, setTests] = useState(null); //Store download URL's for test cases
 
   const array = Array(numtests).fill(null);
   const [expanded, setExpanded] = useState(null);
@@ -45,15 +47,24 @@ function Submissions(props) {
        for (let i = 0; i < numtests; i++){
         const curr_data = await response.subs_history.filter(sub => sub.test_case === (i + 1))
         if (curr_data.length > 0){
-          
-          const latest = curr_data[curr_data.length - 1]
-          
-          arr[i] = (latest.score === -1 ? latest.feedback : ("Test case scored " + latest.score))
-          console.log(arr)
-          
+        const latest = curr_data[curr_data.length - 1]
+        arr[i] = (latest.score === -1 ? latest.feedback : ("Test case scored " + latest.score)) 
         }
         setMarkedState(arr)   
       }
+
+      const newTests = Array(numtests).fill(null);
+
+       for (let i = 1; i <= numtests; i++){
+        try {
+          const response = await getURL(compid + "/testCases/test_case_" + i + ".txt");
+          newTests[i-1] = response;
+        } catch (error) {
+          continue;
+        }
+       }
+
+      setTests(newTests)
       setLoading(false);
 
       } catch (error) {
@@ -86,6 +97,16 @@ function Submissions(props) {
        zipFileRef.click(); // Trigger click on the corresponding file input
     
   }
+  }
+
+  const downloadTestCase = async (index) => {
+    try {
+      const res = await fetch(tests[index])
+      const content = await res.blob()
+      saveAs(content, "test_case_" + (index + 1) + ".txt")
+    } catch (error) {
+      
+    }
   }
   
   const toggleSubmit = (index) => {
@@ -235,7 +256,12 @@ function Submissions(props) {
           {array.map((state, index) => (
             <React.Fragment key={index}>
             <TableRow key={index}>
-              <TableCell>{"Test Case " + (index +1)}</TableCell>
+              <TableCell>
+                {"Test Case " + (index +1)}
+                <IconButton onClick={async () => await downloadTestCase(index)} color='inherit'>
+                  <SaveAltIcon/>
+                </IconButton>
+              </TableCell>
               <TableCell>
                 <Typography style={{fontFamily: 'Arcade', color: '#00ffbb'}}>
                    {subsdata.max_scores[index] ? subsdata.max_scores[index] : "--"}

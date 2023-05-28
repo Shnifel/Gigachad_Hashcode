@@ -113,6 +113,24 @@ export const getImage = (path) => {
   })
 }
 
+export const getURL= (path) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const storageRef = ref(storage, path);
+
+      getDownloadURL(storageRef).then(
+        url => {
+          resolve(url);
+        }
+      ).catch(error => reject(error))
+
+
+    } catch (error) {
+      reject(error);
+    }
+  })
+}
+
 export const downloadFile = (path) => {
     return new Promise((resolve, reject) => {
       try {
