@@ -78,7 +78,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8800/server",
+  "proxy": "https://smiling-bass-train.cyclic.app/server",
   "devDependencies": {
     "@babel/core": "^7.21.4",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
