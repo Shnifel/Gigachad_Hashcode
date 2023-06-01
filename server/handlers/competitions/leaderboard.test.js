@@ -34,6 +34,7 @@ describe("getLeaderboard", () => {
       teams: [
         db.doc("team1"),
         db.doc("team2"),
+    
       ],
     };
     db.collection().doc().get.mockResolvedValueOnce({ data: () => compData });
@@ -42,10 +43,12 @@ describe("getLeaderboard", () => {
     const team1Data = {
       subsRef: "team1-subs",
       teamname: "team-1",
+      members: [db.collection("Users").doc("Human")]
     };
     const team2Data = {
       subsRef: "team2-subs",
-      teamname: 'team-2'
+      teamname: 'team-2',
+      members: [db.collection("Users").doc("Human2")]
     };
     const team1SubScores = { max_scores: [0, 0, 100] };
     const team2SubScores = { max_scores: [1, 76, 200] };
@@ -53,6 +56,9 @@ describe("getLeaderboard", () => {
     db.doc("team2").get.mockResolvedValueOnce({ id: "team2", data: () => team2Data });
     db.collection("Submissions").doc("team1-subs").get.mockResolvedValueOnce({ data: () => ({ max_scores: team1SubScores }) });
     db.collection("Submissions").doc("team2-subs").get.mockResolvedValueOnce({ data: () => ({ max_scores: team2SubScores }) });
+    db.collection("Users").doc("Human").get.mockResolvedValueOnce({ data: () => ({name:  "Human", location :  "Wits"}) })
+    db.collection("Users").doc("Human2").get.mockResolvedValueOnce({ data: () => ({name:  "Human2", location :  "UP"}) })
+
 
     // Call the function under test
     await getLeaderboard(req, res);
@@ -60,8 +66,8 @@ describe("getLeaderboard", () => {
     // Assertions
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith([
-      { id: "team1", teamname: "team-1", scores: team1SubScores },
-      { id: "team2", teamname: "team-2", scores: team2SubScores },
+      { id: "team1", teamname: "team-1", scores: team1SubScores, location : "Wits" },
+      { id: "team2", teamname: "team-2", scores: team2SubScores, location : "UP" },
     ]);
   });
 

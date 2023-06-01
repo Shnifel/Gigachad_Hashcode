@@ -135,8 +135,6 @@ function CompetitionContent() {
           );
     }
 
-    console.log(comps)
-
     const my_comps = comps.filter(comp => userComps.includes(comp.id))
     const rest = comps.filter(comp => ! my_comps.includes(comp))
     const past = rest.filter(comp => new Date(comp.data.compdate) <= new Date())

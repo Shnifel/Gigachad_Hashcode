@@ -478,12 +478,15 @@ describe("deleteMember function", () => {
         const req = {body: {
             compid: "competition-1",
             uid: "luke-id",
-            teamCode: "123"
+            teamCode: "123",
+            teamid: "abcd"
         }};
         const res = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn().mockReturnThis()
         };
+
+        db.collection("Teams").doc(req.body.teamid).get.mockResolvedValueOnce({data : () => ({members : ["I'm here"]})})
 
         await deleteMember(req, res);
         expect(db.collection).toHaveBeenCalledWith("Competitions");
