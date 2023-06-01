@@ -16,7 +16,7 @@ import { darkTheme } from '../../components/styles/Theme';
 import { CssBaseline, ThemeProvider, Box, Paper, Button, Grid, Avatar } from '@material-ui/core';
 import { Typography, IconButton } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { Edit, Add, Save, Description as PdfIcon} from '@mui/icons-material';
+import { Edit, Add, Save, Description as PdfIcon, FileUploadRounded} from '@mui/icons-material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { CloudDownload, CloudUpload } from '@mui/icons-material';
 import {CircularProgress} from '@material-ui/core';
@@ -44,6 +44,7 @@ function ProblemAdmin(props) {
   const markerInputRef = useRef(null);
   const testInputs = useRef([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   const handleUpload = async (path, file) =>{
     try {
@@ -147,7 +148,9 @@ function ProblemAdmin(props) {
   const uploadMarkerFile = async(e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile){
+      setUploading(true);
       await handleUpload(compid + "/marker.py", selectedFile)
+      setUploading(false);
     }
   }
 
@@ -168,7 +171,7 @@ function ProblemAdmin(props) {
         
        
     <div className="container">
-    <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
+    <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#6ded8a", margin: 10 , fontFamily: 'Arcade'}}>
         Competition Problem
       </Typography>
     
@@ -200,7 +203,7 @@ function ProblemAdmin(props) {
           {pdfFile ? "Change pdf"  : "Upload competition problem"}
         </Button> <input type='file' color='white'  ref = {pdfInputRef} onChange={handleFile} style={{display: 'none'}}/></Box>
        
-        <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
+        <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#f500ff", margin: 10 , fontFamily: 'Arcade'}}>
        Test Cases
       </Typography>
       <Box sx={{m: 2, bgcolor: '#1e1e1e', display: 'inline-block'}}>
@@ -226,14 +229,15 @@ function ProblemAdmin(props) {
                       onChange = { async (event) => { await uploadTextFile(event, index)}}
                     />
                   <IconButton color='inherit'  onClick = {async () => await handleTextFileChange(index)}>
-                    <CloudUpload />
+                    <FileUploadRounded/>
                   </IconButton>
                   
                 {test && (
                   <IconButton onClick={() => downloadFileLocal(test, "test_case_" + (index+1) + ".txt")} color='inherit'>
-                    <CloudDownload />
+                    <SaveAltIcon/>
                   </IconButton>
                 )}
+                
               </TableCell>
             </TableRow></React.Fragment>
           ))}
@@ -241,7 +245,7 @@ function ProblemAdmin(props) {
       </Table>
     </TableContainer>
     </Box>
-    <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
+    <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#2A3492", margin: 10 , fontFamily: 'Arcade'}}>
         MARKER FILE
       </Typography>
 
@@ -270,7 +274,9 @@ function ProblemAdmin(props) {
            onClick={handleMarkerInput}
            
          >
+          {uploading && <CircularProgress size ={17} />}
            {marker ? "Change marker"  : "Upload competition marker"}
+           
          </Button> <input type='file' color='white' accept = '.py' ref = {markerInputRef} onChange={uploadMarkerFile} style={{display: 'none'}}/></Box>
       
 

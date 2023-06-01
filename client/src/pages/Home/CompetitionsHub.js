@@ -168,18 +168,18 @@ function CompetitionContent() {
             }}
           > 
             <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
-            <div className='font'>
-            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#F0FFFF", margin: 2 , fontFamily: 'Scififont'}}>
+            {/* <div className='font' >
+            <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#F0FFFF", margin: 2 , fontFamily: 'Arcade', justifyItems: 'right', display: 'flex'}}>
               CODING COMPETITIONS
-            </Typography></div>
+            </Typography></div> */}
             {isAdmin &&
-            <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex'}}>
+            <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex', mt: 5}}>
               <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} style = {{backgroundColor: "#F2D2BD", margin: 10, padding: 10}}>
-                CREATE NEW COMPETITIONS
+                CREATE NEW COMPETITION
               </Button>
             </Box>}
 
-      {my_comps.length !== 0 &&  <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#1F51FF", margin: 2 , fontFamily: 'Scififont'}}>
+      {my_comps.length !== 0 &&  <Typography  variant= "h2"  style = {{ fontSize: 35, fontStyle: 'bold', color: "#1F51FF", margin: 2 , fontFamily: 'Arcade'}}>
        MY COMPETITIONS
       </Typography>}
            
@@ -190,7 +190,7 @@ function CompetitionContent() {
         </Grid>
 
 
-        {current.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#E0115F", margin: 2 , fontFamily: 'Scififont'}}>
+        {current.length !== 0 && <Typography  variant= "h2"  style = {{ fontSize: 35, fontStyle: 'bold', color: "#E0115F", margin: 2 , fontFamily: 'Arcade'}}>
        UPCOMING COMPETITIONS
       </Typography>}
 
@@ -201,7 +201,7 @@ function CompetitionContent() {
         </Grid>
 
 
-      {past.length !== 0 && <Typography  variant= "h1"  style = {{ fontSize: 50, fontStyle: 'bold', color: "#00A36C", margin: 2 , fontFamily: 'Scififont'}}>
+      {past.length !== 0 && <Typography  variant= "h2"  style = {{ fontSize: 35, fontStyle: 'bold', color: "#00A36C", margin: 2 , fontFamily: 'Arcade'}}>
        PAST COMPETITIONS
       </Typography>}
 

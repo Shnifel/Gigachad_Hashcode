@@ -70,6 +70,14 @@ function CompetitionCreate() {
     }
   }
 
+  const validateDates = (regstart, regend, compstart, compend) => {
+    return new Date(regstart) <= new Date(regend) && new Date(regend) <= new Date(compstart) && new Date(compstart) <= new Date(compend)
+  }
+
+  const validateTeams = (min_teams, max_teams) => {
+    return min_teams <= max_teams;
+  }
+
 
   const createCompetition = async (event) => {
       event.preventDefault();
@@ -89,7 +97,15 @@ function CompetitionCreate() {
         num_tests : data.get("NumTests"),
         image : imName
       };
-      try {
+
+      if (! validateDates(inputs.regstartdate, inputs.regenddate, inputs.compdate, inputs.compenddate)){
+        setError("Invalid date combination specified")
+      }
+      else if (! validateTeams(parseInt(inputs.min_teamsize), parseInt(inputs.max_teamsize))){
+        setError("Minimum number of participants should be less than maximum")
+      }
+      else{
+        try {
         setLoading(true);
         const response = await createNewCompetitions(inputs)
         
@@ -104,6 +120,8 @@ function CompetitionCreate() {
         setSuccess(null);
         setError(err.response.data);
       }
+      }
+      
       }
 
 

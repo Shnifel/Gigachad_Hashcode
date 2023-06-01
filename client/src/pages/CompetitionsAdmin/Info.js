@@ -5,11 +5,12 @@ import '../Competitions/competition.scss';
 import '../login.scss';
 import { useState } from 'react';
 import { CircularProgress, IconButton, Button } from '@mui/material';
-import { Delete, Edit, Save } from '@mui/icons-material';
+import { Close, Delete, Edit, Save } from '@mui/icons-material';
 import { MarkdownTextbox } from '../../components/MarkdownTextBox.js';
 import { TextareaAutosize }from '@material-ui/core';
 import { deleteCompetition, updateCompetition } from '../../handlers/competitions';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '../../components/Error';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -41,12 +42,23 @@ const InfoAdmin = ({update, data, compid}) => {
    const [current, setCurrent] = useState(data);
    const [loading, setLoading] = useState(false);
    const [upValue, setUpValue] = useState(0);
-
    const [editMode, setEditMode] = useState(false);
-   const navigate = useNavigate();
+   const [error, setError] = useState(null);
+
+   const navigate = useNavigate(); 
+
+   const validateDates = (regstart, regend, compstart, compend) => {
+    return new Date(regstart) <= new Date(regend) && new Date(regend) <= new Date(compstart) && new Date(compstart) <= new Date(compend)
+  }
+
+  const validateTeams = (min_teams, max_teams) => {
+    return min_teams <= max_teams;
+  }
 
    const toggleEdit = async () => {
     if (editMode && unsaved){
+      if(validateDates(current.regstartdate, current.regenddate, current.compdate, current.compenddate) && validateTeams(parseInt(current.min_teamsize), parseInt(current.max_teamsize))){
+      setError(null);
       try {
         setLoading(true);
         const {teams, ...other} = current
@@ -60,10 +72,23 @@ const InfoAdmin = ({update, data, compid}) => {
         setLoading(false);
         setUnsaved(false);
       }
+    
+    setEditMode(!editMode);
+    setCurrent(data);}
+    else{
+      setError("Invalid date and/or team size parameters.")
     }
+   }else{
     setEditMode(!editMode);
     setCurrent(data);
    }
+  }
+
+   const cancelChanges = () => {
+    setEditMode(!editMode);
+    setError(null);
+   }
+  
 
    const handleChange = (field, param) => {
     if (data[field] !== param){
@@ -71,6 +96,8 @@ const InfoAdmin = ({update, data, compid}) => {
     }
     setCurrent(prev => ({...prev, [field] : param}))
    }
+
+   
 
    const deleteComp = async() => {
     try {
@@ -102,7 +129,11 @@ const InfoAdmin = ({update, data, compid}) => {
         </Grid>}
         {!loading && editMode ? <Save /> : <Edit />}
         </IconButton>
+        {editMode && <IconButton onClick= {cancelChanges} color='inherit'>
+          <Close/>
+          </IconButton>}
        </Box>
+       {error && <ErrorMessage errmsg = {error}/>}
         <Typography  variant= "h1"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#f500ff", margin: 2 , fontFamily: 'Arcade'}}>
          Description
          </Typography>
@@ -111,7 +142,7 @@ const InfoAdmin = ({update, data, compid}) => {
           :<Typography variant="h3" style={{margin: 20, fontSize: 25}}>
                 {description}
             </Typography>}
-            <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#2A3492", margin: 2 , fontFamily: 'Arcade'}}>
+            <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#2A3492", margin: 5 , fontFamily: 'Arcade'}}>
          Dates
          </Typography>
 
@@ -189,6 +220,48 @@ const InfoAdmin = ({update, data, compid}) => {
                       onChange = {event => handleChange('compenddate', event.target.value)}
                     />
           </Grid>}
+   
+
+          {editMode && <div>
+            <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#000FFF", margin: 2 , fontFamily: 'Arcade'}}>
+             CONSTRAINTS
+            </Typography> 
+            <Grid item>
+                  <TextField
+                  margin = "normal"
+                  type = "number"
+                  color = "inherit"
+                  variant = "filled"
+                  name = "minPeople"
+                  label = "Min people per team"
+                  id = "minPeople"
+                  value = {current.min_teamsize}
+                  InputProps={{
+                    style: { backgroundColor: 'black', borderRadius: 10, overflow: 'hidden'}
+                  }}
+                  onChange = {event => handleChange('min_teamsize', event.target.value)}
+                  />
+             </Grid>
+            <Grid item>
+                <TextField
+                margin = "normal"
+                type = "number"
+                color = "inherit"
+                variant = "filled"
+                name = "numPeople"
+                label = "Max people per team"
+                id = "numPeople"
+                value = {current.max_teamsize}
+                InputProps={{
+                  style: { backgroundColor: 'black', borderRadius: 10, overflow: 'hidden'}
+                }}
+                onChange = {event => handleChange('max_teamsize', event.target.value)}
+                />
+              </Grid>
+            </div>}
+
+            
+
 
 
             <Typography  variant= "h1"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#6ded8a", margin: 2 , fontFamily: 'Arcade'}}>
@@ -206,9 +279,9 @@ const InfoAdmin = ({update, data, compid}) => {
          </Grid> 
          </Grid>
 
-         <Button variant = "contained" startIcon = { <Delete/>} onClick={deleteComp} style = {{backgroundColor: "#DC143C", margin: 10, padding: 10}}>
-                DELETE COMPETITION
-          </Button>
+         {editMode && <Button variant = "contained" startIcon = { <Delete/>} onClick={deleteComp} style = {{backgroundColor: "#DC143C", margin: 10, padding: 10}}>
+            DELETE COMPETITION
+          </Button>}
         </Box>
     </ThemeProvider>
   )

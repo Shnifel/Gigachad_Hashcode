@@ -199,14 +199,14 @@ function CompetitionAdmin() {
               color='inherit'
             >
               <MenuItem onClick={handleProfileClick}>
-                <ListItemIcon>
+                <ListItemIcon style={{color: "#ffffff"}}>
                   <AccountCircleIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
+                <ListItemIcon style={{color: "#ffffff"}}>
                   <Logout fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Logout" />
@@ -217,7 +217,7 @@ function CompetitionAdmin() {
       </div>
      </Card>
       {tab === 0 && !loading && <InfoAdmin data = {data.data} compid = {compid} update = {setUpdate} />}
-      {tab === 1 && !loading && <Teams id = {compid} />}
+      {tab === 1 && !loading && <Teams id = {compid} min_teamsize = {parseInt(data.data.min_teamsize)} />}
       {tab === 2 && <ProblemAdmin compid={compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 &&  <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />}
     {tab === 4 && <SubmissionsAdmin compid={compid} numtests={parseInt(data.data.num_tests)}/> }

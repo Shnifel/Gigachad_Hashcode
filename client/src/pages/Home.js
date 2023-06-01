@@ -29,6 +29,7 @@ import { logout } from '../handlers/auth/auth';
 import CompetitionsHub from './Home/CompetitionsHub';
 import { Avatar } from '@mui/material';
 import { Auth } from '../Firebase';
+import TypewriterTitle from '../components/TypewriterTitle';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -83,9 +84,7 @@ function Home() {
       <AppBar position="static" color='inherit'>
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
-            <Tab label="Competitions Hub" icon={<HomeIcon/>} value={0}/>
-            <Tab label="About" icon={<InfoIcon/>} value={1}/>
-            <Tab label="FAQ" icon = {<Forum/>} value={2}/>
+            <Tab label="Competitions Hub" icon={<HomeIcon/>} value={0} style={{fontFamily: 'Arcade'}}/>
           </Tabs>
           <div style={{ flexGrow: 1 }} />
           <IconButton
@@ -94,9 +93,8 @@ function Home() {
             aria-haspopup="true"
             onClick={handleMenu}
           >
-             <Avatar
+        <Avatar
       alt="User Avatar"
-      
       src={Auth.currentUser && Auth.currentUser.photoURL}
       sx={{
         width: 48,
@@ -139,7 +137,6 @@ function Home() {
       </AppBar>
       </div>
       {tab === 0 && <CompetitionsHub/>}
-      {tab === 1 && <div> Hello world </div>}
     </ThemeProvider>
   );
 }
