@@ -13,7 +13,7 @@ import {
   createTheme,
   Card,
   CardMedia,
-  Typography, CircularProgress, CssBaseline
+  Typography, CircularProgress, CssBaseline, Grid
 } from '@material-ui/core';
 import {
     AccountCircle as AccountCircleIcon,
@@ -30,7 +30,7 @@ import { ThemeProvider } from '@material-ui/core';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { darkTheme } from '../components/styles/Theme';
 import { logout } from '../handlers/auth/auth';
-import { getCompetition, getTeam } from '../handlers/competitions';
+import { getCompetition, getImage, getTeam } from '../handlers/competitions';
 import './login.scss'
 import Info from './Competitions/Info';
 import Team from './Competitions/Team';
@@ -41,6 +41,7 @@ import { useSelector } from 'react-redux';
 import { Avatar } from '@mui/material';
 import { Auth } from '../Firebase';
 import Prizes from './Competitions/Prizes';
+import CountdownTimer from '../components/CountdownTimer';
 
 
 
@@ -73,6 +74,8 @@ function Competition() {
   const location = useLocation();
   const compid = location.state.compid;
   const [subsid, setSubsid] = useState(null);
+  const [image, setImage] = useState(null);
+  const [teamid, setTeamid] = useState(null);
   const uid = useSelector(state => state.auth.userID);
 
 
@@ -81,8 +84,13 @@ function Competition() {
       try {
         const response = await getCompetition({compid: compid})
         setData(response);
+        const url = await getImage(await response.id + "/" + await response.data.image)
+        setImage(url)
         const team = await getTeam({compid, uid})
         setSubsid(team.teamData.subsRef);
+        setTeamid(team.id);
+
+        
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -130,6 +138,7 @@ function Competition() {
   }
 
   const isrunning = new Date(data.data.compdate) <= new Date()
+  const isrunningopen = isrunning &&  new Date() <= new Date(data.data.compenddate) 
   const regopen = new Date(data.data.regstartdate) <= new Date() && new Date() <= new Date(data.data.regenddate) 
 
   return (
@@ -140,11 +149,15 @@ function Competition() {
             component="img"
             alt={data.data.compname}
             height="100"
-            image="https://www.computersciencedegreehub.com/wp-content/uploads/2023/02/shutterstock_535124956-scaled.jpg"
+            image={image}
             /> 
      <Typography variant= "h2" sx = {{textAlign: 'center', fontSize: 20, fontStyle: 'bold', }} style={{fontFamily: 'Arcade', color: "#6700ff"}}>
              {data.data.compname}
      </Typography>
+     <Grid container style={{display: 'flex', width: '100%', justifyItems: 'right', justifyContent: 'right'}}>
+      <CountdownTimer targetDate={new Date(data.data.compenddate)}/>
+     </Grid>
+      
 
       <div className={classes.appBar}>
       <AppBar position="static" color = "inherit" >
@@ -154,7 +167,7 @@ function Competition() {
             {(regopen || subsid) && <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>}
             {isrunning && <Tab label="Problem" icon = {<Quiz/>} value={2} style={{fontFamily: 'Arcade'}}/>}
             <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3} style={{fontFamily: 'Arcade'}}/> 
-            {subsid && isrunning && <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>}
+            {isrunningopen && <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>}
             <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} style={{fontFamily: 'Arcade'}} />
           </Tabs>
           <div style={{ flexGrow: 1 ,color: 'inherit'}} />
@@ -192,14 +205,14 @@ function Competition() {
               color='inherit'
             >
               <MenuItem onClick={handleProfileClick}>
-                <ListItemIcon>
+                <ListItemIcon style={{color: "#ffffff"}}>
                   <AccountCircleIcon fontSize="small" />
-                </ListItemIcon>
+                </ListItemIcon >
                 <ListItemText primary="Profile" />
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
+                <ListItemIcon style={{color: "#ffffff"}}>
                   <Logout fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Logout" />
@@ -210,10 +223,10 @@ function Competition() {
       </div>
      </Card>
       {tab === 0 && !loading && <Info data = {data.data} />}
-      {tab === 1 && !loading && <Team id = {compid} minteamsize={data.data.min_teamsize} />}
+      {tab === 1 && !loading && <Team id = {compid} minteamsize={data.data.min_teamsize}  />}
       {tab === 2 && !loading && <PdfViewer compid= {compid} numtests = {parseInt(data.data.num_tests)}/>}
       {tab === 3 && 
-      <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} />
+      <Leaderboard compid={compid} num_tests={parseInt(data.data.num_tests)} teamid={teamid}/>
     }
     {tab === 4 && <Submissions compid={compid} numtests = {parseInt(data.data.num_tests)} subsid = {subsid}/>}
     {tab === 5 && <Prizes prizeDetails = {data.data.prizeDetails}/>}

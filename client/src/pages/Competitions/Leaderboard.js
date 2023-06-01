@@ -36,7 +36,6 @@ const Leaderboard = ( props ) => {
        const response = await getLeaderboard({compid})
        setTeams(response)
        setLoading(false)
-        console.log(response)
       } catch (error) {
          setLoading(false);
       }
@@ -69,7 +68,7 @@ const Leaderboard = ( props ) => {
 
   const renderTestCases = (team) => {
     return team.scores.map((score, index) => (
-      <TableCell key={index}>{score ? score : "--"}</TableCell>
+      <TableCell key={index}  style = {{color:props.teamid === team.id ?  "#000000" : "#ffffff"}}>{score ? score : "--"}</TableCell>
     ));
   };
 
@@ -102,7 +101,6 @@ const Leaderboard = ( props ) => {
       teamsWithRanks[i] = {...rankedTeams[i], rank: currentRank}
     }
 
-    console.log(teamsWithRanks)
     
     const sortedTeams = [...teamsWithRanks].sort((a, b) => {
       let aValue,bValue
@@ -128,12 +126,12 @@ const Leaderboard = ( props ) => {
 
     return sortedTeams.map((team, index) => (
       <React.Fragment key={index}>
-        <TableRow onClick={() => handleTeamClick(team)}>
-          <TableCell>{team.rank}</TableCell>
-        <TableCell>{team.teamname}</TableCell>
-          <TableCell>{team.location ? team.location : "--"}</TableCell>
+        <TableRow style = {{backgroundColor : props.teamid === team.id ?  "#EEEB3B" : "inherit", color: "#000000"}} onClick={() => handleTeamClick(team)}>
+          <TableCell style = {{color:props.teamid === team.id ?  "#000000" : "#ffffff"}}>{team.rank}</TableCell>
+        <TableCell  style = {{color:props.teamid === team.id ?  "#000000" : "#ffffff"}}>{team.teamname}</TableCell>
+          <TableCell  style = {{color:props.teamid === team.id ?  "#000000" : "#ffffff"}}>{team.location ? team.location : "--"}</TableCell>
           {renderTestCases(team)}
-          <TableCell>{findAgregate(team)}</TableCell>
+          <TableCell  style = {{color:props.teamid === team.id ?  "#000000" : "#ffffff"}}>{findAgregate(team)}</TableCell>
           
           
         </TableRow>
