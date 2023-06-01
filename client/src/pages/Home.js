@@ -84,8 +84,6 @@ function Home() {
         <Toolbar>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor='primary'>
             <Tab label="Competitions Hub" icon={<HomeIcon/>} value={0}/>
-            <Tab label="About" icon={<InfoIcon/>} value={1}/>
-            <Tab label="FAQ" icon = {<Forum/>} value={2}/>
           </Tabs>
           <div style={{ flexGrow: 1 }} />
           <IconButton
@@ -121,16 +119,16 @@ function Home() {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={handleProfileClick} style={{color: '#ffffff'}}>
+              <MenuItem onClick={handleProfileClick} style={{color: '#FFFFFF'}}>
                 <ListItemIcon>
-                  <AccountCircleIcon fontSize="small" />
+                  <AccountCircleIcon fontSize="small" style={{color:"#FFFFFF"}} />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
-                  <Logout fontSize="small" />
+                  <Logout fontSize="small" style={{color:"#FFFFFF"}} />
                 </ListItemIcon>
                 <ListItemText primary="Logout" />
               </MenuItem>
@@ -139,7 +137,6 @@ function Home() {
       </AppBar>
       </div>
       {tab === 0 && <CompetitionsHub/>}
-      {tab === 1 && <div> Hello world </div>}
     </ThemeProvider>
   );
 }
