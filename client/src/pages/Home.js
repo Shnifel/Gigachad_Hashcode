@@ -119,16 +119,16 @@ function Home() {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={handleProfileClick} style={{color: '#ffffff'}}>
+              <MenuItem onClick={handleProfileClick} style={{color: '#FFFFFF'}}>
                 <ListItemIcon>
-                  <AccountCircleIcon fontSize="small" />
+                  <AccountCircleIcon fontSize="small" style={{color:"#FFFFFF"}} />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
-                  <Logout fontSize="small" />
+                  <Logout fontSize="small" style={{color:"#FFFFFF"}} />
                 </ListItemIcon>
                 <ListItemText primary="Logout" />
               </MenuItem>

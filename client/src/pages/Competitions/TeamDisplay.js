@@ -102,7 +102,7 @@ return (
          </Typography>
 
       <Clipboard label = "Team join code: " copy = {teamData.teamCode} color = "inherit" />
-      {members.length <= props.minteamsize && <ErrorMessage errmsg = {"Your team does not have enough members to participate. Please Invite more members or join a team with more members to participate"}/>}
+      {members.length < props.minteamsize && <ErrorMessage errmsg = {"Your team does not have enough members to participate. Please Invite more members or join a team with more members to participate"}/>}
       <Typography  variant= "h3"  style = {{ fontSize: 20, fontStyle: 'bold', color: "#ffffff", marginBottom: 25, marginTop: 20, fontFamily: 'Arcade'}}>
           Members
          </Typography>
