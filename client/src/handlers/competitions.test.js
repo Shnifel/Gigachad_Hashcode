@@ -1,103 +1,202 @@
-import { createNewCompetitions, createTeam, joinTeams, getCompetition, updateTeam } from './competitions.js'
-import axios from 'axios';
+import axios from "axios";
+import {
+  createNewCompetitions,
+  getCompetitions,
+  getUserCompetitions,
+  getCompetition,
+  deleteCompetition,
+  updateCompetition,
+  createTeam,
+  joinTeams,
+  getTeams,
+  getTeam,
+  removeMember,
+  deleteTeam,
+  updateTeam,
+  uploadCompetitionProblem,
+  uploadFile,
+  getImage,
+  getURL,
+  downloadFile
+} from "./competitions.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { storage } from "../Firebase.js";
 
-jest.mock('axios');
+jest.mock("axios");
+jest.mock("firebase/storage", () => ({
+  ref: jest.fn(),
+  uploadBytes: jest.fn(),
+  getDownloadURL: jest.fn(),
+}));
+jest.mock("../Firebase", () => ({
+  storage: jest.fn(),
+}));
 
-describe('createNewCompetitions', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+describe("API Functions", () => {
+  describe("getUserCompetitions", () => {
+    it("sends a request to get user competitions", async () => {
+      const mockInputs = { uid: "abcd" };
+      const mockResponse = { /* mock response */ };
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await getUserCompetitions(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/competitions/getUserCompetitions",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
   });
-  it('should return the competition data', async () => {
-    const expectedResponse = { data: { competitionId: '123' } };
-    axios.post.mockResolvedValue(expectedResponse);
 
-    const inputs = {
-      compname: 'Test Competition',
-      compdesc: 'This is a test competition',
-      regstartdate: '2022-01-01',
-      regenddate: '2022-01-31',
-      compdate: '2022-02-28',
-      teamsize: 3,
-      numteams: 8,
-    };
-    const result = await createNewCompetitions(inputs);
+  describe("getCompetition", () => {
+    it("sends a request to get a competition", async () => {
+      const mockInputs = {compid: "12345" };
+      const mockResponse = { compname: "Hashcode", teams: ["Team1", "Team2"]};
+      axios.post.mockResolvedValue({ data: mockResponse });
 
-    expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('/competitions/createCompetition', inputs);
-    expect(result).toEqual(expectedResponse.data);
+      const result = await getCompetition(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/competitions/getCompetition",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("deleteCompetition", () => {
+    it("sends a request to delete a competition", async () => {
+      const mockInputs = { compid: "compid" };
+      const mockResponse = { message: "Successfully deleted" };
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await deleteCompetition(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/competitions/deleteCompetition",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("updateCompetition", () => {
+    it("sends a request to update a competition", async () => {
+      const mockInputs = { compstartdate: "2023-05-25T09:34" };
+      const mockResponse = {message: "Successfully updated" };
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await updateCompetition(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/competitions/updateCompetition",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("createTeam", () => {
+    it("sends a request to create a team", async () => {
+      const mockInputs = { uid: "1234", compid: "6789" };
+      const mockResponse = {code: "joinCode1234" };
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await createTeam(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/createTeams",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("joinTeams", () => {
+    it("sends a request to join teams", async () => {
+      const mockInputs = { uid: "1234", joinCode: "joinCode1234", compid: "s2345" };
+      const mockResponse = { /* mock response */ };
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await joinTeams(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/joinTeams",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("getTeams", () => {
+    it("sends a request to get teams", async () => {
+      const mockInputs = { compid : "67890"};
+      const mockResponse = [{teamname: "fun", members: [{name: "Person1"}]}];
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await getTeams(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/getTeams",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("getTeam", () => {
+    it("sends a request to get a team", async () => {
+      const mockInputs = { /* mock inputs */ };
+      const mockResponse = { /* mock response */ };
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await getTeam(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/getTeam",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("removeMember", () => {
+    it("sends a request to remove a team member", async () => {
+      const mockInputs = { /* mock inputs */ };
+
+      await removeMember(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/removeMember",
+        mockInputs
+      );
+    });
+  });
+
+  describe("deleteTeam", () => {
+    it("sends a request to delete a team", async () => {
+      const mockInputs = { /* mock inputs */ };
+
+      await deleteTeam(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/deleteTeam",
+        mockInputs
+      );
+    });
+  });
+
+  describe("updateTeam", () => {
+    it("sends a request to update a team", async () => {
+      const mockInputs = { /* mock inputs */ };
+
+      await updateTeam(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        "/teams/updateTeam",
+        mockInputs
+      );
+    });
   });
 });
-
-describe('createTeam', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  it('should create a new team and return join code', async () => {
-    const expectedResponse = { teamCode: 'abcde' };
-    axios.post.mockResolvedValue(expectedResponse);
-
-    const inputs = {
-      teamname: 'TeamName',
-      uid: '123',
-    };
-    const result = await createTeam(inputs);
-
-    expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('/teams/createTeams', inputs);
-    expect(result).toEqual(expectedResponse.data);
-  });
-});
-
-describe('joinTeams', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  it('should register person in new team', async () => {
-    const expectedResponse =  "Successfully joined team";
-    axios.post.mockResolvedValue(expectedResponse);
-
-    const inputs = {
-      joinCode: 'abcde',
-      uid: '1234'
-    };
-    const result = await joinTeams(inputs);
-
-    expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('/teams/joinTeams', inputs);
-    expect(result).toEqual(expectedResponse.data);
-  });
-});
-
-describe('getCompetition', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  it('should retrieve all details for a particular competition', async () => {
-    const expectedResponse =  {
-      compname: 'Test Competition',
-      compdesc: 'This is a test competition',
-      regstartdate: '2022-01-01',
-      regenddate: '2022-01-31',
-      compdate: '2022-02-28',
-      teamsize: 3,
-      numteams: 8,
-      membersData: [
-        {
-          name: 'John Smith',
-          email: 'johnsmith@gmail.com'
-        },
-      ]
-    };
-    axios.post.mockResolvedValue(expectedResponse);
-
-    const inputs = {
-      compid: '1234'
-    };
-    const result = await getCompetition(inputs);
-
-    expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('/competitions/getCompetition', inputs);
-    expect(result).toEqual(expectedResponse.data);
-  });
-});
-

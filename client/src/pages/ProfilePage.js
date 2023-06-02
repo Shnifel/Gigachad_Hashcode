@@ -12,7 +12,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { changeEmail, changeProfile, updateUserProfile } from '../handlers/auth/auth';
 import { getProfile } from '../handlers/auth/auth';
 import {useSelector} from 'react-redux'
-import {CircularProgress} from '@material-ui/core';
+import {CircularProgress, Typography} from '@material-ui/core';
 import { uploadFile,getImage } from '../handlers/competitions';
 import { Auth } from '../Firebase';
 
@@ -129,25 +129,28 @@ console.log(Auth.currentUser.photoURL)
       <div className={classes.content}>
     <Container maxWidth="sm">
       <Grid container spacing={2} alignItems="center" justifyContent="center">
+      <Typography component = "h1" style = {{fontFamily: 'Arcade', fontSize: 40, color: "#0000ff"}} sx = {{textAlign: 'center', fontSize: 30, fontStyle: 'bold', color: "#ffffff"}}>
+            MY PROFILE
+          </Typography>
         <Grid item xs={12} align="center">
         
-           <Avatar sx={{ width: 300, height: 300 }}src={image? URL.createObjectURL(image): Auth.currentUser && Auth.currentUser.photoURL}  alt="Profile Picture" /> 
+           <Avatar sx={{ width: 200, height: 200, m: 5 }}src={image? URL.createObjectURL(image): Auth.currentUser && Auth.currentUser.photoURL}  alt="Profile Picture" /> 
            <input type='file' accept='image/*' onChange={handleImageChange} ref={fileInputRef} style={{ display: 'none' }}/>
           <Button startIcon={<EditIcon />} variant="outlined" size="small" onClick={handleImageButton} > 
             Change Picture
           </Button>
         </Grid>
         <Grid item xs={12} style={{borderColor:"#FFFFF"}} >
-          <TextField label="Name" value={name} onChange={handleNameChange} style={{borderColor: "#FFFFF"}} />
+          <TextField label="Name" value={name} onChange={handleNameChange} style={{borderColor: "#FFFFF", display: 'flex'}} />
         </Grid>
         <Grid item xs={12}>
-          <TextField label="Surname" value={surname} onChange={handleSurnameChange} />
+          <TextField label="Surname" value={surname} onChange={handleSurnameChange} style={{display: 'flex'}} />
         </Grid>
         <Grid item xs={12}>
-          <TextField label="Email" value={email} onChange={handleEmailChange}  />
+          <TextField label="Email" value={email} onChange={handleEmailChange}  style={{display: 'flex'}}/>
         </Grid>
         <Grid item xs={12}>
-          <TextField label="Location" value={location} onChange={handleLocationChange} fullWidth />
+          <TextField label="Location" value={location} onChange={handleLocationChange} fullWidth  />
         </Grid>
         <Grid item xs={12} align="center">
           <Button variant="contained" color="primary" onClick={handleSaveChanges}>

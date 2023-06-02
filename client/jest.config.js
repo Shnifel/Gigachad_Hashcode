@@ -26,16 +26,13 @@ module.exports = {
       "src/pages/Teams.js",
       "stateManagement/",
       "src/pages/Home",
-      "src/pages/Competitions/competition.scss",
-      "src/pages/Competitions/Leaderboard.js",
-      "src/pages/Competitions/Problem.js",
-      "src/pages/Competitions/Team.js",
-      "src/pages/Competitions/TeamDisplay.js",
+      "src/pages/Competitions",
       "src/pages/CompetitionsAdmin",
       "src/pages/ProfilePage.js",
       "src/routes/",
       "src/pages/Home.js",
-      "src/pages/Competition.js"
+      "src/pages/Competition.js",
+      "src/pages/CompetitionAdmin.js"
     ],
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/src/$1',

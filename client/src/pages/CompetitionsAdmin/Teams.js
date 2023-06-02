@@ -24,7 +24,8 @@ import {
   ExpandMore,
   ExpandLess,
   Save,
-  Add
+  Add,
+  QrCode
 } from '@mui/icons-material';
 import { darkTheme } from '../../components/styles/Theme';
 import {CircularProgress} from '@material-ui/core';
@@ -126,19 +127,31 @@ return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
       <Box sx = {{m : 2}} color="inherit">
+      <Typography  variant= "h2"  style = {{ fontSize: 40, fontStyle: 'bold', color: "#2A3492", margin: 5 , fontFamily: 'Arcade'}}>
+         TEAMS
+      </Typography>
+
        <Box sx = {{display: 'flex', width: '100%',justifyContent: 'right', m : 2}}>
         <IconButton onClick={handleEditClick} color='inherit'>
         {editMode ? <Save /> : <Edit />}
       </IconButton>
        </Box>
+
+       <Box color="inherit">
+       <Typography  variant= "h4"  style = {{ fontSize: 15, fontStyle: 'bold', color: "#ffffff", margin: 15 , fontFamily: 'Arcade'}}>
+         TOTAL TEAMS REGISTERED:  {teams.length}
+        
+      </Typography> 
+      
+       </Box>
       
       <TableContainer component={Paper} >
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>Team Name</TableCell>
-              <TableCell>Join Code</TableCell>
-              <TableCell>Number of Members</TableCell>
+            <TableRow style={{backgroundColor: "#0000ff"}}>
+              <TableCell style={{fontFamily: 'Arcade'}}>Team Name</TableCell>
+              <TableCell style={{fontFamily: 'Arcade', alignItems: 'center'}}> <QrCode/> Join Code</TableCell>
+              <TableCell style={{fontFamily: 'Arcade'}}> Number of Members  {"(" + teams.reduce((acc, curr) => acc += curr.members.length, 0) + ")"}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -159,7 +172,12 @@ return (
                     )}
                   </TableCell>
                   <TableCell>{team.teamData.teamCode}</TableCell>
-                  <TableCell>{team.members.length}</TableCell>
+                  <TableCell>
+                    <Typography style={{color: team.members.length < props.min_teamsize ? "#ff0000" : "#ffffff"}}>
+                      {team.members.length}
+                    </Typography>
+                    
+                    </TableCell>
                   <TableCell sx = {{width : '100%', justifyContent: 'right', display: 'flex'}}>
                     <IconButton onClick={() => handleTeamExpand(index)} color='inherit'>
                       {expandedTeamIndex === index ? <ExpandLess /> : <ExpandMore />}
@@ -177,9 +195,9 @@ return (
                       <Table>
                         <TableHead>
                           <TableRow>
-                            <TableCell>First Name</TableCell>
-                            <TableCell>Last Name</TableCell>
-                            <TableCell>Email</TableCell>
+                            <TableCell style={{fontFamily: 'Arcade'}}>First Name</TableCell>
+                            <TableCell style={{fontFamily: 'Arcade'}}>Last Name</TableCell>
+                            <TableCell style={{fontFamily: 'Arcade'}}>Email</TableCell>
                             <TableCell></TableCell>
                           </TableRow>
                         </TableHead>

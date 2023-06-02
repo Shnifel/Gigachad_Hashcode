@@ -61,22 +61,3 @@ export const getSubmissions = async (req, res) => {
         return res.status(400).json(error.message);
     }
 }
-
-export const getAllSubmissions = async(req, res) => {
-    try {
-        const teams = (await db.collection("Competitions").doc(req.body.compid).get()).data().teams;
-
-        const subsPromises = teams.map(async (teamRef) => {
-            const team = (await teamRef.get()).data();
-            const subs = (await db.collection("Submissions").doc(team.subsRef).get()).data();
-            return {teamname: team.teamname, subsRef: team.subsRef, ...subs}
-        }
-        )
-        const data = await Promise.all(subsPromises)
-        return res.status(200).json(data)
-        
-    } catch (error) {
-        console.log(error.message)
-        return res.status(400).json(error.message)
-    }
-}

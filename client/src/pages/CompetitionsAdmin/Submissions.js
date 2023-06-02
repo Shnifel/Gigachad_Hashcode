@@ -6,6 +6,8 @@ import { getAllSubmissions } from '../../handlers/submissions'
 import { getURL } from '../../handlers/competitions'
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import { Input } from '@mui/icons-material'
+
 
 const SubmissionsAdmin = (props) => {
     const [data, setData] = useState(null);
@@ -102,9 +104,9 @@ if (loading) // Data not yet back
     <ThemeProvider theme={darkTheme}>
         <CssBaseline/>
 
-        <Button onClick={handleExportClick}>
-          EXPORT FILES
-        </Button>
+        <Button variant = "contained" startIcon = { <Input/> } onClick={handleExportClick} style = {{color: "#FFFFFF", backgroundColor: "#DC143C", margin: 10, padding: 10}}>
+            EXPORT ALL SOURCE CODE SUBMISSIONS
+          </Button>
     </ThemeProvider>
   )
 }
