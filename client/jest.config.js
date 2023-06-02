@@ -31,7 +31,8 @@ module.exports = {
       "src/pages/ProfilePage.js",
       "src/routes/",
       "src/pages/Home.js",
-      "src/pages/Competition.js"
+      "src/pages/Competition.js",
+      "src/pages/CompetitionAdmin.js"
     ],
     moduleNameMapper: {
       '^@/(.*)$': '<rootDir>/src/$1',
