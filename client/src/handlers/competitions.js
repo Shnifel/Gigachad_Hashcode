@@ -1,70 +1,71 @@
 import axios from "axios";
 import { storage } from "../Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+const baseurl="https://smiling-bass-train.cyclic.app/server"
 //Posting to create a new competition
 export const createNewCompetitions = async(inputs) => {
-    const response = await axios.post("/competitions/createCompetition", inputs); 
+    const response = await axios.post(baseurl + "/competitions/createCompetition", inputs); 
     return response.data;
 }
 //Posting to retrieve all competitions
 export const getCompetitions = async() => {
-    const response = await axios.post("/competitions/getCompetitions"); 
+    const response = await axios.post(baseurl + "/competitions/getCompetitions"); 
     return response.data;
 
 }
 //Posting to retrieve a specific user's competitions
 export const getUserCompetitions = async(inputs) => {
-  const response = await axios.post("/competitions/getUserCompetitions", inputs);
+  const response = await axios.post(baseurl + "/competitions/getUserCompetitions", inputs);
   return response.data;
 }
 //Posting to retrieve a specific competition
 export const getCompetition = async(inputs) => {
-    const response = await axios.post("/competitions/getCompetition", inputs);
+    const response = await axios.post(baseurl + "/competitions/getCompetition", inputs);
     return response.data;
 }
 //Posting to delete a compeition
 export const deleteCompetition = async(inputs) => {
-  const response = await axios.post("/competitions/deleteCompetition", inputs);
+  const response = await axios.post(baseurl + "/competitions/deleteCompetition", inputs);
   return response.data;
 }
 //Posting to update a competiton
 export const updateCompetition = async(inputs) => {
-  const response = await axios.post("/competitions/updateCompetition", inputs);
+  const response = await axios.post(baseurl + "/competitions/updateCompetition", inputs);
   return response.data;
 }
 //Posting to create a team on a competition
 export const createTeam = async(inputs) => {
-    const response = await axios.post("/teams/createTeams",inputs); 
+    const response = await axios.post(baseurl + "/teams/createTeams",inputs); 
     return response.data;
 
 }
 //Posting to Join a team for a competition
 export const joinTeams = async(inputs) => {
-    const response = await axios.post("/teams/joinTeams",inputs); 
+    const response = await axios.post(baseurl + "/teams/joinTeams",inputs); 
     return response.data;
 }
 //Posting to retrieve all teams in a competition
 export const getTeams = async(inputs) => {
-    const response = await axios.post("/teams/getTeams", inputs);
+    const response = await axios.post(baseurl + "/teams/getTeams", inputs);
     return response.data;
 }
 
 //Posting to retrieve a specific team in a competition
 export const getTeam = async(inputs) => {
-    const response = await axios.post("/teams/getTeam", inputs);
+    const response = await axios.post(baseurl + "/teams/getTeam", inputs);
     return response.data;
 }
 //Posting to remove a member from a team
 export const removeMember = async(inputs) => {
-    const response = await axios.post("/teams/removeMember", inputs);
+    const response = await axios.post(baseurl + "/teams/removeMember", inputs);
 }
 //Posting to delete a team from a competition
 export const deleteTeam = async(inputs) => {
-    const response = await axios.post("/teams/deleteTeam", inputs);
+    const response = await axios.post(baseurl + "/teams/deleteTeam", inputs);
 }
 //Posting to Update a team
 export const updateTeam = async(inputs) => {
-    const response = await axios.post("/teams/updateTeam", inputs);
+    const response = await axios.post(baseurl + "/teams/updateTeam", inputs);
 }
 //Handling uploading a competition problem as a pdf
 export const uploadCompetitionProblem = async(file) => {

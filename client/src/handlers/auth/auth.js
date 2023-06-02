@@ -4,7 +4,7 @@ import {collection,doc,setDoc,query,onSnapshot,where,documentId} from "firebase/
 import { googleProvider } from "../../Firebase.js";
 import axios from "axios";
 import CryptoJS from "crypto-js";
-
+const baseurl="https://smiling-bass-train.cyclic.app/server"
 //Handling Error message
 function Error(message) {
     this.message = message;
@@ -45,7 +45,7 @@ export const loginHandler = async (inputs) => {
     }
     const creds = {uid : id}
     //retrieving user's data
-    const response = await axios.post("/auth/login",creds); 
+    const response = await axios.post(baseurl +"/auth/login",creds); 
     //Handling Success case
     if (response.status == 200){
         const user_info = {uid: id, isAdmin: CryptoJS.AES.encrypt(response.data.isAdmin.toString(), "hashcode-123").toString()}
@@ -62,7 +62,7 @@ export const googleAuth = async (response) => {
     const id = user.user.uid
     const creds = {uid : id}
     localStorage.setItem("uid", id)
-    const res = await axios.post("/auth/login",creds); 
+    const res = await axios.post(baseurl + "/auth/login",creds); 
     //Handling success case
     if (res.status == 200){
         const user_info = {uid: id, isAdmin: CryptoJS.AES.encrypt(res.data.isAdmin.toString(), "hashcode-123").toString()}
@@ -81,12 +81,12 @@ export const logout = () => {
 }
 //Handling user update profile
 export const updateUserProfile = async(data) => {
-    const response = await axios.post("/auth/updateProfile", data);
+    const response = await axios.post(baseurl +"/auth/updateProfile", data);
     return response.data;
 }
 //Hadnling retrieveing a user's profie
 export const getProfile = async(data) => {
-    const response = await axios.post("/auth/login", data);
+    const response = await axios.post(baseurl + "/auth/login", data);
     return response.data;
 }
 //Handling user's email being updated
