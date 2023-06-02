@@ -526,7 +526,7 @@ describe("deleteMember function", () => {
             json: jest.fn().mockReturnThis()
         };
 
-        db.collection("Teams").doc(req.body.teamid).get.mockResolvedValueOnce({data : () => ({members : ["I'm here"]})})
+        db.collection("Teams").doc(req.body.teamid).get.mockResolvedValueOnce({data : () => ({members : ["1234", "4567"]})})
 
         await deleteMember(req, res);
         expect(db.collection).toHaveBeenCalledWith("Competitions");
@@ -536,10 +536,37 @@ describe("deleteMember function", () => {
         expect(res.json).toHaveBeenCalledWith("Successfully removed member");
         expect(res.status).toHaveBeenCalled();
     })
+
+    it("should remove member from team and delete team when only one member", async () => {
+        const req = {body: {
+            compid: "competition-1",
+            uid: "luke-id",
+            teamCode: "123",
+            teamid: "abcd"
+        }};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis()
+        };
+
+        db.collection("Teams").doc(req.body.teamid).get.mockResolvedValueOnce({data : () => ({members : []})}) /// Mock empty members list
+
+        await deleteMember(req, res);
+        expect(db.collection).toHaveBeenCalledWith("Competitions"); //Competitions collection referenced
+        expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid); //Called with corrrect competition id
+        expect(db.collection("Teams").doc(req.body.teamid).update).toHaveBeenCalled(); //Update teams document
+        expect(db.collection("Teams").doc(req.body.compid).delete).toHaveBeenCalled(); //Deleted teams document once all members removed
+        expect(res.status).toHaveBeenCalledWith(200); //Successful member remove
+        expect(res.json).toHaveBeenCalledWith("Successfully removed member"); //Successful error message
+    })
+
+
+
 })
 
 describe("deleteTeam function", () => {
     it ("should delete team from competitions", async () => {
+        //Mock request
         const req = {body: {
             compid: "competition-1",
             uid: "luke-id",
@@ -551,12 +578,13 @@ describe("deleteTeam function", () => {
         };
 
 
-        await deleteTeam(req, res);
+        await deleteTeam(req, res); //Call function
+
         expect(db.collection).toHaveBeenCalledWith("Competitions");
         expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
-        expect(db.collection().doc().update).toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith("Successfully deleted team");
+        expect(db.collection("Competitions").doc().update).toHaveBeenCalled(); //Should update competition
+        expect(res.status).toHaveBeenCalledWith(200); //Successful update
+        expect(res.json).toHaveBeenCalledWith("Successfully deleted team"); // Success response
         expect(res.status).toHaveBeenCalled();
     })
 } )
