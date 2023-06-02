@@ -403,6 +403,7 @@ describe("updateCompetitions function", () => {
   });
   
   it("should correctly update the competition", async () => {
+    //mock Competition update
     const req = {
       body: {
         compid: 'competitionId',
@@ -416,6 +417,8 @@ describe("updateCompetitions function", () => {
         min_teamsize: 1,
       },
     };
+
+    //mock response
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis()
@@ -423,9 +426,16 @@ describe("updateCompetitions function", () => {
     const mockCollectionRef = db.collection('Competitions');
     const mockCollectionDoc = mockCollectionRef.doc(req.body.compid);
     mockCollectionDoc.update.mockResolvedValue();
+
+    //Call update function on mocked data
+
     await updateCompetition(req, res);
-    expect(db.collection).toHaveBeenCalledWith("Competitions");
-    expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
+
+    expect(db.collection).toHaveBeenCalledWith("Competitions"); // competition data updated
+    expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid); 
+
+    // Expect correct update with all passed parameters
+
     expect(db.collection().doc().update).toHaveBeenCalledWith({
       compname: 'New Competition Name',
       compdesc: 'New Competition Description',
@@ -502,13 +512,13 @@ describe("deleteCompetitions function", () => {
 
     await deleteCompetition(req, res);
 
-    expect(db.collection).toHaveBeenCalledWith("Competitions");
+    expect(db.collection).toHaveBeenCalledWith("Competitions"); //Retrieves competition data
     expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
-    expect(db.batch).toHaveBeenCalled();
-    expect(db.batch).toHaveBeenCalled();
+    expect(db.batch).toHaveBeenCalled(); // Create batch delete
+    expect(db.batch).toHaveBeenCalled(); 
     expect(db.batch().commit).toHaveBeenCalled();
-    expect(db.batch().delete).toHaveBeenCalledTimes(mockSnapshot.data().teams.length);
-    expect(db.collection().doc().delete).toHaveBeenCalled();
+    expect(db.batch().delete).toHaveBeenCalledTimes(mockSnapshot.data().teams.length); // Delete all teams in competition
+    expect(db.collection().doc().delete).toHaveBeenCalled();  //Delete competition document
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith("Successfully deleted competition");
   });

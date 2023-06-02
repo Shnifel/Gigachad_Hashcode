@@ -50,6 +50,40 @@ describe("API Functions", () => {
     });
   });
 
+  describe("getCompetitions", () => {
+    it("sends a request to retrieve competitions data", async () => {
+      const mockResponse = [{compname: "Comp-1", compid: "1234"}, {compname: "Comp-2", compid: "2345"}];
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await getCompetitions();
+
+      expect(axios.post).toHaveBeenCalledWith(
+        baseurl +"/competitions/getCompetitions",
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe("createCompetitions", () => {
+    it("sends a request to create a new competition", async () => {
+      const mockInputs = { compname: "New competition", compdetails: "Competition is for fun" };
+      const mockResponse = {message: "Success"};
+      axios.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await createNewCompetitions(mockInputs);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        baseurl +"/competitions/createCompetition",
+        mockInputs
+      );
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+
+
+
+
   describe("getCompetition", () => {
     it("sends a request to get a competition", async () => {
       const mockInputs = {compid: "12345" };
