@@ -53,22 +53,22 @@ const mockSnapshot = {
 
 const mockTeamSnapshots = [
 {
-    id: "team-a",
-    data: () => ({
-        teamname: "a",
-        teamCode: "1234",
-        members: [db.collection("Users").doc("luke-id"), db.collection("Users").doc("kirti-id")]
-    }
-    )
+id: "team-a",
+data: () => ({
+    teamname: "a",
+    teamCode: "1234",
+    members: [db.collection("Users").doc("luke-id"), db.collection("Users").doc("kirti-id")]
+}
+)
 },
 {
-    id: "team-b",
-    data: () => ({
-        teamname: "b",
-        teamCode: "cdef",
-        members: [db.collection("Users").doc("msg-id")]
-    }
-    )
+id: "team-b",
+data: () => ({
+    teamname: "b",
+    teamCode: "cdef",
+    members: [db.collection("Users").doc("msg-id")]
+}
+)
 }]
 
 const mockMembers = [
@@ -397,6 +397,46 @@ describe("joinTeam function", () => {
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith("Succesfully joined team");
     });
+
+    it("should give status 400 if maximum number of members reached", async () => {
+        const req = {body: {
+            compid: "competition-1",
+            uid: "random-id",
+            teamCode: "1234"
+        }};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis()
+        };
+
+        const mockCollectionRef = db.collection('Competitions');
+        const mockCollectionDoc = mockCollectionRef.doc(req.body.compid);
+        mockCollectionDoc.get.mockResolvedValueOnce(mockSnapshot);
+        db.collection("Teams").doc("team-a").get.mockResolvedValueOnce(mockTeamSnapshots[0]);
+        db.collection("Teams").doc("team-b").get.mockResolvedValueOnce(mockTeamSnapshots[1]);
+        db.collection("Teams").where().get.mockResolvedValueOnce({
+            docs:[
+                {
+                    id: "team-a",
+                    data: () => ({
+                        teamname: "a",
+                        teamCode: "1234",
+                        members: [db.collection("Users").doc("luke-id"), db.collection("Users").doc("kirti-id"), db.collection("Users").doc(
+                        "random-id"), db.collection("Users").doc("idk"), db.collection("Users").doc("fun")]
+                    }
+                    )
+                }
+            ]
+        });
+
+        await joinTeam(req, res);
+
+        expect(db.collection).toHaveBeenCalledWith("Competitions");
+        expect(db.collection().doc).toHaveBeenCalledWith(req.body.compid);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith("This team has reached its capacity. Please create a new team or a join another one");
+
+    })
 
     it("should give error status 400 invalid code", async () =>{
         const req = {body: {

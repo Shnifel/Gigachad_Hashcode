@@ -1,5 +1,5 @@
 // Import the function to test and Firebase
-import { createCompetition, getCompetitions, getCompetition, updateCompetition, deleteCompetition } from './competitions.js';
+import { createCompetition, getCompetitions, getCompetition, updateCompetition, deleteCompetition, getUserCompetitions } from './competitions.js';
 import { db } from '../../database/firebase.js';
 
 // Mock the Firebase Firestore methods
@@ -7,6 +7,7 @@ jest.mock('../../database/firebase.js', () => {
   return {
     db: {
       collection: jest.fn().mockReturnValue({
+        where: jest.fn().mockReturnThis(),
         add: jest.fn().mockResolvedValue({ id: 'competition-id' }),
         get: jest.fn(),
           doc: jest.fn().mockReturnValue({
@@ -223,6 +224,99 @@ describe("getCompetitions function", () => {
     ]);
   });
 });
+/**Retrieve all user specific competitions **/
+
+describe("getUserCompetitions function", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+
+  it("should return a list of user-specific competitions with their data", async () => {
+    const req = {body : {uid: "me-id"}};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis()
+    };
+
+    
+      const mockTeams = 
+      { docs :[
+        {
+            id: "team-a",
+            data: () => ({
+                teamname: "a",
+                teamCode: "1234",
+                members: [db.collection("Users").doc("me-id"), db.collection("Users").doc("kirti-id")]
+            }
+            )
+        },
+        {
+            id: "team-b",
+            data: () => ({
+                teamname: "b",
+                teamCode: "cdef",
+                members: [db.collection("Users").doc("me-id")]
+            }
+            )
+        }]}
+
+      const mockComp1 = {docs : [
+        {
+          id: "competition-1",
+          data: {
+            compname: "Competition 1",
+            compdesc: "A competition",
+            numteams: 10,
+            regstartdate: "2022-05-01",
+            regenddate: "2022-05-10",
+            compdate: "2022-06-01",
+            min_teamsize: 2,
+            max_teamsize: 5,
+            num_tests: 6,
+            admin: "admin-1",
+            teams: ["abcdef", "team-a", "pqrstuv"]
+          }
+        }
+      ]}
+
+      const mockComp2 = {docs: [
+    
+          {id: "competition-2",
+          data: {
+            compname: "Competition 2",
+            compdesc: "Another competition",
+            numteams: 5,
+            regstartdate: "2022-05-10",
+            regenddate: "2022-05-20",
+            compdate: "2022-06-10",
+            min_teamsize: 3,
+            max_teamsize: 6,
+            num_tests: 6,
+            admin: "admin-2",
+            teams: ["team-b"]
+          }} 
+        ]
+      }
+
+
+    const mockCollectionRef = db.collection('Teams');
+    mockCollectionRef.where("members", "array-contains", db.collection("Users").doc("me")).get.mockResolvedValueOnce(mockTeams);
+    db.collection("Competitions").where("teams", "array-contains", mockCollectionRef.doc("team-a")).get.mockResolvedValueOnce(mockComp1)
+    db.collection("Competitions").where("teams", "array-contains", mockCollectionRef.doc("team-b")).get.mockResolvedValueOnce(mockComp2)
+
+    await getUserCompetitions(req, res);
+    expect(db.collection).toHaveBeenCalledWith("Competitions");
+    expect(db.collection().where).toHaveBeenCalledTimes(6);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith([
+      "competition-1", "competition-2"
+    ]);
+  });
+});
+
+
+
 
 /**Get competitions function testing */
 
