@@ -21,6 +21,7 @@ import {
 } from "./competitions.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { storage } from "../Firebase.js";
+const baseurl="https://smiling-bass-train.cyclic.app/server"
 
 jest.mock("axios");
 jest.mock("firebase/storage", () => ({
@@ -42,7 +43,7 @@ describe("API Functions", () => {
       const result = await getUserCompetitions(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/competitions/getUserCompetitions",
+        baseurl +"/competitions/getUserCompetitions",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -58,7 +59,7 @@ describe("API Functions", () => {
       const result = await getCompetition(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/competitions/getCompetition",
+        baseurl +"/competitions/getCompetition",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -74,7 +75,7 @@ describe("API Functions", () => {
       const result = await deleteCompetition(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/competitions/deleteCompetition",
+        baseurl +"/competitions/deleteCompetition",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -90,7 +91,7 @@ describe("API Functions", () => {
       const result = await updateCompetition(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/competitions/updateCompetition",
+        baseurl +"/competitions/updateCompetition",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -106,7 +107,7 @@ describe("API Functions", () => {
       const result = await createTeam(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/createTeams",
+        baseurl + "/teams/createTeams",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -122,7 +123,7 @@ describe("API Functions", () => {
       const result = await joinTeams(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/joinTeams",
+        baseurl +"/teams/joinTeams",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -138,7 +139,7 @@ describe("API Functions", () => {
       const result = await getTeams(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/getTeams",
+        baseurl +"/teams/getTeams",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -154,7 +155,7 @@ describe("API Functions", () => {
       const result = await getTeam(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/getTeam",
+        baseurl +"/teams/getTeam",
         mockInputs
       );
       expect(result).toEqual(mockResponse);
@@ -168,7 +169,7 @@ describe("API Functions", () => {
       await removeMember(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/removeMember",
+        baseurl + "/teams/removeMember",
         mockInputs
       );
     });
@@ -181,7 +182,7 @@ describe("API Functions", () => {
       await deleteTeam(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/deleteTeam",
+        baseurl +"/teams/deleteTeam",
         mockInputs
       );
     });
@@ -194,7 +195,7 @@ describe("API Functions", () => {
       await updateTeam(mockInputs);
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/teams/updateTeam",
+        baseurl +"/teams/updateTeam",
         mockInputs
       );
     });
