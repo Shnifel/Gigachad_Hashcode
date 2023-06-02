@@ -1,3 +1,8 @@
+coverage:
+  range: 70..80
+  round: up
+  precision: 2
+
 ignore:
   - 'client/src/components/*'
   - 'client/src/assets/*'
