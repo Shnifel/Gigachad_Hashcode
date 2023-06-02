@@ -172,7 +172,7 @@ function CompetitionContent() {
             </Typography></div> */}
             {isAdmin &&
             <Box sx = {{justifyContent: 'right', width: '100%', display: 'flex', mt: 5}}>
-              <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} style = {{backgroundColor: "#F2D2BD", margin: 10, padding: 10}}>
+              <Button variant = "contained" startIcon = { <AddIcon />} onClick = {createNew} style = {{backgroundColor: "#40E0D0", margin: 10, padding: 10}}>
                 CREATE NEW COMPETITION
               </Button>
             </Box>}
