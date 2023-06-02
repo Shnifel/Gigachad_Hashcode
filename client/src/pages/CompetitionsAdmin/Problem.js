@@ -45,7 +45,7 @@ function ProblemAdmin(props) {
   const testInputs = useRef([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-
+  //Handling upload of a problem 
   const handleUpload = async (path, file) =>{
     try {
       const res =  await uploadFile(path, file);
@@ -54,7 +54,7 @@ function ProblemAdmin(props) {
       console.log(error.message);
     }
   }
-
+  //Handling when a text file changes
   const handleTextFileChange = async (index) => {
     const inputFileRef = testInputs.current[index];
     if (inputFileRef) {
@@ -62,15 +62,15 @@ function ProblemAdmin(props) {
     }
   };
 
-
+//Handles when a PDF is Inputed
   const handlePdfInput = async () => {
     await pdfInputRef.current.click();
   }
-
+//Handles when a marker file is inputed
   const handleMarkerInput = async () => {
     await markerInputRef.current.click();
   }
-
+//Handles downloading the file to a local machine
  const downloadFileLocal = (data, filename) => {
     const link = document.createElement("a");
     link.href = data;
@@ -83,7 +83,7 @@ function ProblemAdmin(props) {
   }
 
 
-
+  //Handles fetching test case data
    useEffect(() => {
     async function fetchdata(){
       try {
@@ -144,7 +144,7 @@ function ProblemAdmin(props) {
       await handleUpload(compid + "/testCases/test_case_" + i + ".txt", selectedFile)
     }
   }
-
+  //Handles the uploading of a marker file
   const uploadMarkerFile = async(e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile){

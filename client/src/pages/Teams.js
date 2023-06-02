@@ -24,7 +24,7 @@ import ErrorMessage from '../components/Error.js';
 import Success from '../components/Success.js';
 import Clipboard from '../components/Clipboard.js';
 import { darkTheme } from '../components/styles/Theme.js';
-
+//Handling team register properties
 export function TeamRegister(props) {
   const classes = useStyles();
   const [error,setError] = useState(null) ;
@@ -39,7 +39,7 @@ export function TeamRegister(props) {
     setError(null);
     setcode(null);
   }
-
+//Handles creating a team
   const handlecreateTeam = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -50,17 +50,17 @@ export function TeamRegister(props) {
     };
     
 
-    try { 
+    try { //trying to create the new team
     const code= await createTeam(inputs)
     setcode(code.teamCode)
     setSuccess("Succesfully created team, share the code above to invite your friends to join")
     setError(null)
-    } catch (error) {
+    } catch (error) {//returning error message
       setError(error.response.data)
       setSuccess(null)
     }
   }
-
+//Handling joining an exxisting team
   const handlejoinTeam = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -71,13 +71,13 @@ export function TeamRegister(props) {
     };
     
     console.log(userid)
-    try { 
+    try { //Trying to join the team
      await joinTeams(inputs)
      setSuccess("Successfully joined team")
      setError(null)
 
       
-    } catch (error) {
+    } catch (error) {//Handling the error message
       setError(error.response.data)
       setSuccess(null)
     }

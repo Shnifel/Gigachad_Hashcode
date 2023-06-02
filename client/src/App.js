@@ -16,7 +16,7 @@ import Home from './pages/Home';
 import Competition from './pages/Competition';
 import CompetitionAdmin from './pages/CompetitionAdmin';
 
-
+//Hadling Entire websites properties
 const App = () => {
   const isAdmin = useSelector(state => state.auth.isAdmin);
   const router = createBrowserRouter(

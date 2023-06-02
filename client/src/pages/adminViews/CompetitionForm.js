@@ -97,10 +97,10 @@ function CompetitionCreate() {
         num_tests : data.get("NumTests"),
         image : imName
       };
-
+      //Checking if Dates are valid
       if (! validateDates(inputs.regstartdate, inputs.regenddate, inputs.compdate, inputs.compenddate)){
         setError("Invalid date combination specified")
-      }
+      } //Checking if Team size is valid
       else if (! validateTeams(parseInt(inputs.min_teamsize), parseInt(inputs.max_teamsize))){
         setError("Minimum number of participants should be less than maximum")
       }

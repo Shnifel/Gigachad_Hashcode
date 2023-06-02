@@ -17,7 +17,7 @@ import { uploadFile,getImage } from '../handlers/competitions';
 import { Auth } from '../Firebase';
 
 
-
+//Handles properties of Profile Page
 const ProfilePage = () => {
   const uid = useSelector(state => state.auth.userID)
   const classes = useStyles();
@@ -32,7 +32,7 @@ const ProfilePage = () => {
   const [image,setImage]= useState(null);
   const fileInputRef = useRef(null);
 
-
+//Fetching current data for a user
   useEffect(() => {
     async function fetchdata(){
       try {
@@ -55,28 +55,28 @@ const ProfilePage = () => {
     }
      fetchdata()
         }, []);
-
+//handles user location change
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
-
+//handles user email change
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
-
+//handles user name change
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
-
+//handles user Surame change
   const handleSurnameChange = (event) => {
     setSurname(event.target.value);
   };
-
+//handles user Profile Image change
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
   };
-
+//Handles uploading the new Profile picture
   const handleImageButton = () => {
     fileInputRef.current.click();
   }

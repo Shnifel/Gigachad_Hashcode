@@ -89,7 +89,7 @@ const Leaderboard = ( props ) => {
       if (scoreA < scoreB) return 1
       if (scoreA > scoreB) return -1
     })
-
+//Creating Teams by ranks
     const teamsWithRanks = Array(rankedTeams.length);
 
     let currentScore = -1;
@@ -104,13 +104,13 @@ const Leaderboard = ( props ) => {
       teamsWithRanks[i] = {...rankedTeams[i], rank: currentRank}
     }
 
-    
+    //Handling sorting leaderboard by aggregate
     const sortedTeams = [...teamsWithRanks].sort((a, b) => {
       let aValue,bValue
       if (sortBy === "aggregate") {
          aValue=findAgregate(a)
          bValue=findAgregate(b)
-         
+    //Handling sorting leaderboard by testCase   
       }else if (sortBy.slice(0,-1) === "testcase"){
         const num=parseInt(sortBy.slice(-1))
         aValue=a.scores[num]
@@ -120,13 +120,13 @@ const Leaderboard = ( props ) => {
         aValue = a[sortBy];
         bValue = b[sortBy]; 
       }
-       
+       //Handling sorted in ascending or descending
       if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
       
       return 0;
     });
-
+    
     return sortedTeams.map((team, index) => (
       <React.Fragment key={index}>
         <TableRow style = {{backgroundColor : props.teamid === team.id ?  "#EEEB3B" : "inherit", color: "#000000"}} onClick={() => handleTeamClick(team)}>

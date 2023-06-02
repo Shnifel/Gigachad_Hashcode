@@ -8,14 +8,14 @@ import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { Input } from '@mui/icons-material'
 
-
+//Handles prooperties of Submission properties
 const SubmissionsAdmin = (props) => {
     const [data, setData] = useState(null);
     const [srcUrls, setDownloads] = useState(null);
     const [fNames, setfNames] = useState(null);
     const [loading, setLoading] = useState(true);
 
-
+  //Fetches data for submissions by test cases
     useEffect(() => {
         async function fetchdata(){
           try {
@@ -57,7 +57,7 @@ const SubmissionsAdmin = (props) => {
         
         }, [])
 
-
+        
         const handleExportClick = async () => {
           const downloadUrls = [...srcUrls]; // Replace arrayOfDownloadUrls with your actual array
         

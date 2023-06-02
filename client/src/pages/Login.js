@@ -27,7 +27,7 @@ import GoogleButton from 'react-google-button';
 import { useStyles } from '../components/styles/Theme';
 import Success from '../components/Success';
 
-
+//Hadnling Login properties
 export default function Login() {
   const classes = useStyles();
   const dispatch= useDispatch();
@@ -39,7 +39,7 @@ export default function Login() {
   const navigate = useNavigate();
  
   const handleSubmit = async (event) => {
-    
+    //Setting default Username and password
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const inputs = {
@@ -47,25 +47,25 @@ export default function Login() {
       
       password: data.get('password'),
     };
-    
+    //Trying to log user in with their details
     try{
       const login = await loginHandler(inputs);
       const isAdmin = login.isAdmin;
       dispatch(setAdmin(isAdmin));
       navigate("/Home");
-    }
+    }//Displaying the error if there is one
     catch (err){
       setError(err.message);
       
     }
   };
-
+//Handling when an email changes
   const onEmailChange = (event) => {
     event.preventDefault();
     setEmail(event.target.value);
   }
 
-
+//Handles Google Log in
   const handlegoogle = async(event) => {
     event.preventDefault()
     try {
@@ -78,7 +78,7 @@ export default function Login() {
       setError(err.message);
     }
   }
-
+//Handles Password reset
   const handlePasswordReset = async () => {
     try {
       console.log(email);

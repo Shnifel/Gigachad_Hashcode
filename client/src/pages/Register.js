@@ -21,7 +21,7 @@ import ReactPlayer from 'react-player';
 import TypewriterTitle from '../components/TypewriterTitle';
 import myTheme from '../components/styles/Theme';
 
-
+//Handling properties of Signup
 export default function SignUp() {
   const classes = useStyles();
   const [error,setError]=React.useState(null);
@@ -35,12 +35,12 @@ export default function SignUp() {
       surname:data.get('lastName'),
       password: data.get('password'),
     };
-    try{
+    try{//Trying to Register new user
       const response = await registerHandler(Inputs);
       setError(null);
       setSuccess(response.message);
    }
-   catch (err){
+   catch (err){//Returning error message
       setSuccess(null);
      setError(err.message);
    }

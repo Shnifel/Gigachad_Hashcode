@@ -20,14 +20,14 @@ import { ArrowForward } from "@mui/icons-material";
 import { useStyles } from '../../components/styles/Theme.js';
 import ReactPlayer from 'react-player';
 import video from "../../assets/black-13495.mp4"
-
+//Handling properties of competition cards 
 function CompetitionCard(props) {
   const competition = props.competition
   const isAdmin = props.isAdmin
   const [image, setImage] = useState(null);
-
+//Handling navigation
   const navigate = useNavigate();
-
+//Handling navigation for an admin
   const gotoComp = (event, compid) => {
     if (isAdmin){
       navigate("/CompetitionsAdmin", {state:{compid: compid}});
@@ -35,7 +35,7 @@ function CompetitionCard(props) {
       navigate("/Competition", {state:{compid: compid}});
     }
   }
-
+//Handling fetching data
   useEffect(() => {
     async function fetchdata(){
       try {
@@ -137,7 +137,7 @@ function CompetitionContent() {
 
     const my_comps = comps.filter(comp => userComps.includes(comp.id))
     const rest = comps.filter(comp => ! my_comps.includes(comp))
-    const past = rest.filter(comp => new Date(comp.data.compdate) <= new Date())
+    const past = rest.filter(comp => new Date(comp.data.compenddate) <= new Date())
     const current = rest.filter(comp => !past.includes(comp))
 
     return (

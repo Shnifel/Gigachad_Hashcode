@@ -45,7 +45,7 @@ import CountdownTimer from '../components/CountdownTimer';
 
 
 
-
+//Handling video background
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-
+//Handling properties of Competiiton
 function Competition() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -78,7 +78,7 @@ function Competition() {
   const [teamid, setTeamid] = useState(null);
   const uid = useSelector(state => state.auth.userID);
 
-
+//Fetching data for a competition
   useEffect(() => {
     async function fetchdata(){
       try {
@@ -107,24 +107,24 @@ function Competition() {
      };
     
     }, []);
-
+//Handling when a menu is closed
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+//Handling the creation of a menu
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+//Handling tabs changing
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     setTab(newValue);
   };
-
+//Handling navigation for when a profile icon is clicked
   const handleProfileClick = () => {
     navigate("/ProfilePage");
   }
-
+//Handling a user to logout
   const handleLogout = () => {
     logout();
     navigate("/")
@@ -167,7 +167,7 @@ function Competition() {
             {(regopen || subsid) && <Tab label="My Team" icon={<Group/>} value={1} style={{fontFamily: 'Arcade'}}/>}
             {isrunning && <Tab label="Problem" icon = {<Quiz/>} value={2} style={{fontFamily: 'Arcade'}}/>}
             <Tab label = "Leaderboard" icon={<LeaderboardIcon/>} value = {3} style={{fontFamily: 'Arcade'}}/> 
-            {isrunningopen && <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>}
+            {isrunningopen && subsid && <Tab label = "Submissions" icon = {<Grading/>} value = {4} style={{fontFamily: 'Arcade'}}/>}
             <Tab label = "Prizes" icon = {<EmojiEvents/>} value = {5} style={{fontFamily: 'Arcade'}} />
           </Tabs>
           <div style={{ flexGrow: 1 ,color: 'inherit'}} />

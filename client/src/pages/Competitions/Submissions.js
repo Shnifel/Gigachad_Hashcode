@@ -98,7 +98,7 @@ function Submissions(props) {
     
   }
   }
-
+  //handling downloading a test case
   const downloadTestCase = async (index) => {
     try {
       const res = await fetch(tests[index])
@@ -108,7 +108,7 @@ function Submissions(props) {
       
     }
   }
-  
+  //handling toggle of submit button
   const toggleSubmit = (index) => {
     const arr = [...submit]
     arr[index] = !arr[index]
@@ -120,7 +120,7 @@ function Submissions(props) {
     setChangedSubs(subs)
     setSubmit(arr);
   }
-
+  //Handling expansion of component
   const toggleExpanded = (index) => {
     if (expanded === index){
       setExpanded(null);
@@ -132,7 +132,7 @@ function Submissions(props) {
   }
 
   
-
+  //Handling when a zip is updated 
   const updateZipFile =(e, index) => {
     const selectedFile = e.target.files[0];
     const arr = [...changedZips];
@@ -146,14 +146,14 @@ function Submissions(props) {
       subsRef.click(); // Trigger click on the corresponding file input
     }
   }
-
+// handling when a solution file is updated
   const updateSolnFile =(e, index) => {
     const selectedFile = e.target.files[0];
     const arr = [...changedSubs];
     arr[index] = selectedFile;
     setChangedSubs(arr);
   }
-
+  //handling when submition takes place
   const handleSubmit =  async (index) => {
     try {
       const zipFile = changedZips[index];
@@ -167,7 +167,7 @@ function Submissions(props) {
         arr[index] = null
         setChangedZips(arr);
       }
-
+      //Handling submsion and responses of submiting a file
       const solnFile = changedSubs[index];
       if (solnFile) {
         await handleUpload(compid + "/submissions/" + subsid + "/test_case_" + test_case + ".txt", solnFile);
@@ -199,7 +199,7 @@ function Submissions(props) {
     } 
   }
 
-
+  //HAndling downloading a file to a local machine
  const downloadFileLocal = (data, filename) => {
     const link = document.createElement("a");
     link.href = data;

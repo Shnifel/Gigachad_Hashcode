@@ -5,7 +5,7 @@ import { Box, CssBaseline, Grid, IconButton, Paper, TextareaAutosize, Typography
 import { Edit, Save } from '@mui/icons-material'
 import { MarkdownTextbox } from '../../components/MarkdownTextBox'
 import { updateCompetition } from '../../handlers/competitions'
-
+// Retrieving Prizes properties
 const Prizes = (props) => {
 
   return (

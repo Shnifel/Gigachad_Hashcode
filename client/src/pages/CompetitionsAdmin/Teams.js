@@ -31,7 +31,7 @@ import { darkTheme } from '../../components/styles/Theme';
 import {CircularProgress} from '@material-ui/core';
 import { deleteTeam, getTeams, removeMember, updateTeam } from '../../handlers/competitions';
 
-
+//Handling properties of teams
 const Teams = (props) => {
     const id = props.id; // Get competition id
     const [teams, setTeams] = useState(null); // Team related information
@@ -42,7 +42,7 @@ const Teams = (props) => {
     const [teamsChange, setTeamsChange] = useState(null);
     const [change, setChanges] = useState(false);
      
-    
+    //Fetching data for team
     useEffect(() => {
         async function fetchdata(){
          try {
@@ -57,7 +57,7 @@ const Teams = (props) => {
          
         }
          fetchdata()}, [change]);
-
+  //Handling edit mode is clicked
   const handleEditClick = async (event) => {
 
     if (editMode && unsavedChanges) {
@@ -91,19 +91,19 @@ const Teams = (props) => {
     setUnsavedChanges(true);
   };
 
-
+//Handling when team is deleted from a competition
   const handleTeamDelete = async (teamId) => {
     setLoading(true);
     await deleteTeam({teamid: teamId, compid: id})
     setChanges(!change);
   };
-
+// Handling when a team member is deleted from a team
   const handleMemberDelete = async (teamIndex, memberIndex) => {
     setLoading(true);
     await removeMember({uid: memberIndex, teamid: teamIndex, compid: id});
     setChanges(!change);
   };
-
+//Handling when a team is expanded in view
   const handleTeamExpand = (index) => {
     setExpandedTeamIndex(index === expandedTeamIndex ? -1 : index);
   };

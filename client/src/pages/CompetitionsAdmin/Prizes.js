@@ -5,17 +5,17 @@ import { Box, CssBaseline, Grid, IconButton, Paper, TextareaAutosize, Typography
 import { Edit, Save } from '@mui/icons-material'
 import { MarkdownTextbox } from '../../components/MarkdownTextBox'
 import { updateCompetition } from '../../handlers/competitions'
-
+//Declares properties of prizes
 const PrizesAdmin = ({update, ...props}) => {
 
     const [editMode, setEditMode] = useState(false);
     const [text, setText] = useState(props.prizeDetails);
     const [updateVal, setUpdateVal] = useState(5);
-
+//Handles when text is changed
     const handleTextChange = (event) => {
         setText(event.target.value)
     }
-
+    //Handles toggle to edit mode
     const toggleEdit = async () => {
 
         try {

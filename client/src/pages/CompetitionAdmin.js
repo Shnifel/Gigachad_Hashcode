@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-
+//Handling properties of a competition as Admin
 function CompetitionAdmin() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -77,7 +77,7 @@ function CompetitionAdmin() {
   const navigate = useNavigate();
   const location = useLocation();
   const compid = location.state.compid;
-
+  //fetching data
   useEffect(() => {
     async function fetchdata(){
       try {
@@ -106,20 +106,20 @@ function CompetitionAdmin() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+// Handles when a menu is opened 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+//Handling tab changes
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     setTab(newValue);
   };
-
+//Handling when profile icon is clicked
   const handleProfileClick = () => {
     navigate("/ProfilePage");
   }
-
+//Handling user logout
   const handleLogout = () => {
     logout();
     navigate("/")

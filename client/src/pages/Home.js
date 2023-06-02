@@ -30,7 +30,7 @@ import CompetitionsHub from './Home/CompetitionsHub';
 import { Avatar } from '@mui/material';
 import { Auth } from '../Firebase';
 import TypewriterTitle from '../components/TypewriterTitle';
-
+//Setting components for video background
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-
+//handling Home page properties
 function Home() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,24 +55,24 @@ function Home() {
   const [tab, setTab] = useState(0);
   const navigate = useNavigate();
  
-
+//Handling when a menu is closed
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+//Handling when a menu is opened
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+//Handling tab changes
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     setTab(newValue);
   };
-
+//handling when Profile Icon is clicked
   const handleProfileClick = () => {
     navigate("/ProfilePage");
   }
-
+//Handling User logout
   const handleLogout = () => {
     logout();
     navigate("/")

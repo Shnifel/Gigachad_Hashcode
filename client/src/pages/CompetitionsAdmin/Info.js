@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
+///Handles properties of Admin information
 const InfoAdmin = ({update, data, compid}) => {
    const description = data.compdesc;
    const regstartdate = data.regstartdate;
@@ -46,15 +46,15 @@ const InfoAdmin = ({update, data, compid}) => {
    const [error, setError] = useState(null);
 
    const navigate = useNavigate(); 
-
+  //Handles the verification of valid dates
    const validateDates = (regstart, regend, compstart, compend) => {
     return new Date(regstart) <= new Date(regend) && new Date(regend) <= new Date(compstart) && new Date(compstart) <= new Date(compend)
   }
-
+  // Handles verification of if a team is valid or not
   const validateTeams = (min_teams, max_teams) => {
     return min_teams <= max_teams;
   }
-
+  //Handles toggling into edit mode for dates
    const toggleEdit = async () => {
     if (editMode && unsaved){
       if(validateDates(current.regstartdate, current.regenddate, current.compdate, current.compenddate) && validateTeams(parseInt(current.min_teamsize), parseInt(current.max_teamsize))){
@@ -83,13 +83,13 @@ const InfoAdmin = ({update, data, compid}) => {
     setCurrent(data);
    }
   }
-
+  //Handles canceling making changes
    const cancelChanges = () => {
     setEditMode(!editMode);
     setError(null);
    }
   
-
+   //Handles when a change is commited
    const handleChange = (field, param) => {
     if (data[field] !== param){
       setUnsaved(true);
@@ -98,7 +98,7 @@ const InfoAdmin = ({update, data, compid}) => {
    }
 
    
-
+   //Handles when a team is deleted from a competition
    const deleteComp = async() => {
     try {
       await deleteCompetition({compid})
@@ -107,7 +107,7 @@ const InfoAdmin = ({update, data, compid}) => {
       console.log(error.message)
     }
    }
-
+   //Creating layour for table
    const timeString =  `|  | Date | Time |
    |-----------|---------|------------|
    | Registration opens |`+ new Date(regstartdate).toDateString() +`|`  + new Date(regstartdate).toLocaleTimeString() + `| 

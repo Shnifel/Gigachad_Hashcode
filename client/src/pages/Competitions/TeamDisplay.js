@@ -37,7 +37,7 @@ import Clipboard from '../../components/Clipboard';
 import { useSelector } from 'react-redux';
 import { removeMember } from '../../handlers/competitions';
 import ErrorMessage from '../../components/Error';
-
+//Setting Dark theme
 const darkTheme = createTheme({
   palette: {
     type: 'dark',
@@ -58,7 +58,7 @@ const darkTheme = createTheme({
   },
 });
 
-
+// Handling properties of displaying a team
 const TeamDisplay = ({change,...props}) => {
   const data = props.data;
   const teamID = data.id
@@ -72,11 +72,11 @@ const TeamDisplay = ({change,...props}) => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [expandedTeamIndex, setExpandedTeamIndex] = useState(-1);
   const [pdf, setPdf] = useState(null);
-
+//Handles toggling to edit mode when a team is clicked
   const handleEditClick = (event, teamId) => {
     setEditMode(!editMode);
   }
-
+//Handles when a member is deleted from a team
   const handleMemberDelete = async (id) => {
    try {
     await removeMember({uid : id, teamid: teamID, compid});
