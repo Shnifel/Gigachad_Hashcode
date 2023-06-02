@@ -71,15 +71,15 @@ export const getCompetitions = async (req, res) => {
 
 export const getUserCompetitions = async (req, res) => {
   try {
-    const userRef = db.collection("Users").doc(req.body.uid)
-    const usersTeams = await db.collection("Teams").where("members", "array-contains", userRef).get()
+    const userRef = db.collection("Users").doc(req.body.uid) // Get reference to user document
+    const usersTeams = await db.collection("Teams").where("members", "array-contains", userRef).get() // Find all teams where where the user is registered
     const competitionIds = usersTeams.docs.map(async(team) => {
       const teamRef = db.collection("Teams").doc(team.id)
-      const comp = await db.collection("Competitions").where("teams", "array-contains", teamRef).get()
+      const comp = await db.collection("Competitions").where("teams", "array-contains", teamRef).get() // Find all compettitions where those teams are registered
       return comp.docs[0].id
     })
 
-    const data = await Promise.all(competitionIds);
+    const data = await Promise.all(competitionIds); // Return competition ids of all those user is registered in
 
     return res.status(200).json(data)
     
@@ -90,7 +90,7 @@ export const getUserCompetitions = async (req, res) => {
 }
   
 
-
+//Retrieve competition data for given competition
 export const getCompetition = async (req, res) => {
     try {
      const compid = req.body.compid;

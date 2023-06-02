@@ -30,11 +30,11 @@ export const getTeams = async(req,res) => {
             }
           )
 
-          const membersData = await Promise.all(memberPromises)
+          const membersData = await Promise.all(memberPromises) //Ensure all data fetched
 
           const {members, ...teamData} = teamDoc.data();
 
-          return {id: teamDoc.id, teamData, members: membersData};
+          return {id: teamDoc.id, teamData, members: membersData}; 
     });
 
     //Promise ensures that all async requests to teams data is obtained before proceeding
@@ -58,14 +58,15 @@ export const getTeam = async(req, res) => {
         const compid = req.body.compid
         const user = req.body.uid
 
-        const competitionDoc = await db.collection('Competitions').doc(compid).get();
-        const teams = competitionDoc.data().teams
+        const competitionDoc = await db.collection('Competitions').doc(compid).get(); // Get competitions data
+        const teams = competitionDoc.data().teams // Get teams registered
 
-        for (const teamRef of teams) {
+        for (const teamRef of teams) { // Search teams to find provided user id
             const teamDoc = await teamRef.get()
             const {members, ...teamData} = teamDoc.data()
 
-            if (members.some(memberRef => memberRef.id === user)) {
+            // Search if current id is one of the members
+            if (members.some(memberRef => memberRef.id === user)) { 
               const membersPromises = members.map(
                 async (member) => {
                   const memDoc = await member.get()
@@ -76,11 +77,11 @@ export const getTeam = async(req, res) => {
 
               const memberData = await Promise.all(membersPromises)
               
-              return res.status(200).json({id: teamDoc.id, teamData, membersData: memberData})
+              return res.status(200).json({id: teamDoc.id, teamData, membersData: memberData}) // Team found ! Return success
             }
         }
 
-        return res.status(400).json("You are not registered in this competition")
+        return res.status(400).json("You are not registered in this competition") // Error - team not found
       }
     catch (error) {
         return res.status(400).json(error.message)
@@ -210,12 +211,15 @@ export const createTeams = async(req,res) => {
     const user = db.collection('Users').doc(req.body.uid)
     const team = db.collection('Teams').doc(req.body.teamid)
     const compRef = db.collection('Competitions').doc(req.body.compid)
+    //Update team to remove user from list of members
     team.update({members : Admin.firestore.FieldValue.arrayRemove(user)})
 
+    // Obtain currently how many members in team
     const num_members = (await team.get()).data().members.length
 
+    // Check if there are no more members in team
     if (num_members === 0){
-      await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(team)})
+      await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(team)}) // Delete team
       await team.delete()
     }
 
@@ -235,17 +239,18 @@ export const createTeams = async(req,res) => {
   try {
     const team = req.body.teamid
     const teamRef = db.collection('Teams').doc(team)
-    const compRef = db.collection('Competitions').doc(req.body.compid)
+    const compRef = db.collection('Competitions').doc(req.body.compid) //Referemce to competitions collection
 
-    await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(teamRef)})
+    await compRef.update({teams: Admin.firestore.FieldValue.arrayRemove(teamRef)}) //Remove team from registered teams
     await teamRef.delete()
-    return res.status(200).json("Successfully deleted team")
+    return res.status(200).json("Successfully deleted team") // Return successful delete
    
   } catch (error) {
-    return res.status(400).json("Error deleting team")
+    return res.status(400).json("Error deleting team") // Return error has occurred
   }
  }
 
+ // Updates team with provided parameters
  export const updateTeam = async(req, res) => {
   try {
     const {teamid, ...updatedData} = req.body;
