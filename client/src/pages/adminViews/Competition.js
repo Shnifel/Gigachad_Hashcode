@@ -30,7 +30,7 @@ import {Document, Page} from 'react-pdf';
 import NavBar from '../../components/Navbar';
 import '../login.scss'
 import TypewriterTitle from '../../components/TypewriterTitle';
-
+//Calling darktheme
 const darkTheme = createTheme({
   palette: {
     type: 'dark',
@@ -51,7 +51,7 @@ const darkTheme = createTheme({
   },
 });
 
-
+//Defining Competiton Page
 const CompetitionsPage = () => {
   const [teams, setTeams] = useState([
     {
@@ -86,7 +86,7 @@ const CompetitionsPage = () => {
   const handlePdfFileChange = (event) => {
       setPdf(event.target.files[0])
   }
-
+//Handling when a team name changes
   const handleTeamNameChange = (event, teamId) => {
     const newTeams = teams.map((team) => {
       if (team.id === teamId) {
@@ -98,7 +98,7 @@ const CompetitionsPage = () => {
     setTeams(newTeams);
     setUnsavedChanges(true);
   };
-
+//Handling when Join Code for a team changes
   const handleJoinCodeChange = (event, teamId) => {
     const newTeams = teams.map((team) => {
       if (team.id === teamId) {
@@ -109,7 +109,7 @@ const CompetitionsPage = () => {
     setTeams(newTeams);
     setUnsavedChanges(true);
   };
-
+// Handling when a member changes their Name
   const handleMemberNameChange = (event, teamId, memberId) => {
     const newTeams = teams.map((team) => {
       if (team.id === teamId) {
@@ -126,7 +126,7 @@ const CompetitionsPage = () => {
     setTeams(newTeams);
     setUnsavedChanges(true);
   };
-
+// Handling user's email changing
   const handleMemberEmailChange = (event, teamId, memberId) => {
     const newTeams = teams.map((team) => {
       if (team.id === teamId) {
@@ -143,20 +143,20 @@ const CompetitionsPage = () => {
     setTeams(newTeams);
     setUnsavedChanges(true);
   };
-
+//Handles team is deletetion
   const handleTeamDelete = (teamId) => {
     const newTeams = teams.filter((team) => team.id !== teamId);
     setTeams(newTeams);
     setUnsavedChanges(true);
   };
-
+//Handles Memeber deletion from a team
   const handleMemberDelete = (teamIndex, memberIndex) => {
     const newTeams = [...teams];
     newTeams[teamIndex].members.splice(memberIndex, 1);
     setTeams(newTeams);
     setUnsavedChanges(true);
   };
-
+//Handles expanding a team's size
   const handleTeamExpand = (index) => {
     setExpandedTeamIndex(index === expandedTeamIndex ? -1 : index);
   };

@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
-
+//Defining Information displyed on competition card: whether or not its open for registration, and the corresponding navigate function
 const CompetitionCard = (props) => {
  const open = props.isrunning;
  const msg = open ? "Currently open for registration" : "Closed"
  const navigate = useNavigate();
-
+//Handles Onclick for when a compeition card is onclicked, navigating to the corresponding competition
  const handleClick = () => {
   navigate("/Teams", {state: {compName : props.name,compid:props.compid}})
  }

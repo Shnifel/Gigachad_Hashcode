@@ -42,24 +42,24 @@ function CompetitionCreate() {
   const pdfInputRef = useRef(null);
   const navigate = useNavigate();
 
-
+//Handles an image changine by setting the new file location
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
   };
-
+//Handles Image buttons
   const handleImageButton = () => {
     fileInputRef.current.click();
   }
-
+//Handle's pdf input button
   const handlePdfInput = () => {
     pdfInputRef.current.click();
   }
-
+  //setting what the allowed file is
   const allowedFiles = ['application/pdf'];
   const handleFile = (e) =>{
     const selectedFile = e.target.files[0];
-    
+    //checking that the current file is allowed
     if(selectedFile){
       if(selectedFile&&allowedFiles.includes(selectedFile.type)){
        setPdfFile(selectedFile);
@@ -70,7 +70,7 @@ function CompetitionCreate() {
     }
   }
 
-
+//Handles creating a competition
   const createCompetition = async (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -91,8 +91,9 @@ function CompetitionCreate() {
       };
       try {
         setLoading(true);
+        //retrieves new competition details
         const response = await createNewCompetitions(inputs)
-        
+        //Uploads file details
         {image && await uploadFile(response.compid + "/" + image.name, image)}
         {pdfFile && await uploadFile(response.compid + "/problem.pdf", pdfFile)}
         setLoading(false); 

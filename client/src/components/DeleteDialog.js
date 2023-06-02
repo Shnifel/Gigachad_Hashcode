@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-
+//Defining Delete dialog
 const DeleteConfirmationDialog = ({ onDelete }) => {
   const [open, setOpen] = useState(false);
-
+//SetOpen to true when handleOpen is called
   const handleOpen = () => {
     setOpen(true);
   };
-
+//SetOpen to false when hadleClose is called
   const handleClose = () => {
     setOpen(false);
   };
-
+//call onDelete and set setOpen to false 
   const handleDelete = () => {
     onDelete();
     setOpen(false);

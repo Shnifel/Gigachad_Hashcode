@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 function preventDefault(event) {
     event.preventDefault();
   }
-  
+  //DSetting values for rows, labels, title and cols of table
   export default function DisplayTable(props) {
     const rows = props.rows;
     const labels = props.labels;

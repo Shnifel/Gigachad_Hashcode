@@ -1,7 +1,8 @@
 import {createTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/core';
-
+//Creating template for background video player by setting positions of components when calling the theme
 export const useStyles = makeStyles((theme) => ({
+  //root layer specified
   root: {
     position: 'fixed',
     top: 0,
@@ -10,6 +11,7 @@ export const useStyles = makeStyles((theme) => ({
     height: '100%',
     zIndex: -1,
   },
+  // Video player layer specified
   player: {
     position: 'absolute',
     top: 0,
@@ -17,6 +19,7 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
   },
+  //content component layer specified
   content: {
     position: 'relative',
     zIndex: 1,
@@ -30,7 +33,7 @@ const myTheme = createTheme({
     status: {
       danger: '#e53e3e',
     },
-    
+    //Creating theme for UI by setting main, seondary, neutral and white colours
     palette: {
       type: 'dark',
       primary: {
@@ -54,6 +57,7 @@ const myTheme = createTheme({
   });
 
 export const darkTheme = createTheme({
+  // Creating dark theme for UI by setting primary, secondary, background, Text and Icon colours
   palette: {
     type: 'dark',
     primary: {

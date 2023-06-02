@@ -29,7 +29,7 @@ import { ThemeProvider } from '@material-ui/core';
 import { useNavigate, Link } from 'react-router-dom';
 import { darkTheme } from './styles/Theme';
 import { logout } from '../handlers/auth/auth';
-
+//Defining theme for Navbar 
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -52,31 +52,31 @@ function NavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
-
+//Handling Menu Open
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+//Handling Menu Close
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+// Handling creation of the menu
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+//Handling close of a menu
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+//Handling tab change of a menu
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
-
+//Handling navigation when a Profile is clicked
   const handleProfileClick = () => {
     navigate("/ProfilePage");
   }
-
+//Handling Loging a user out of the website
   const handleLogout = () => {
     logout();
   }

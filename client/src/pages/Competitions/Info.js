@@ -38,7 +38,7 @@ const Info = ({data}) => {
    const compdetails = data.compdetails;
    const classes = useStyles();
 
-
+//Formating table on info table
    const timeString =  `|  | Date | Time |
    |-----------|---------|------------|
    | Registration opens |`+ new Date(regstartdate).toDateString() +`|`  + new Date(regstartdate).toLocaleTimeString() + `| 

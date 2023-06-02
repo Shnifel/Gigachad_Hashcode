@@ -2,8 +2,9 @@ import React from 'react';
 import { Box, Typography, makeStyles, IconButton, ThemeProvider, CssBaseline } from '@material-ui/core';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { darkTheme } from './styles/Theme';
-
+//Defining Test Case Box
 const useStyles = makeStyles((theme) => ({
+  //Setting container properties such as colour radius and margin
   container: {
     backgroundColor: '#1d1d1d',
     borderRadius: theme.spacing(2),
@@ -12,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     
   },
+  //Setting Heading properties for Test Case box
   heading: {
     backgroundColor: '#C8A2C8',
     padding: theme.spacing(1),
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     borderTopRightRadius: theme.spacing(2),
     marginBottom: theme.spacing(1),
   },
+  //Setting Row properties for Test Case Box
   row: {
     display: 'flex',
     alignItems: 'center',
@@ -33,7 +36,7 @@ const TestCasesBox = (props) => {
   const classes = useStyles();
 
   const testCases = props.testCases;
-
+  //Handling download of Test Case from Test Case box
   const downloadFileLocal = (data, filename) => {
     const link = document.createElement("a");
     link.href = data;

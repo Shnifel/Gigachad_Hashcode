@@ -6,7 +6,7 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import styles from './MarkdownStyles.module.scss'
-
+ //Defining Markdown Text Box
 export const MarkdownTextbox = (props) => {
     const inputText = props.text;
   

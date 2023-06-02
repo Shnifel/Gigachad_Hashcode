@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     justifyContent: 'right'
   },
 });
-
+// Adding functionality for displaying and copying team codes
 const Clipboard = (props) => {
   const label = props.label;
   const copy = props.copy;

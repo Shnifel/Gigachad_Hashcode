@@ -22,6 +22,7 @@ import TestCasesBox from '../../components/TestCasesBox';
 import { ThemeProvider } from '@emotion/react';
 import { LocationCity, LocationOn, Scoreboard, Leaderboard as LeaderboardIcon } from '@mui/icons-material';
 
+//Defining leadeboard's properties
 const Leaderboard = ( props ) => {
   const num_tests=props.num_tests;
   const compid=props.compid;
@@ -31,9 +32,11 @@ const Leaderboard = ( props ) => {
   const [sortBy, setSortBy] = useState('location');
   const [loading,setLoading]=useState(true);
   useEffect(() => {
+    //fetching leaderboard data
     async function fetchdata(){
       try {
        const response = await getLeaderboard({compid})
+       //setting data
        setTeams(response)
        setLoading(false)
         console.log(response)
@@ -53,7 +56,7 @@ const Leaderboard = ( props ) => {
     
     }, [])
 
-
+    //handles sort for columns
   const handleSort = (column) => {
     if (column === sortBy) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -62,23 +65,23 @@ const Leaderboard = ( props ) => {
       setSortOrder('asc');
     }
   };
-
+  //Handling Team click to expand team
   const handleTeamClick = (team) => {
     setExpandedTeam(team);
   };
-
+  //Handles rendering test cases for for leaderboard
   const renderTestCases = (team) => {
     return team.scores.map((score, index) => (
       <TableCell key={index}>{score ? score : "--"}</TableCell>
     ));
   };
-
+//Hanfles finding the aggregate across all test case scores
   const findAgregate = (team) => {
     return team.scores.reduce((acc, curr) => curr === null || curr === -1 ? acc : acc + curr, 0)
     
   }
 
-
+//Handles rendering teams into the leaderboard by rank
   const renderTeams = () => {
     const rankedTeams = [...teams].sort((a, b) => {
       const scoreA = findAgregate(a);
@@ -103,7 +106,7 @@ const Leaderboard = ( props ) => {
     }
 
     console.log(teamsWithRanks)
-    
+    //Handling how teams are sorted by aggregate, testcase score in ascending or descending
     const sortedTeams = [...teamsWithRanks].sort((a, b) => {
       let aValue,bValue
       if (sortBy === "aggregate") {

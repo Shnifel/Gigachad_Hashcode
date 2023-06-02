@@ -1,7 +1,7 @@
 import React from 'react'
 import Typewriter from 'typewriter-effect';
 import "../pages/login.scss";
-
+// Deining TypeWriter effect for text 
 const TypewriterTitle = () => {
   return (
         <Typewriter
